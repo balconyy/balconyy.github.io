@@ -7,10 +7,11 @@ import MovieSearch from '@/features/search/components/MovieSearch.vue'
   </header>
 
   <main>
-    <MovieSearch />
+    <MovieSearch/>
   </main>
 </template>
 
 <style scoped>
+
 
 </style>

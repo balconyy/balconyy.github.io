@@ -1,7 +1,14 @@
 
 /* semantic color variables for this project */
 :root {
+  --accent-color: #6c5ce7;
+  --accent-hover: #5a4fcf;
+  --accent-light: #8a7ce8;
+  --accent-dark: #5548c4;
+  --accent-transparent: #6c5ce730;
+  --accent-semi-transparent: #6c5ce780;
 
+  --background-primary: #000000
 }
 
 @media (prefers-color-scheme: dark) {
