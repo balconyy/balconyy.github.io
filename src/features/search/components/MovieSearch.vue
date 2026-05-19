@@ -14,8 +14,6 @@ function requestSearch(){
 <template>
   <div class="search-container">
     <div class="input-wrapper">
-      <h1>Search Example</h1>
-
       <input
           class="search-input"
           v-model="searchInput"

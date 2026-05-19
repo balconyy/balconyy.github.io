@@ -1,0 +1,27 @@
+:root {
+  --accent-color: #7e5baf;
+  --accent-color-rgb: 126 91 175;
+  --accent-hover: #9b80bd;
+  --accent-light: #b9a9c9;
+  --accent-dark: #5d418a;
+  --accent-transparent: #6c5ce730;
+  --accent-semi-transparent: #6c5ce780;
+
+
+  --white: #fff;
+  --white-rgb: 255 255 255;
+  --background-primary: #000000
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
