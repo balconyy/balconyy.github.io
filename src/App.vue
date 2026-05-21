@@ -1,18 +1,22 @@
 <script setup>
 import MovieSearch from '@/features/search/components/MovieSearch.vue'
-import LogoHeader from "@/components/LogoHeader.vue";
+import LogoMain from "@/components/logo/LogoMain.vue";
 import Background from "@/components/Background.vue";
+import GeekTelegram from "@/components/GeekTelegram.vue";
 </script>
 
 <template>
   <Background/>
   <header>
-    <LogoHeader/>
+    <LogoMain/>
   </header>
 
   <main>
     <MovieSearch/>
   </main>
+
+  <footer>
+  </footer>
 </template>
 
 <style scoped>

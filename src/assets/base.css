@@ -1,16 +1,32 @@
 :root {
+  /* HEX */
   --accent-color: #7e5baf;
-  --accent-color-rgb: 126 91 175;
   --accent-hover: #9b80bd;
   --accent-light: #b9a9c9;
   --accent-dark: #5d418a;
   --accent-transparent: #6c5ce730;
   --accent-semi-transparent: #6c5ce780;
 
+  --ui-color: #71717a;
+  --ui-hover: #52525b;
+  --ui-light: #e4e4e7;
+  --ui-dark: #3f3f46;
 
   --white: #fff;
   --white-rgb: 255 255 255;
-  --background-primary: #000000
+  --background-primary: #000000;
+
+  /* RGB */
+  --accent-color-rgb: 126 91 175;
+  --accent-hover-rgb: 155 128 189;
+  --accent-light-rgb: 185 169 201;
+  --accent-dark-rgb: 93 65 138;
+
+  --ui-color-rgb: 113 113 122;
+  --ui-hover-rgb: 82 82 91;
+  --ui-light-rgb: 228 228 231;
+  --ui-dark-rgb: 63 63 70;
+
 }
 
 @media (prefers-color-scheme: dark) {

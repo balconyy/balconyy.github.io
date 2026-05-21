@@ -42,7 +42,7 @@ const question = "-Эээ... бэлкони?"
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 48px;
+  padding: 36px;
 }
 
 .content {

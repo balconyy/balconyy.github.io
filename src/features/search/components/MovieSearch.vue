@@ -1,101 +1,109 @@
 <script setup>
-import {ref} from "vue";
+import {ref} from 'vue'
+import {Search} from '@lucide/vue';
 
-const searchInput = ref("")
-
-function clearSearch(){
-
-}
-function requestSearch(){
-
-}
+const query = ref('')
 </script>
 
 <template>
-  <div class="search-container">
-    <div class="input-wrapper">
-      <input
-          class="search-input"
-          v-model="searchInput"
-          type="text"
-          placeholder="Введите текст..."
-          @keydown.enter.prevent="requestSearch"
-      />
-      <div class="icons">
-        <button v-if="searchInput" class="reset-button" @click="clearSearch">
-          <i class="fas fa-times"></i>
-        </button>
-        <button class="search-button" @click="requestSearch">
-          <i class="fas fa-search"></i>
+  <section class="movie-search">
+    <div class="content">
+      <div class="search-wrap">
+        <input
+            v-model="query"
+            class="search-input"
+            type="text"
+            placeholder="Название фильма..."
+        />
+        <button class="search-button">
+          <Search class="ic search" :size="24"/>
         </button>
       </div>
+
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
 
-.search-container {
+.movie-search {
   display: flex;
+  align-items: stretch;
   justify-content: center;
-  padding: 20px;
-}
-
-.input-wrapper {
   position: relative;
-  width: 100%;
-  max-width: 800px;
+  overflow: hidden;
 }
 
-.search-input {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background: rgba(30, 30, 30, 0.8);
-  color: #fff;
-  transition: border-color 0.3s ease;
+.content {
+  width: min(850px, 100%);
+  z-index: 2;
+  margin: 0 auto;
+  position: relative;
 }
 
-.search-input:focus {
+.search-wrap {
+  display: flex;
+  align-items: center;
+
+  margin: 0 0;
+
+
+  border: 3px solid rgba(var(--accent-color-rgb)/0.4);
+  border-radius: 18px;
+
+  background: rgba(var(--ui-dark-rgb)/0.28);
+  backdrop-filter: blur(10px);
+  transition: 0.2s ease;
+
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.search-wrap:focus-within {
   outline: none;
-  border-color: var(--accent-color);
+  background: rgba(var(--ui-dark-rgb)/0.34);
+  border-color: rgba(var(--accent-color-rgb)/0.9);
   box-shadow: 0 0 0 2px var(--accent-transparent);
 }
 
-.icons {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.reset-button,
-.search-button {
-  background: none;
+
+.search-input {
+  flex: 1;
+  padding: 12px 20px;
   border: none;
-  color: #fff;
-  cursor: pointer;
-  padding: 2px;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
-}
+  outline: none;
+  background: transparent;
+  color: var(--white);
 
-.reset-button:hover,
-.search-button:hover {
-  opacity: 1;
-}
-
-.reset-button i,
-.search-button i {
   font-size: 18px;
+  letter-spacing: 0.02em;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.search-button {
   display: block;
-  width: 20px;
-  height: 20px;
+  padding: 12px 20px;
+  background: rgba(var(--accent-color-rgb)/0.4);
+  color: rgba(255, 255, 255, 0.70);
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.search-wrap:focus-within .search-button {
+  background: rgba(var(--accent-color-rgb)/0.9);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.search-wrap:focus-within .search-button:hover {
+  background-color: var(--accent-color);
+  color: var(--white);
 }
 
 
