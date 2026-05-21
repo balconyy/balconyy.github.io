@@ -6,8 +6,8 @@ import avatar from '@/assets/geek-avatar.jpg'
   <section class="telegram-ad">
     <div class="support-title">При поддержке тг-канала</div>
     <a href="https://t.me/qulyaba">
-    <div class="wrapper">
-        <div class="content">
+    <div class="content">
+        <div class="content-wrapper">
           <img class="avatar" :src="avatar" alt="Гик Новости. Аватарка"/>
           <div class="text-block">
             <div class="channel-name">Гик Новости</div>
@@ -41,7 +41,7 @@ a {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding: 8px 0;
+  margin: 12px 0;
 }
 
 .support-title {
@@ -58,11 +58,11 @@ a {
   margin-bottom: 2px;
 }
 
-.wrapper {
+.content {
   width: 180px;
   background: linear-gradient(145deg, #1691c7 0%, #0c6f99 100%);
   border-radius: 20px;
-  padding: 4px 4px;
+  padding: 10px;
   display: flex;
   gap: 6px;
   flex-direction: column;
@@ -72,7 +72,7 @@ a {
   border: 2px solid var(--white);
 }
 
-.wrapper:hover {
+.content:hover {
   transform: translateY(-3px);
   background: linear-gradient(145deg, #29a9e1 0%, #1c8fc0 100%);
   box-shadow:
@@ -81,18 +81,19 @@ a {
       inset 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
-.content {
+.content-wrapper {
+  width: 100%;
   display: flex;
   flex-direction: row;
-  margin: auto;
-  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
 }
 
 
 .avatar {
   width: 44px;
   height: 44px;
-  margin: auto;
   background: rgba(var(--white-rgb)/0.25);
   backdrop-filter: blur(2px);
   display: flex;
@@ -105,11 +106,9 @@ a {
 }
 
 .text-block {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  margin: auto;
 }
 
 .channel-name {
@@ -139,7 +138,7 @@ a {
   backdrop-filter: blur(2px);
 }
 
-.wrapper:hover .subscribe-button {
+.content:hover .subscribe-button {
   background: rgba(0, 0, 0, 0.5);
 }
 
