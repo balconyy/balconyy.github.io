@@ -1,85 +1,26 @@
 <script setup>
-import {onMounted, ref, watch} from "vue";
-
 import bolvanWebm from '@/assets/bolvan.webm'
 import blinkWebm from '@/assets/blink.webm'
 import zaebPng from '@/assets/zaeb.png'
+import FaceView from "@/components/logo/FaceView.vue";
 
-const question = "-Эмм... бэлкони?"
+const question = "-Эээ... бэлкони?"
 
-const bolvan = ref(null)
-const blink = ref(null)
-
-const activeImage = ref(null)
-
-const onDown = (id) => {
-  activeImage.value = id
-}
-
-const onUp = (event) => {
-  activeImage.value = null
-  play(event.currentTarget.querySelector('video'))
-}
-
-const play = (video) => {
-  if (!video) return
-  video.currentTime = 0
-  video.play()
-}
-
-const restartWithDelay = (event) => {
-  setTimeout(() => {
-    play(event.target)
-  }, 3000)
-}
-
-
-onMounted(() => {
-  play(bolvan.value)
-  play(blink.value)
-})
 
 </script>
 
 <template>
-  <section class="balcony-block">
+  <section class="logo-main">
     <div class="content">
       <div class="upper-block">
         <p class="question">
           <span v-for="letter in question">{{ letter }}</span>
         </p>
-        <div @mousedown="onDown('bolvan', $event)"
-             @mouseup="onUp"
-             @mouseleave="onUp">
-          <video v-if="activeImage !== 'bolvan'" ref="bolvan" class="face secondary" muted playsinline
-                 @ended="restartWithDelay">
-            <source :src=bolvanWebm type="video/webm"/>
-          </video>
-          <img
-              v-else
-              class="face secondary"
-              :src="zaebPng"
-              alt="bolvan"
-          />
-        </div>
+        <FaceView class="face secondary" :video-main="bolvanWebm" :image-pressed="zaebPng"/>
       </div>
 
       <div class="main-block">
-        <div class="image-main"
-            @mousedown="onDown('blink', $event)"
-             @mouseup="onUp"
-             @mouseleave="onUp">
-          <video v-if="activeImage !== 'blink'" ref="blink" class="face main" muted playsinline
-                 @ended="restartWithDelay">
-            <source :src=blinkWebm type="video/webm"/>
-          </video>
-          <img
-              v-else
-              class="face main"
-              :src="zaebPng"
-              alt="bolvan"
-          />
-        </div>
+        <FaceView class="face main" :video-main="blinkWebm" :image-pressed="zaebPng"/>
         <h1 class="titles-container">
           <span class="balcony-title">Balcony</span>
           <span class="sub-title">Именно Balcony</span>
@@ -91,7 +32,7 @@ onMounted(() => {
 
 <style scoped>
 
-.balcony-block {
+.logo-main {
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -171,14 +112,14 @@ onMounted(() => {
 }
 
 .face.secondary {
+  overflow: hidden;
+  position: relative;
   width: clamp(24px, 6vw, 40px);
   aspect-ratio: 1 / 1;
 }
-.image-main{
-  margin: auto;
-}
 
 .face.main {
+  margin: auto;
   width: clamp(64px, 12vw, 108px);
   aspect-ratio: 1 / 1;
   filter: drop-shadow(0px 8px 20px rgba(var(--white-rgb) / 0.12));
