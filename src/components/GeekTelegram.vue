@@ -59,7 +59,7 @@ a {
 }
 
 .content {
-  width: 180px;
+  width: 200px;
   background: linear-gradient(145deg, #1691c7 0%, #0c6f99 100%);
   border-radius: 20px;
   padding: 10px;
