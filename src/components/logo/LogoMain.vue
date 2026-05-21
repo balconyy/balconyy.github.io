@@ -11,7 +11,7 @@ const question = "-Эээ... бэлкони?"
 
 <template>
   <section class="logo-main">
-    <div class="content">
+    <div class="text-block">
       <div class="upper-block">
         <p class="question">
           <span v-for="letter in question">{{ letter }}</span>
@@ -45,7 +45,7 @@ const question = "-Эээ... бэлкони?"
   padding: 36px;
 }
 
-.content {
+.text-block {
   position: relative;
   z-index: 2;
 }
@@ -54,20 +54,20 @@ const question = "-Эээ... бэлкони?"
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 .question {
   gap: 4px;
   display: flex;
-  margin: 0 0 0 -32px;
+  margin: 0 0 0 -48px;
   letter-spacing: 0.035em;
   color: var(--accent-dark);
 }
 
 .question span {
   display: inline-block;
-  font-size: clamp(10px, 2vw, 32px);
+  font-size: clamp(10px, 2vw, 24px);
   font-weight: 200;
   font-style: italic;
 }
@@ -94,7 +94,7 @@ const question = "-Эээ... бэлкони?"
 }
 
 .balcony-title {
-  font-size: clamp(72px, 9vw, 160px);
+  font-size: clamp(90px, 8vw, 128px);
   font-weight: 900;
   letter-spacing: -0.095em;
   color: white;
@@ -102,9 +102,9 @@ const question = "-Эээ... бэлкони?"
 }
 
 .sub-title {
-  margin-left: 7px;
-  margin-top: 8px;
-  font-size: clamp(4px, 2vw, 28px);
+  margin-left: 4px;
+  margin-top: 4px;
+  font-size: clamp(10px, 2vw, 24px);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -114,13 +114,13 @@ const question = "-Эээ... бэлкони?"
 .face.secondary {
   overflow: hidden;
   position: relative;
-  width: clamp(24px, 6vw, 40px);
+  width: clamp(24px, 6vw, 36px);
   aspect-ratio: 1 / 1;
 }
 
 .face.main {
   margin: auto;
-  width: clamp(64px, 12vw, 108px);
+  width: clamp(64px, 8vw, 92px);
   aspect-ratio: 1 / 1;
   filter: drop-shadow(0px 8px 20px rgba(var(--white-rgb) / 0.12));
 }

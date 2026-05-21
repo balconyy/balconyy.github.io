@@ -16,6 +16,7 @@ import GeekTelegram from "@/components/GeekTelegram.vue";
   </main>
 
   <footer>
+    <GeekTelegram/>
   </footer>
 </template>
 

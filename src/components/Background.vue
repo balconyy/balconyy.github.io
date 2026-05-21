@@ -13,6 +13,7 @@
 
 
 .base-layer {
+  z-index: 1;
   position: absolute;
   top: 0;
   left: 0;
@@ -26,6 +27,7 @@
 }
 
 .square-pattern {
+  z-index: 1;
   position: absolute;
   top: 0;
   left: 0;

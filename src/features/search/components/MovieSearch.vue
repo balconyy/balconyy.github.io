@@ -7,7 +7,7 @@ const query = ref('')
 
 <template>
   <section class="movie-search">
-    <div class="content">
+    <div class="text-block">
       <div class="search-wrap">
         <input
             v-model="query"
@@ -34,7 +34,7 @@ const query = ref('')
   overflow: hidden;
 }
 
-.content {
+.text-block {
   width: min(850px, 100%);
   z-index: 2;
   margin: 0 auto;
