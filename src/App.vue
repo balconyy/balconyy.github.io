@@ -1,8 +1,8 @@
 <script setup>
-import MovieSearch from '@/features/search/components/MovieSearch.vue'
 import LogoMain from "@/components/logo/LogoMain.vue";
 import Background from "@/components/Background.vue";
 import GeekTelegram from "@/components/GeekTelegram.vue";
+import SearchMain from "@/features/search/components/SearchMain.vue";
 </script>
 
 <template>
@@ -12,7 +12,7 @@ import GeekTelegram from "@/components/GeekTelegram.vue";
   </header>
 
   <main>
-    <MovieSearch/>
+    <SearchMain/>
   </main>
 
   <footer>

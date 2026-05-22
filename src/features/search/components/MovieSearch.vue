@@ -1,8 +1,19 @@
-<script setup>
-import {ref} from 'vue'
+<script setup lang="ts">
 import {Search} from '@lucide/vue';
+import {ref} from "vue";
 
-const query = ref('')
+const emit = defineEmits<{
+  (e: "search", value: string): void;
+}>();
+
+const query = ref("");
+
+const onSearch = () => {
+  console.log(query.value);
+  if (!query.value.trim()) return;
+  emit("search", query.value);
+};
+
 </script>
 
 <template>
@@ -13,9 +24,10 @@ const query = ref('')
             v-model="query"
             class="search-input"
             type="text"
-            placeholder="Название фильма..."
+            placeholder="Введите название..."
+            @keyup.enter="onSearch"
         />
-        <button class="search-button">
+        <button class="search-button" @click="onSearch">
           <Search class="ic search" :size="24"/>
         </button>
       </div>
