@@ -1,21 +1,21 @@
-import {MovieResponseDTO} from "../dto/movie.dto";
 import {Movie} from "../../models/movie";
+import {MovieDTO} from "../dto/movieDTO";
 
 
 export class MovieMapper {
-    static toDomain(dto: MovieResponseDTO): Movie {
-        const raw = dto.raw_data;
+    static toDomain(dto: MovieDTO): Movie {
         return {
-            id: dto.id,
-            titleMain: raw.name_ru,
-            titleSecond: raw.name_en,
-            posterUrl: dto.poster,
+            id: dto.filmId,
+            titleMain: dto.nameRu,
+            titleSecond: dto.nameEn,
+            posterUrl: dto.posterUrl,
             year: dto.year,
-            ratingKP: raw.rating,
+            type: dto.type,
+            ratingKP: dto.rating,
         };
     }
 
-    static toDomainList(dtoList: MovieResponseDTO[]): Movie[] {
+    static toDomainList(dtoList: MovieDTO[]): Movie[] {
         return dtoList.map(this.toDomain);
     }
 }

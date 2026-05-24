@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {searchApi} from "../data/http";
 import type {Movie} from "@/models/movie";
-import {MovieResponseDTO} from "../data/dto/movie.dto";
+import {MovieListDTO} from "../data/dto/movieDTO";
 import {MovieMapper} from "../data/mapper/movie.mapper";
 
 export const useSearchStore = defineStore("movies", {
@@ -16,8 +16,12 @@ export const useSearchStore = defineStore("movies", {
             this.loading = true;
             this.error = null;
             try {
-                const rawRes = await searchApi.get<MovieResponseDTO[]>(`/search/${query}`);
-                this.movies = MovieMapper.toDomainList(rawRes.data);
+                const rawRes = await searchApi.get<MovieListDTO>(`/search`, {
+                    params: {
+                        name: `${query}`,
+                    },
+                });
+                this.movies = MovieMapper.toDomainList(rawRes.data.films);
             } catch (e) {
                 this.error = "Ошибка загрузки фильмов";
             } finally {

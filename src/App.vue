@@ -2,7 +2,7 @@
 import LogoMain from "@/components/logo/LogoMain.vue";
 import Background from "@/components/Background.vue";
 import GeekTelegram from "@/components/GeekTelegram.vue";
-import SearchMain from "@/features/search/components/SearchMain.vue";
+import SearchMain from "@/features/main/components/SearchMain.vue";
 </script>
 
 <template>

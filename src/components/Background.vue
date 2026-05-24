@@ -14,11 +14,12 @@
 
 .base-layer {
   z-index: 1;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
+  min-height: 100%;
   background: radial-gradient(circle at 50% 50%,
   #0f0a1a 0%,
   #08060c 50%,
@@ -28,11 +29,9 @@
 
 .square-pattern {
   z-index: 1;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  inset: 0;
+  min-height: 100%;
   background-image:
       repeating-linear-gradient(
           60deg,

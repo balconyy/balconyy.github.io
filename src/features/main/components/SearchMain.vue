@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import MovieSearch from "./MovieSearch.vue";
-import SearchList from "./SearchList.vue";
+import MovieSearch from "./search/MovieSearch.vue";
+import SearchList from "./search/SearchList.vue";
 import MovieLoading from "./MovieLoading.vue";
 import {useSearchStore} from "@/store/searchStore";
+import FeatureTabs from "@/features/main/components/FeatureTabs.vue";
 
 const store = useSearchStore()
 
@@ -15,6 +16,8 @@ const onSearch = (query: string) => {
 <template>
   <div class="search-main">
     <MovieSearch @search="onSearch"/>
+
+    <FeatureTabs/>
 
     <MovieLoading v-if="store.loading" />
 

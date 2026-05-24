@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const searchApi = axios.create({
-    baseURL: "https://api4.rhserv.vu",
+    baseURL: "http://45.81.35.103:8080/",
 });
 

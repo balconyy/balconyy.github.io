@@ -9,7 +9,7 @@ import avatar from '@/assets/geek-avatar.jpg'
     <div class="content">
         <div class="content-wrapper">
           <img class="avatar" :src="avatar" alt="Гик Новости. Аватарка"/>
-          <div class="text-block">
+          <div class="search-block">
             <div class="channel-name">Гик Новости</div>
             <div class="channel-description">Для тех кто в теме</div>
           </div>
@@ -49,12 +49,9 @@ a {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.3cap;
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(0, 0, 0, 0.2);
-  display: inline-block;
-  width: fit-content;
+  color: rgba(var(--white-rgb) /0.85);
+  background: rgba(0, 0, 0, 0.3);
   padding: 2px 6px;
-  border-radius: 30px;
   margin-bottom: 2px;
 }
 
@@ -105,7 +102,7 @@ a {
   border: 1px solid var(--white);
 }
 
-.text-block {
+.search-block {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -116,7 +113,7 @@ a {
   font-size: 16px;
   color: white;
   line-height: 1.2;
-  letter-spacing: -0.2px;
+  letter-spacing: 0.05em;
 }
 
 .channel-description {

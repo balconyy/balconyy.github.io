@@ -4,6 +4,7 @@
   --accent-hover: #9b80bd;
   --accent-light: #b9a9c9;
   --accent-dark: #5d418a;
+  --accent-black: #211731;
   --accent-transparent: #6c5ce730;
   --accent-semi-transparent: #6c5ce780;
 
@@ -21,6 +22,7 @@
   --accent-hover-rgb: 155 128 189;
   --accent-light-rgb: 185 169 201;
   --accent-dark-rgb: 93 65 138;
+  --accent-black-rgb: 33 23 49;
 
   --ui-color-rgb: 113 113 122;
   --ui-hover-rgb: 82 82 91;
