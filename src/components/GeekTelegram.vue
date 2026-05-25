@@ -1,5 +1,5 @@
 <script setup>
-import avatar from '@/assets/geek-avatar.jpg'
+import avatar from '@/assets/media/geek-avatar.jpg'
 </script>
 
 <template>
@@ -23,11 +23,6 @@ import avatar from '@/assets/geek-avatar.jpg'
 </template>
 
 <style scoped>
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
 
 .telegram-ad {
   z-index: 2;

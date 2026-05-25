@@ -9,29 +9,34 @@ defineProps<{
 
 
 <template>
-  <div class="movie-card">
-    <div class="old-school-effect"></div>
-    <div class="card-inner">
-      <div class="poster-wrapper">
-        <img
-            class="poster"
-            :src="movie.posterUrl"
-        >
-      </div>
+  <RouterLink :to="{ name: 'movie', params: { id: movie.id, title: movie.titleMain }}">
+    <div class="movie-card">
+      <div class="old-school-effect"/>
+      <div class="card-inner">
+        <div class="poster-wrapper">
+          <img
+              class="poster"
+              :src="movie.posterUrl"
+          >
+        </div>
 
-      <div class="movie-info">
-        <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}</h3>
-        <p class="title-second">{{ movie.titleMain != null ? movie.titleSecond : "" }}</p>
-        <div class="info-container">
-          <span class="info">{{ movie.type + " | " + (movie.year !== 'null' ? movie.year : "???") }}</span>
+        <div class="movie-info">
+          <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}</h3>
+          <p class="title-second">{{ movie.titleMain != null ? movie.titleSecond : "" }}</p>
+          <div class="info-container">
+            <span class="info">{{ movie.type + " | " + (movie.year !== 'null' ? movie.year : "???") }}</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 <style scoped>
 .movie-card {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   z-index: 2;
   position: relative;
   width: 230px;

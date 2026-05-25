@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import FeatureTab from './Tab.vue'
 
-const tabs = ['Запрос', 'История', 'Популярное']
+const tabs = ['Запрос']
 const activeTab = ref('Запрос')
 </script>
 

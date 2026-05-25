@@ -1,7 +1,7 @@
 <script setup>
-import bolvanWebm from '@/assets/bolvan.webm'
-import blinkWebm from '@/assets/blink.webm'
-import zaebPng from '@/assets/zaeb.png'
+import bolvanWebm from '@/assets/media/bolvan.webm'
+import blinkWebm from '@/assets/media/blink.webm'
+import zaebPng from '@/assets/media/zaeb.png'
 import FaceView from "@/components/logo/FaceView.vue";
 
 const question = "-Эээ... бэлкони?"

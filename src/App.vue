@@ -1,29 +1,26 @@
 <script setup>
-import LogoMain from "@/components/logo/LogoMain.vue";
 import Background from "@/components/Background.vue";
-import GeekTelegram from "@/components/GeekTelegram.vue";
-import SearchMain from "@/features/main/components/SearchMain.vue";
 </script>
 
 <template>
   <Background/>
-  <header>
-    <LogoMain/>
-  </header>
-
-  <main>
-    <SearchMain/>
-  </main>
-
-  <footer>
-    <GeekTelegram/>
-  </footer>
+  <div class="layout">
+    <main class="content">
+      <RouterView/>
+    </main>
+  </div>
 </template>
 
 <style scoped>
-
-footer{
-  padding-bottom: 120px;
+.layout {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
 }
 
+.content {
+  flex: 1;
+  padding: 20px;
+}
 </style>
