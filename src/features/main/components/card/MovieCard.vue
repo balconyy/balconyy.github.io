@@ -10,6 +10,7 @@ defineProps<{
 
 <template>
   <div class="movie-card">
+    <div class="old-school-effect"></div>
     <div class="card-inner">
       <div class="poster-wrapper">
         <img
@@ -35,6 +36,7 @@ defineProps<{
   position: relative;
   width: 230px;
   cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 
@@ -43,14 +45,17 @@ defineProps<{
   position: relative;
   background: radial-gradient(rgba(var(--white-rgb)/0.1) 40%, rgba(var(--accent-black-rgb)) 100%);
   border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 8px;
   height: 400px;
+  transition: 0.2s ease;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
 }
 
 .movie-card:hover .card-inner {
-  border-color: white;
-  box-shadow: 0 0 32px rgba(var(--white-rgb)/0.3);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
 }
 
 .poster-wrapper {
@@ -108,8 +113,7 @@ defineProps<{
 }
 
 
-.movie-card::before {
-  content: "";
+.old-school-effect {
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(

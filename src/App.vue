@@ -22,5 +22,8 @@ import SearchMain from "@/features/main/components/SearchMain.vue";
 
 <style scoped>
 
+footer{
+  padding-bottom: 120px;
+}
 
 </style>
