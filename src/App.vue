@@ -5,7 +5,7 @@ import Background from "@/components/Background.vue";
 <template>
   <Background/>
   <div class="layout">
-    <main class="content">
+    <main class="main-content">
       <RouterView/>
     </main>
   </div>
@@ -19,8 +19,7 @@ import Background from "@/components/Background.vue";
   width: 100%;
 }
 
-.content {
+.main-content {
   flex: 1;
-  padding: 20px;
 }
 </style>

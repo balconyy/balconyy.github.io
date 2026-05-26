@@ -9,7 +9,7 @@ defineProps<{
 
 
 <template>
-  <RouterLink :to="{ name: 'movie', params: { id: movie.id, title: movie.titleMain }}">
+  <RouterLink :to="{ name: 'movie', params: { kp_id: movie.id}}">
     <div class="movie-card">
       <div class="old-school-effect"/>
       <div class="card-inner">
@@ -39,7 +39,6 @@ defineProps<{
   -ms-user-select: none;
   z-index: 2;
   position: relative;
-  width: 230px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -60,7 +59,7 @@ defineProps<{
 }
 
 .movie-card:hover .card-inner {
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .poster-wrapper {

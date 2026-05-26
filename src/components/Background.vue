@@ -13,7 +13,8 @@
 
 
 .base-layer {
-  z-index: 1;
+  pointer-events: none;
+  z-index: -1;
   position: fixed;
   top: 0;
   left: 0;
@@ -53,6 +54,9 @@
       );
   opacity: 0.4;
 }
-
+.base-layer,
+.square-pattern {
+  pointer-events: none;
+}
 
 </style>

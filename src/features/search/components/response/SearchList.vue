@@ -11,7 +11,7 @@
 <script setup lang="ts">
 
 import {Movie} from "@/models/movie";
-import MovieCard from "@/features/main/components/card/MovieCard.vue";
+import MovieCard from "@/features/search/components/card/MovieCard.vue";
 
 defineProps<{
   movies: Movie[];
@@ -21,10 +21,10 @@ defineProps<{
 <style scoped>
 .search-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 230px);
+  grid-template-columns: repeat(auto-fill, 226px);
   justify-content: center;
   align-items: stretch;
-  gap: 24px;
+  gap: 18px;
   padding: 0;
 }
 </style>

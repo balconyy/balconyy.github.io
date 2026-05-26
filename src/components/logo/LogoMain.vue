@@ -38,11 +38,10 @@ const question = "-Эээ... бэлкони?"
   -ms-user-select: none;
   position: relative;
   margin: auto;
-  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px 0 12px 0;
+  padding: 12px 0 12px 0;
 }
 
 .search-block {

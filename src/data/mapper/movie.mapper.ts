@@ -5,7 +5,7 @@ import {MovieDTO} from "../dto/movieDTO";
 export class MovieMapper {
     static toDomain(dto: MovieDTO): Movie {
         return {
-            id: dto.filmId,
+            id: dto.filmId.toString(),
             titleMain: dto.nameRu,
             titleSecond: dto.nameEn,
             posterUrl: dto.posterUrl,

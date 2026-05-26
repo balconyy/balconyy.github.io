@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import MovieSearch from "./search/MovieSearch.vue";
-import SearchList from "./search/SearchList.vue";
+import MovieSearch from "./response/MovieSearch.vue";
+import SearchList from "./response/SearchList.vue";
 import MovieLoading from "./MovieLoading.vue";
 import {useSearchStore} from "@/store/searchStore";
-import FeatureTabs from "@/features/main/components/FeatureTabs.vue";
+import FeatureTabs from "@/features/search/components/FeatureTabs.vue";
 
 const store = useSearchStore()
 

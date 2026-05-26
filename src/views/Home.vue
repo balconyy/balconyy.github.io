@@ -1,6 +1,6 @@
 <script setup>
 
-import SearchMain from "@/features/main/components/SearchMain.vue";
+import SearchMain from "@/features/search/components/SearchMain.vue";
 import LogoMain from "@/components/logo/LogoMain.vue";
 import GeekTelegram from "@/components/GeekTelegram.vue";
 </script>

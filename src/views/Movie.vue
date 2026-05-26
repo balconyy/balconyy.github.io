@@ -1,5 +1,6 @@
 <script setup>
 import {useRoute} from "vue-router";
+import PlayerComponent from "@/features/player/components/PlayerComponent.vue";
 
 const route = useRoute();
 console.log("route", route.params);
@@ -9,6 +10,7 @@ console.log("route", route.params);
   <h1 class="content-title">
     Ждун
   </h1>
+  <PlayerComponent class="player-component"/>
 </template>
 
 <style scoped>
