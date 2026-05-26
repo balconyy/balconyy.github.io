@@ -8,7 +8,6 @@ console.log("route", route.params);
 
 <template>
   <h1 class="content-title">
-    Ждун
   </h1>
   <PlayerComponent class="player-component"/>
 </template>
