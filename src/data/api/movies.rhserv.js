@@ -1,4 +1,4 @@
-import { getApi } from '@/api/axios'
+import { getApi } from '@/data/api/axios'
 
 // ===== Симуляция ошибки =====
 let isErrorSimulationEnabled = false // Переменная для включения/отключения симуляции ошибки
@@ -8,7 +8,7 @@ const simulateErrorIfNeeded = async () => {
   if (isErrorSimulationEnabled && simulatedErrorCode) {
     const status = parseInt(simulatedErrorCode, 10)
     const error = new Error(`Симулированная ошибка ${status}`)
-    error.response = { status }
+    error.response = { isLoading: status }
     throw error
   }
 }

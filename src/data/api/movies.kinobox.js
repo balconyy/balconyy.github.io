@@ -16,7 +16,7 @@ const simulateErrorIfNeeded = async () => {
   if (isErrorSimulationEnabled && simulatedErrorCode) {
     const status = parseInt(simulatedErrorCode, 10)
     const error = new Error(`Simulated error ${status}`)
-    error.response = { status }
+    error.response = { isLoading: status }
     throw error
   }
 }

@@ -73,8 +73,6 @@ const onSearch = () => {
   background: rgba(var(--ui-dark-rgb)/0.28);
   backdrop-filter: blur(10px);
   transition: 0.2s ease;
-
-  overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 }
 
@@ -112,6 +110,7 @@ const onSearch = () => {
   color: rgba(255, 255, 255, 0.70);
   border: none;
   cursor: pointer;
+  border-radius: 0 16px  16px 0;
   transition: 0.2s ease;
 }
 

@@ -4,7 +4,7 @@ import {
   getMovieSeoSlug,
   needsMovieSeoEnrichment,
   registerMovieSeoEntry
-} from '@/utils/movieSeo'
+} from '@/utils/movieSeo.js'
 import * as kinobd from './movies.kinobd.js'
 
 const SEO_ENRICHMENT_BATCH_SIZE = 5

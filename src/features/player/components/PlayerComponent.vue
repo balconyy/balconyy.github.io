@@ -1,5 +1,5 @@
 <template>
-  <ErrorMessage v-if="errorMessage" :message="errorMessage" :code="errorCode" />
+  <ErrorScreen v-if="errorMessage" :message="errorMessage" />
 
   <template v-else>
     <PlayerSelectorBar
@@ -92,9 +92,6 @@
             @mouseleave="activeTooltip = null"
             @click="toggleTheaterMode"
           >
-            <span class="material-symbols-outlined">{{
-              theaterMode ? 'fullscreen_exit' : 'aspect_ratio'
-            }}</span>
           </button>
           <div v-show="activeTooltip === 'theater'" class="custom-tooltip" data-tooltip="theater">
             {{ theaterMode ? 'Выйти из театрального режима' : 'Театральный режим' }}
@@ -141,7 +138,7 @@
 import { defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import ErrorMessage from '@/components/ErrorMessage.vue'
+import ErrorScreen from '@/components/ErrorScreen.vue'
 import SpinnerLoading from '@/components/SpinnerLoading.vue'
 import { usePlayerLayout } from '@/features/player/composables/usePlayerLayout'
 import { usePlayerSources } from '@/features/player/composables/usePlayerSources'

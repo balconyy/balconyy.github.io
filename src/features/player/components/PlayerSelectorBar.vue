@@ -39,6 +39,7 @@ defineEmits(['open-player-modal', 'open-source-modal'])
 <style scoped>
 .players-list {
   width: 100%;
+  color: white;
   max-width: none;
   display: flex;
   align-items: center;

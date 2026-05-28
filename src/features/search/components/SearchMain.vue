@@ -1,30 +1,36 @@
 <script setup lang="ts">
 import MovieSearch from "./response/MovieSearch.vue";
 import SearchList from "./response/SearchList.vue";
-import MovieLoading from "./MovieLoading.vue";
-import {useSearchStore} from "@/store/searchStore";
 import FeatureTabs from "@/features/search/components/FeatureTabs.vue";
+import LoadingScreen from "@/components/LoadingScreen.vue";
+import ErrorScreen from "@/components/ErrorScreen.vue";
+import {useSearch} from "@/features/search/useSearch";
 
-const store = useSearchStore()
+const {
+  movieList,
+  error,
+  isSuccess,
+  isLoading,
+  searchMovie,
+} = useSearch();
 
-const onSearch = (query: string) => {
-  store.searchMovies(query);
-};
 
 </script>
 
 <template>
   <div class="search-main">
-    <MovieSearch @search="onSearch"/>
+    <MovieSearch @search="searchMovie"/>
 
-    <FeatureTabs/>
-
-    <MovieLoading v-if="store.loading" />
-
-    <SearchList
-        v-else
-        :movies="store.movies"
+    <LoadingScreen v-if="isLoading"
+                   message="Поиск фильмов..."
     />
+    <ErrorScreen v-else-if="error"
+                 :message="error.message"
+    />
+    <SearchList v-else-if="isSuccess"
+                :movies="movieList"
+    />
+
   </div>
 </template>
 

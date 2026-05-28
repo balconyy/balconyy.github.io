@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { resolvePosterSetByMovie } from '@/utils/mediaUtils'
+import { resolvePosterSetByMovie } from '@/utils/mediaUtils.js'
 
 let apiInstance = null
 let isErrorSimulationEnabled = false
@@ -29,16 +29,9 @@ const DEFAULT_PLAYER_PROVIDERS = [
   'kholobok',
   'videoapi',
   'voidboost',
-  'trailer_local',
   'videoseed',
   'ia',
-  'youtube',
   'ext',
-  'trailer',
-  'netflix',
-  'torrent',
-  'vk',
-  'nf'
 ].join(',')
 
 const getApi = () => {
@@ -69,7 +62,7 @@ const simulateErrorIfNeeded = async () => {
   if (isErrorSimulationEnabled && simulatedErrorCode) {
     const status = parseInt(simulatedErrorCode, 10)
     const error = new Error(`Simulated error ${status}`)
-    error.response = { status }
+    error.response = { isLoading: status }
     throw error
   }
 }

@@ -1,11 +1,13 @@
 <template>
   <div class="spinner-wrapper">
-    <img src="@/assets/icon-spinner.svg" alt="Loading..." class="spinner" />
+    <img class="spinner" :src="Waiter" alt="logo"/>
     <p v-if="text" class="spinner-text">{{ text }}</p>
   </div>
 </template>
 
 <script setup>
+import Waiter from "@/assets/waiter.svg";
+
 defineProps({
   loading: {
     type: Boolean,
@@ -36,7 +38,7 @@ defineProps({
 .spinner {
   width: 70px;
   height: 70px;
-  animation: spin 1s linear infinite;
+  animation: spin 10s linear infinite;
   pointer-events: none;
 }
 

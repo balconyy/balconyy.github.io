@@ -86,6 +86,9 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
+
+  backface-visibility: hidden;
+  will-change: transform;
   -webkit-user-drag: none;
 }
 </style>

@@ -1,4 +1,4 @@
-import {normalizeMovieListResponse} from '@/api/movieSeoNormalizer'
+import {normalizeMovieListResponse} from '@/data/api/movieSeoNormalizer.js'
 
 const CONTENT_PROVIDERS = {
     KINOBD: 'kinobd',
@@ -18,7 +18,7 @@ const PLAYER_PROVIDER_TIMEOUT_MS = 15000
 
 
 const providerImporters = {
-    kinobd: () => import('@/api/movies.kinobd'),
+    kinobd: () => import('@/data/api/movies.kinobd.js'),
 }
 
 const loadProvider = () => {
@@ -94,7 +94,7 @@ const getPlayersWithFallback = async (...args) => {
             lastError = error
             const isTimeout = error?.name === 'PlayerProviderTimeoutError'
             const attemptPayload = {
-                status: isTimeout ? 'timeout' : 'error',
+                isLoading: isTimeout ? 'timeout' : 'error',
                 kp_id: contentId,
                 configured_source: provider,
                 source: currentProvider,

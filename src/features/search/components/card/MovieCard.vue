@@ -1,9 +1,15 @@
-<script setup lang="ts">
-import {Movie} from "@/models/movie";
+<script setup>
+import emptyPoster from '@/assets/empty-poster.jpg'
 
-defineProps<{
-  movie: Movie;
-}>();
+defineProps({
+  movie: Object
+})
+
+function onImgError(e) {
+  if (e.target.src !== emptyPoster) {
+    e.target.src = emptyPoster
+  }
+}
 
 </script>
 
@@ -17,6 +23,8 @@ defineProps<{
           <img
               class="poster"
               :src="movie.posterUrl"
+              @error="onImgError"
+              alt="poster"
           >
         </div>
 

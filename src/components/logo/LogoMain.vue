@@ -20,13 +20,14 @@ const question = "-Эээ... бэлкони?"
       </div>
 
       <div class="main-block">
-        <FaceView class="face main" :video-main="blinkWebm" :image-pressed="zaebPng"/>
-        <h1 class="titles-container">
-          <span class="balcony-title">Balcony</span>
-          <span class="sub-title">Именно Balcony</span>
-        </h1>
+        <div class="circle-shadow"/>
+          <FaceView class="face main" :video-main="blinkWebm" :image-pressed="zaebPng"/>
+          <h1 class="titles-container">
+            <span class="balcony-title">Balcony</span>
+            <span class="sub-title">Именно Balcony</span>
+          </h1>
+        </div>
       </div>
-    </div>
   </section>
 </template>
 
@@ -117,10 +118,24 @@ const question = "-Эээ... бэлкони?"
 }
 
 .face.main {
+  position: relative;
   margin: auto;
   width: clamp(64px, 8vw, 82px);
   aspect-ratio: 1 / 1;
-  filter: drop-shadow(0px 8px 20px rgba(var(--white-rgb) / 0.12));
+}
+
+.face.main::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: clamp(64px, 8vw, 60px);
+  aspect-ratio: 1 / 1;
+
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(255 255 255 / 0.6);
 }
 
 

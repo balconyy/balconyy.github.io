@@ -1,4 +1,4 @@
-import { getPlayers, searchKinoBDPlayerCandidates, getKinoBDPlayerDataByInid } from '@/api/movies'
+import { getPlayers, searchKinoBDPlayerCandidates, getKinoBDPlayerDataByInid } from '@/data/api/movies'
 import { usePlayerStore } from '@/store/player'
 import { computed, ref } from 'vue'
 
@@ -198,7 +198,7 @@ export function usePlayerSources({  kinopoiskId, getProviderDisplayName, onSelec
     sourceLoading,
     sourceError,
     errorMessage,
-    errorCode,
+    name: errorCode,
     playersEmptyMessage,
     isKinoBdProvider,
     showSourceButton,
@@ -220,14 +220,14 @@ const handleApiError = (error) => {
       code: 408
     }
   } else if (error.response) {
-    if (error.response.status >= 500) {
+    if (error.response.isLoading >= 500) {
       return {
         message: 'Ошибка на сервере. Пожалуйста, попробуйте позже',
-        code: error.response.status
+        code: error.response.isLoading
       }
     }
 
-    switch (error.response.status) {
+    switch (error.response.isLoading) {
       case 403:
         return {
           message: 'Упс, недоступно по требованию правообладателя',
@@ -245,8 +245,8 @@ const handleApiError = (error) => {
         }
       default:
         return {
-          message: `Произошла неизвестная ошибка. Ошибка: ${error.response.data?.status ?? error.response.status}`,
-          code: error.response.status
+          message: `Произошла неизвестная ошибка. Ошибка: ${error.response.data?.isLoading ?? error.response.isLoading}`,
+          code: error.response.isLoading
         }
     }
   } else {
