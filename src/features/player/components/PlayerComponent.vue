@@ -92,6 +92,7 @@
             @mouseleave="activeTooltip = null"
             @click="toggleTheaterMode"
           >
+          <Fullscreen/>
           </button>
           <div v-show="activeTooltip === 'theater'" class="custom-tooltip" data-tooltip="theater">
             {{ theaterMode ? 'Выйти из театрального режима' : 'Театральный режим' }}
@@ -147,6 +148,7 @@ import PlayerModal from '@/features/player/components/PlayerModal.vue'
 import PlayerSelectorBar from '@/features/player/components/PlayerSelectorBar.vue'
 import { debugLog } from '@/utils/logger'
 import { getProviderDisplayName } from '@/utils/playerUtils'
+import { Fullscreen } from '@lucide/vue';
 
 const PlayerSourceModal = defineAsyncComponent(
   () => import('@/features/player/components/PlayerSourceModal.vue')
