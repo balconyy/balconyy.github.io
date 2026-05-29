@@ -25,18 +25,14 @@ import avatar from '@/assets/media/geek-avatar.jpg'
 <style scoped>
 
 .telegram-ad {
-  z-index: 2;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: static;
+  margin: 0;
 
   flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  margin: 12px 0;
 }
 
 .support-title {

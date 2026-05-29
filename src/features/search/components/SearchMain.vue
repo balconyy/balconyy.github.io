@@ -21,6 +21,8 @@ const {
   <div class="search-main">
     <MovieSearch @search="searchMovie"/>
 
+    <FeatureTabs/>
+
     <LoadingScreen v-if="isLoading"
                    message="Поиск фильмов..."
     />
