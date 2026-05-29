@@ -3,11 +3,11 @@ import avatar from '@/assets/media/geek-avatar.jpg'
 </script>
 
 <template>
-  <section class="telegram-ad">
+  <section class="telegram-geek">
     <div class="support-title">При поддержке тг-канала</div>
     <a href="https://t.me/qulyaba">
-    <div class="ad-content">
-        <div class="ad-content-wrapper">
+    <div class="geek-content">
+        <div class="geek-content-wrapper">
           <img class="avatar" :src="avatar" alt="Гик Новости. Аватарка"/>
           <div class="search-block">
             <div class="channel-name">Гик Новости</div>
@@ -24,7 +24,7 @@ import avatar from '@/assets/media/geek-avatar.jpg'
 
 <style scoped>
 
-.telegram-ad {
+.telegram-geek {
   position: static;
   margin: 0;
 
@@ -46,7 +46,7 @@ import avatar from '@/assets/media/geek-avatar.jpg'
   margin-bottom: 2px;
 }
 
-.ad-content {
+.geek-content {
   width: 200px;
   background: linear-gradient(145deg, #1691c7 0%, #0c6f99 100%);
   border-radius: 20px;
@@ -60,7 +60,7 @@ import avatar from '@/assets/media/geek-avatar.jpg'
   border: 2px solid var(--white);
 }
 
-.ad-content:hover {
+.geek-content:hover {
   transform: translateY(-3px);
   background: linear-gradient(145deg, #29a9e1 0%, #1c8fc0 100%);
   box-shadow:
@@ -69,7 +69,7 @@ import avatar from '@/assets/media/geek-avatar.jpg'
       inset 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
-.ad-content-wrapper {
+.geek-content-wrapper {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -126,7 +126,7 @@ import avatar from '@/assets/media/geek-avatar.jpg'
   backdrop-filter: blur(2px);
 }
 
-.ad-content:hover .subscribe-button {
+.geek-content:hover .subscribe-button {
   background: rgba(0, 0, 0, 0.5);
 }
 
