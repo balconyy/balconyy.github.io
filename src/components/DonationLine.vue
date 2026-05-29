@@ -16,7 +16,7 @@
             </div>
           </div>
 
-          <button class="donate-button" @click="handleDonate">
+          <button class="donate-button">
             Поддержать
           </button>
         </div>
@@ -36,10 +36,6 @@ const goalText = "10 000"
 const progressPercent = computed(() => {
   return Math.min((current.value / goal) * 100, 100)
 })
-
-function handleDonate() {
-  alert('Спасибо за поддержку Птичьей мафии!')
-}
 </script>
 
 <style scoped>
