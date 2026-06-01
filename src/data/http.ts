@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const searchClient = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "https://balcony-api.duckdns.org",
     timeout: 15000,
 });
 
