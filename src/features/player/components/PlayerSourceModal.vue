@@ -12,7 +12,7 @@
         <li v-for="candidate in candidates" :key="candidate.id">
           <button class="source-candidate-btn" type="button" @click="$emit('select', candidate)">
             <span class="source-title">{{ candidate.title || `ID ${candidate.id}` }}</span>
-            <span class="source-meta">inid: {{ candidate.id }} · kp: {{ candidate.kp_id || '-' }}</span>
+            <span class="source-meta">inid: {{ candidate.id }} · kp: {{ candidate.kpId || '-' }}</span>
           </button>
         </li>
       </ul>

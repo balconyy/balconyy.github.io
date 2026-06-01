@@ -11,7 +11,7 @@ const index = [
 
     },
     {
-        path: "/movie/:kp_id",
+        path: "/movie/:kpId",
         name: "movie",
         component: Movie,
         props: true,

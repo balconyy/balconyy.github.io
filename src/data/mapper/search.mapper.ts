@@ -1,21 +1,21 @@
 import {Movie} from "../../models/movie";
-import {MovieDTO} from "../dto/movieDTO";
+import {SearchDTO} from "../dto/searchDTO";
 
 
-export class MovieMapper {
-    static toDomain(dto: MovieDTO): Movie {
+export class SearchMapper {
+    static toDomain(dto: SearchDTO): Movie {
         return {
             id: dto.filmId.toString(),
             titleMain: dto.nameRu,
             titleSecond: dto.nameEn,
-            posterUrl: dto.posterUrl,
+            posterUrl: dto.posterUrlPreview,
             year: dto.year,
             type: dto.type,
             ratingKP: dto.rating,
         };
     }
 
-    static toDomainList(dtoList: MovieDTO[]): Movie[] {
+    static toDomainList(dtoList: SearchDTO[]): Movie[] {
         return dtoList.map(this.toDomain);
     }
 }

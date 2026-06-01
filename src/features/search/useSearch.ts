@@ -1,11 +1,16 @@
 import {ref, computed} from 'vue'
 import {searchApi} from "../../data/api/search";
-import {MovieMapper} from "../../data/mapper/movie.mapper";
+import {SearchMapper} from "../../data/mapper/search.mapper";
 import {Movie} from "../../models/movie";
+import {useRouter} from "vue-router";
+import {useMovieStore} from "../../store/movie";
 
 let controller: AbortController | null = null;
 
 export function useSearch() {
+    const router = useRouter();
+    const movieStore = useMovieStore();
+
     const state = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
 
 
@@ -15,7 +20,7 @@ export function useSearch() {
     const error = ref<Error | null>(null)
     const movieList = ref<Movie[]>([])
 
-    const searchMovie = async (query: string) => {
+    const searchMovies = async (query: string) => {
         if (controller) {
             controller.abort();
         }
@@ -27,7 +32,7 @@ export function useSearch() {
         try {
             const rawRes = await searchApi.search(query, controller)
 
-            movieList.value = MovieMapper.toDomainList(rawRes.data.films).slice(0,18)
+            movieList.value = SearchMapper.toDomainList(rawRes.data.films).slice(0,18)
             if (movieList.value.length > 0) state.value = 'success'
             else {
                 state.value = 'error'
@@ -43,11 +48,24 @@ export function useSearch() {
         }
     }
 
+    const onMovieClick =  (movie: Movie) => {
+        movieStore.addToHistory(movie)
+        router.push({
+            name: 'movie',
+            params: {
+                kpId: movie.id
+            }
+        }).then(r => 404)
+
+
+    }
+
     return {
         movieList,
         error,
         isSuccess,
         isLoading,
-        searchMovie,
+        searchMovie: searchMovies,
+        onMovieClick
     }
 }

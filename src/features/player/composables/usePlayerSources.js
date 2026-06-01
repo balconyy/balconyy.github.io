@@ -108,7 +108,7 @@ export function usePlayerSources({  kinopoiskId, getProviderDisplayName, onSelec
 
       const savedInid = playerStore.kinobdSourceByKpId?.[kpId] || null
       players = await getPlayers(kpId, {
-        mode: 'kp_id',
+        mode: 'kpId',
         usePlayerData: true,
         forceInid: isKinoBdProvider.value ? savedInid : null
       })

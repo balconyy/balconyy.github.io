@@ -1,9 +1,9 @@
-export interface MovieListDTO{
-    films: MovieDTO[]
+export interface SearchListDTO {
+    films: SearchDTO[]
 }
 
 
-export interface MovieDTO {
+export interface SearchDTO {
     filmId: number;
     nameRu: string;
     nameEn: string;

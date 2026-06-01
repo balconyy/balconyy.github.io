@@ -2,8 +2,8 @@
   <div class="search-list">
     <MovieCard
         v-for="movie in movies"
-        :key="movie.id"
         :movie="movie"
+        @select="$emit('select', $event)"
     />
   </div>
 </template>

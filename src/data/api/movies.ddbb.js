@@ -9,7 +9,8 @@ const api = axios.create({
     baseURL: DDBB_BASE_URL,
     headers: {
         'Content-Type': 'application/json'
-    }
+    },
+    timeout: 15000,
 })
 
 const simulateErrorIfNeeded = async () => {
@@ -26,11 +27,10 @@ const apiCall = async (callFn) => {
     return await callFn(api)
 }
 
-const ensureUniqueKey = (obj, baseKey) => {
-    if (!obj[baseKey]) return baseKey
-    let idx = 2
-    while (obj[`${baseKey} #${idx}`]) idx++
-    return `${baseKey} #${idx}`
+const ensureUniqueKey = (obj) => {
+    let idx = 0
+    while (obj[`${idx}`]) idx++
+    return `${idx}`
 }
 
 const normalizePlayerType = (value) => String(value || 'Player').trim()
@@ -49,10 +49,9 @@ const toPlayersMap = (providers = [], {type = null, translationId = null} = {}) 
         }
 
         const providerBaseIframe = provider?.iframeUrl || ''
-        const providerLabel = `DDBB>${providerType}`
 
         if (providerBaseIframe) {
-            const key = ensureUniqueKey(players, providerLabel)
+            const key = ensureUniqueKey(players)
             players[key] = {
                 name: key,
                 translate: providerType,
@@ -74,7 +73,7 @@ const toPlayersMap = (providers = [], {type = null, translationId = null} = {}) 
             if (selectedTranslationId && tId !== selectedTranslationId) continue
 
             const translationName = String(translation?.name || 'Translation').trim()
-            const key = ensureUniqueKey(players, `${providerLabel}>${translationName}`)
+            const key = translationName
             players[key] = {
                 name: key,
                 translate: translationName,
@@ -111,7 +110,8 @@ const getPlayers = async (kpId, options = {}) => {
 
 export {
     getPlayers,
-    getPlayersRaw}
+    getPlayersRaw
+}
 
 export const toggleErrorSimulation = (enabled) => {
     isErrorSimulationEnabled = enabled

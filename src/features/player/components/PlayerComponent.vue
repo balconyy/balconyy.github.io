@@ -1,167 +1,169 @@
 <template>
-  <ErrorScreen v-if="errorMessage" :message="errorMessage" />
+  <ErrorScreen v-if="errorMessage" :message="errorMessage"/>
 
   <template v-else>
     <PlayerSelectorBar
-      :selected-label="selectedPlayerLabel"
-      :show-source-button="showSourceButton"
-      @open-player-modal="openPlayerModal"
-      @open-source-modal="openSourceModal"
+        :selected-label="selectedPlayerLabel"
+        :show-source-button="showSourceButton"
+        @open-player-modal="openPlayerModal"
+        @open-source-modal="openSourceModal"
     />
     <!-- Модальное окно выбора плеера -->
     <PlayerModal
-      v-if="showPlayerModal"
-      :players="playersInternal"
-      :selected-player="selectedPlayerInternal"
-      @close="closePlayerModal"
-      @select="handlePlayerSelect"
+        v-if="showPlayerModal"
+        :players="playersInternal"
+        :selected-player="selectedPlayerInternal"
+        @close="closePlayerModal"
+        @select="handlePlayerSelect"
     />
 
     <PlayerSourceModal
-      v-if="showSourceModal"
-      :candidates="sourceCandidates"
-      :loading="sourceLoading"
-      :error="sourceError"
-      @close="closeSourceModal"
-      @select="applySourceCandidate"
+        v-if="showSourceModal"
+        :candidates="sourceCandidates"
+        :loading="sourceLoading"
+        :error="sourceError"
+        @close="closeSourceModal"
+        @select="applySourceCandidate"
     />
 
     <!-- Единый контейнер плеера -->
-    <div
-      ref="containerRef"
-      :class="['player-container', { 'theater-mode': theaterMode }]"
-      :style="!theaterMode ? containerStyle : {}"
-    >
-      <div class="iframe-wrapper" :style="!theaterMode ? iframeWrapperStyle : {}">
-        <iframe
-          v-show="!iframeLoading && selectedPlayerInternal?.iframe"
-          ref="playerIframe"
-          :src="selectedPlayerInternal?.iframe"
-          frameborder="0"
-          allowfullscreen
-          webkitallowfullscreen
-          class="responsive-iframe"
-          :class="{
+    <div class="player-container-wrapper">
+      <div
+          ref="containerRef"
+          :class="['player-container', { 'theater-mode': theaterMode }]"
+          :style="!theaterMode ? containerStyle : {}"
+      >
+        <div class="iframe-wrapper" :style="!theaterMode ? iframeWrapperStyle : {}">
+          <iframe
+              :key="iframeKey"
+              v-show="!iframeLoading && selectedPlayerInternal?.iframe"
+              ref="playerIframe"
+              :src="selectedPlayerInternal?.iframe"
+              frameborder="0"
+              allowfullscreen
+              webkitallowfullscreen
+              class="responsive-iframe"
+              :class="{
             'theater-mode-unlock': closeButtonVisible,
             'theater-mode-lock': theaterMode,
             dimmed: dimmingEnabled
           }"
-          @load="onIframeLoad"
-          @error="onIframeError"
-        ></iframe>
-        <SpinnerLoading
-          v-if="iframeLoading && !playersEmptyMessage"
-          class="player-loading-spinner"
-          :text="`Загружается плеер: ${selectedPlayerInternal ? getProviderDisplayName(selectedPlayerInternal) : 'Загружается список плееров'}\nЕсли плеер не грузится, то смените плеер выше или включите VPN`"
-        />
-        <div v-else-if="playersEmptyMessage" class="player-empty-state">
-          <p>{{ playersEmptyMessage }}</p>
-          <button v-if="showSourceButton" type="button" @click="openSourceModal">
-            Выбрать источник
-          </button>
+              @load="onIframeLoad"
+              @error="onIframeError"
+          ></iframe>
+          <SpinnerLoading
+              v-if="iframeLoading && !playersEmptyMessage"
+              class="player-loading-spinner"
+              :text="`Загружается плеер: ${selectedPlayerInternal ? getProviderDisplayName(selectedPlayerInternal) : 'Загружается список плееров'}\nЕсли плеер не грузится, то смените плеер выше или включите VPN`"
+          />
+          <div v-else-if="playersEmptyMessage" class="player-empty-state">
+            <p>{{ playersEmptyMessage }}</p>
+            <button v-if="showSourceButton" type="button" @click="openSourceModal">
+              Выбрать источник
+            </button>
+          </div>
         </div>
-      </div>
 
-      <!-- Кнопка закрытия в театральном режиме -->
-      <button
-        v-show="theaterMode"
-        class="close-theater-btn"
-        :class="{
+        <!-- Кнопка закрытия в театральном режиме -->
+        <button
+            v-show="theaterMode"
+            class="close-theater-btn"
+            :class="{
           visible: closeButtonVisible,
           hiding: theaterMode && !closeButtonVisible && closeButtonWasVisible
         }"
-        aria-label="Выйти из театрального режима"
-        @click="toggleTheaterMode"
-      >
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="6" y1="6" x2="18" y2="18" />
-          <line x1="18" y1="6" x2="6" y2="18" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Кнопки управления -->
-    <div v-if="!theaterMode" class="controls">
-      <div class="main-controls">
-        <div class="tooltip-container" data-tooltip-container="theater">
-          <button
-            class="theater-mode-btn"
-            :aria-label="theaterMode ? 'Выйти из театрального режима' : 'Театральный режим'"
-            @mouseenter="showTooltip('theater')"
-            @mouseleave="activeTooltip = null"
+            aria-label="Выйти из театрального режима"
             @click="toggleTheaterMode"
-          >
-          <Fullscreen/>
-          </button>
-          <div v-show="activeTooltip === 'theater'" class="custom-tooltip" data-tooltip="theater">
-            {{ theaterMode ? 'Выйти из театрального режима' : 'Театральный режим' }}
-            <span class="shortcut-hint">Alt+T</span>
-          </div>
-        </div>
+        >
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="6" y1="6" x2="18" y2="18"/>
+            <line x1="18" y1="6" x2="6" y2="18"/>
+          </svg>
+        </button>
+      </div>
 
-        <div class="tooltip-container" data-tooltip-container="aspect_ratio">
-          <button
-            class="aspect-ratio-dropdown-btn"
-            aria-label="Изменить соотношение сторон"
-            @mouseenter="showTooltip('aspect_ratio')"
-            @mouseleave="tryHideTooltip"
-            @click="cycleAspectRatio"
-          >
-            <span class="current-ratio">{{ aspectRatio }}</span>
-          </button>
-          <div
-            v-show="activeTooltip === 'aspect_ratio'"
-            class="custom-tooltip advanced-tooltip aspect-ratio-dropdown"
-            data-tooltip="aspect_ratio"
-            @mouseenter="keepTooltipVisible"
-            @mouseleave="hideTooltip"
-          >
-            <div
-              v-for="ratio in aspectRatios"
-              :key="ratio"
-              class="aspect-ratio-option"
-              :class="{ active: aspectRatio === ratio }"
-              @click="setAspectRatio(ratio)"
+      <!-- Кнопки управления -->
+      <div v-if="!theaterMode" class="controls">
+        <div class="main-controls">
+          <div class="tooltip-container" data-tooltip-container="theater">
+            <button
+                class="theater-mode-btn"
+                :aria-label="theaterMode ? 'Выйти из театрального режима' : 'Театральный режим'"
+                @mouseenter="showTooltip('theater')"
+                @mouseleave="activeTooltip = null"
+                @click="toggleTheaterMode"
             >
-              {{ ratio }}
+              <Fullscreen/>
+            </button>
+            <div v-show="activeTooltip === 'theater'" class="custom-tooltip" data-tooltip="theater">
+              {{ theaterMode ? 'Выйти из театрального режима' : 'Театральный режим' }}
+              <span class="shortcut-hint">Alt+T</span>
+            </div>
+          </div>
+
+          <div class="tooltip-container" data-tooltip-container="aspect_ratio">
+            <button
+                class="aspect-ratio-dropdown-btn"
+                aria-label="Изменить соотношение сторон"
+                @mouseenter="showTooltip('aspect_ratio')"
+                @mouseleave="tryHideTooltip"
+                @click="cycleAspectRatio"
+            >
+              <span class="current-ratio">{{ aspectRatio }}</span>
+            </button>
+            <div
+                v-show="activeTooltip === 'aspect_ratio'"
+                class="custom-tooltip advanced-tooltip aspect-ratio-dropdown"
+                data-tooltip="aspect_ratio"
+                @mouseenter="keepTooltipVisible"
+                @mouseleave="hideTooltip"
+            >
+              <div
+                  v-for="ratio in aspectRatios"
+                  :key="ratio"
+                  class="aspect-ratio-option"
+                  :class="{ active: aspectRatio === ratio }"
+                  @click="setAspectRatio(ratio)"
+              >
+                {{ ratio }}
+              </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
-
   </template>
 </template>
 
 <script setup>
-import { defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import {defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue'
+import {useRoute} from 'vue-router'
 
 import ErrorScreen from '@/components/ErrorScreen.vue'
 import SpinnerLoading from '@/components/SpinnerLoading.vue'
-import { usePlayerLayout } from '@/features/player/composables/usePlayerLayout'
-import { usePlayerSources } from '@/features/player/composables/usePlayerSources'
-import { usePlayerStore } from '@/store/player'
+import {usePlayerLayout} from '@/features/player/composables/usePlayerLayout'
+import {usePlayerSources} from '@/features/player/composables/usePlayerSources'
+import {usePlayerStore} from '@/store/player'
 import PlayerModal from '@/features/player/components/PlayerModal.vue'
 import PlayerSelectorBar from '@/features/player/components/PlayerSelectorBar.vue'
-import { debugLog } from '@/utils/logger'
-import { getProviderDisplayName } from '@/utils/playerUtils'
-import { Fullscreen } from '@lucide/vue';
+import {debugLog} from '@/utils/logger'
+import {getProviderDisplayName} from '@/utils/playerUtils'
+import {Fullscreen} from '@lucide/vue';
 
 const PlayerSourceModal = defineAsyncComponent(
-  () => import('@/features/player/components/PlayerSourceModal.vue')
+    () => import('@/features/player/components/PlayerSourceModal.vue')
 )
 
 const playerStore = usePlayerStore()
 const route = useRoute()
-const kinopoiskId = route.params.kp_id
+const kinopoiskId = route.params.kpId
 
 const emit = defineEmits(['update:selectedPlayer'])
 
 const iframeLoading = ref(true)
 const playerIframe = ref(null)
 const containerRef = ref(null)
+const iframeKey = ref(0)
 
 const {
   theaterMode,
@@ -217,7 +219,6 @@ let hideTimeout = null
 
 const videoPositionInterval = ref(null)
 const overlayTimingsCheckInterval = ref(null)
-const lastOverlayTimingsCount = ref(0)
 const currentOverlayElement = ref(null)
 const overlayControlsTimeout = ref(null)
 const overlayCreationInProgress = ref(false)
@@ -304,6 +305,9 @@ const handlePlayerSelect = (player) => {
 watch(selectedPlayerInternal, (newVal) => {
   if (newVal) {
     iframeLoading.value = true
+
+    iframeKey.value++
+
     if (currentOverlayElement.value) {
       removeVideoOverlay()
     }
@@ -329,38 +333,38 @@ const removeVideoOverlay = () => {
       }
       if (currentOverlayElement.value._resizeHandler && currentOverlayElement.value._iframeDoc) {
         currentOverlayElement.value._iframeDoc.defaultView.removeEventListener(
-          'resize',
-          currentOverlayElement.value._resizeHandler
+            'resize',
+            currentOverlayElement.value._resizeHandler
         )
       }
       if (
-        currentOverlayElement.value._fullscreenHandler &&
-        currentOverlayElement.value._iframeDoc
+          currentOverlayElement.value._fullscreenHandler &&
+          currentOverlayElement.value._iframeDoc
       ) {
         currentOverlayElement.value._iframeDoc.removeEventListener(
-          'fullscreenchange',
-          currentOverlayElement.value._fullscreenHandler
+            'fullscreenchange',
+            currentOverlayElement.value._fullscreenHandler
         )
         currentOverlayElement.value._iframeDoc.removeEventListener(
-          'webkitfullscreenchange',
-          currentOverlayElement.value._fullscreenHandler
+            'webkitfullscreenchange',
+            currentOverlayElement.value._fullscreenHandler
         )
 
         if (currentOverlayElement.value._videoElement) {
           currentOverlayElement.value._videoElement.removeEventListener(
-            'webkitbeginfullscreen',
-            currentOverlayElement.value._fullscreenHandler
+              'webkitbeginfullscreen',
+              currentOverlayElement.value._fullscreenHandler
           )
           currentOverlayElement.value._videoElement.removeEventListener(
-            'webkitendfullscreen',
-            currentOverlayElement.value._fullscreenHandler
+              'webkitendfullscreen',
+              currentOverlayElement.value._fullscreenHandler
           )
         }
       }
       if (currentOverlayElement.value._mouseHandler && currentOverlayElement.value._iframeDoc) {
         currentOverlayElement.value._iframeDoc.removeEventListener(
-          'mousemove',
-          currentOverlayElement.value._mouseHandler
+            'mousemove',
+            currentOverlayElement.value._mouseHandler
         )
       }
 
@@ -378,6 +382,8 @@ const removeVideoOverlay = () => {
     overlayControlsTimeout.value = null
   }
 }
+
+
 
 onMounted(() => {
   iframeLoading.value = true

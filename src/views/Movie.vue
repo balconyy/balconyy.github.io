@@ -1,38 +1,28 @@
 <script setup>
 import PlayerComponent from "@/features/player/components/PlayerComponent.vue";
+import MovieInfo from "@/features/player/components/info/MovieInfo.vue";
 
-defineProps({
-  kp_id: {
+import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
+import {onMounted, ref} from "vue";
+const props = defineProps({
+  kpId: {
     type: String,
     required: true
   }
 })
+
+const movie = ref(null)
+onMounted(async () => {
+  movie.value = await useMovieInfo().searchMovie(props.kpId)
+})
 </script>
 
 <template>
-  <h1 class="content-title">
-  </h1>
-  <PlayerComponent class="player-component"/>
+  <MovieInfo :movie="movie"/>
+  <PlayerComponent/>
+
 </template>
 
 <style scoped>
-
-.content-title {
-  position: relative;
-  color: white;
-  z-index: 2;
-  font-size: clamp(38px, 4.2vw, 58px);
-  margin: 0;
-  line-height: 1.05;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  white-space: normal;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-  transition: all 0.3s ease;
-}
 
 </style>

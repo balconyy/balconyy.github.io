@@ -1,9 +1,15 @@
 <script setup>
 import emptyPoster from '@/assets/empty-poster.jpg'
 
-defineProps({
+let props = defineProps({
   movie: Object
 })
+
+const emit = defineEmits(['select'])
+
+function handleClick() {
+  emit('select', props.movie)
+}
 
 function onImgError(e) {
   if (e.target.src !== emptyPoster) {
@@ -15,29 +21,27 @@ function onImgError(e) {
 
 
 <template>
-  <RouterLink :to="{ name: 'movie', params: { kp_id: movie.id}}">
-    <div class="movie-card">
-      <div class="old-school-effect"/>
-      <div class="card-inner">
-        <div class="poster-wrapper">
-          <img
-              class="poster"
-              :src="movie.posterUrl"
-              @error="onImgError"
-              alt="poster"
-          >
-        </div>
+  <div class="movie-card" @click="handleClick">
+    <div class="old-school-effect"/>
+    <div class="card-inner">
+      <div class="poster-wrapper">
+        <img
+            class="poster"
+            :src="movie.posterUrl"
+            @error="onImgError"
+            alt="poster"
+        >
+      </div>
 
-        <div class="movie-info">
-          <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}</h3>
-          <p class="title-second">{{ movie.titleMain != null ? movie.titleSecond : "" }}</p>
-          <div class="info-container">
-            <span class="info">{{ movie.type + " | " + (movie.year !== 'null' ? movie.year : "???") }}</span>
-          </div>
+      <div class="movie-info">
+        <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}</h3>
+        <p class="title-second">{{ movie.titleMain != null ? movie.titleSecond : "" }}</p>
+        <div class="info-container">
+          <span class="info">{{ movie.type + " | " + (movie.year !== 'null' ? movie.year : "???") }}</span>
         </div>
       </div>
     </div>
-  </RouterLink>
+  </div>
 </template>
 
 <style scoped>

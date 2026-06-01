@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MovieSearch from "./response/MovieSearch.vue";
-import SearchList from "./response/SearchList.vue";
+import MovieList from "./MovieList.vue";
 import FeatureTabs from "@/features/search/components/FeatureTabs.vue";
 import LoadingScreen from "@/components/LoadingScreen.vue";
 import ErrorScreen from "@/components/ErrorScreen.vue";
@@ -12,6 +12,7 @@ const {
   isSuccess,
   isLoading,
   searchMovie,
+  onMovieClick
 } = useSearch();
 
 
@@ -29,8 +30,9 @@ const {
     <ErrorScreen v-else-if="error"
                  :message="error.message"
     />
-    <SearchList v-else-if="isSuccess"
-                :movies="movieList"
+    <MovieList v-else-if="isSuccess"
+               :movies="movieList"
+               @select="onMovieClick"
     />
 
   </div>
