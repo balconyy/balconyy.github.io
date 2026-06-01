@@ -25,10 +25,9 @@ export function useSearch() {
         state.value = 'loading'
 
         try {
-            console.log(state.value)
             const rawRes = await searchApi.search(query, controller)
 
-            movieList.value = MovieMapper.toDomainList(rawRes.data.films)
+            movieList.value = MovieMapper.toDomainList(rawRes.data.films).slice(0,18)
             if (movieList.value.length > 0) state.value = 'success'
             else {
                 state.value = 'error'

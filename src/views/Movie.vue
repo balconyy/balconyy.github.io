@@ -1,9 +1,12 @@
 <script setup>
-import {useRoute} from "vue-router";
 import PlayerComponent from "@/features/player/components/PlayerComponent.vue";
 
-const route = useRoute();
-console.log("route", route.params);
+defineProps({
+  kp_id: {
+    type: String,
+    required: true
+  }
+})
 </script>
 
 <template>

@@ -37,7 +37,6 @@
           v-show="!iframeLoading && selectedPlayerInternal?.iframe"
           ref="playerIframe"
           :src="selectedPlayerInternal?.iframe"
-          :title="movieInfo?.title ? `Плеер для ${movieInfo.title}` : 'Видео-плеер'"
           frameborder="0"
           allowfullscreen
           webkitallowfullscreen
@@ -158,7 +157,7 @@ const playerStore = usePlayerStore()
 const route = useRoute()
 const kinopoiskId = route.params.kp_id
 
-const emit = defineEmits(['update:selectedPlayer', 'update:movieInfo'])
+const emit = defineEmits(['update:selectedPlayer'])
 
 const iframeLoading = ref(true)
 const playerIframe = ref(null)

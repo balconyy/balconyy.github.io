@@ -55,29 +55,6 @@ export const usePlayerStore = defineStore(PLAYER_STORE_NAME, {
         [String(kpId)]: inid
       }
     },
-    clearKinoBdSources() {
-      this.kinobdSourceByKpId = {}
-    },
-    updateCompressor(value) {
-      this.compressorEnabled = value
-    },
-    updateMirror(value) {
-      this.mirrorEnabled = value
-    },
-    updateVideoOverlay(value) {
-      this.videoOverlayEnabled2 = value
-    },
-    updateOverlaySettings(settings) {
-      this.overlaySettings = { ...this.overlaySettings, ...settings }
-    },
-    updateObsSettings(settings) {
-      this.obsSettings = { ...this.obsSettings, ...settings }
-    },
-    setObsConnected(connected) {
-      this.obsSettings.connected = connected
-    },
-    setObsSelectedFilter(filterId) {
-      this.obsSettings.selectedFilterId = filterId
-    }
+
   }
 })

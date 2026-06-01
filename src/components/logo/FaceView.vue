@@ -44,7 +44,7 @@ const onUp = () => {
 }
 
 const play = (video) => {
-  if (!video) return
+  if (!video || document.hidden) return
   video.currentTime = 0
   video.play()
 }

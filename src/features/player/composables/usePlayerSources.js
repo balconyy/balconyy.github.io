@@ -1,4 +1,4 @@
-import { getPlayers, searchKinoBDPlayerCandidates, getKinoBDPlayerDataByInid } from '@/data/api/movies'
+import { getPlayers} from '@/data/api/movies'
 import { usePlayerStore } from '@/store/player'
 import { computed, ref } from 'vue'
 
@@ -98,7 +98,6 @@ export function usePlayerSources({  kinopoiskId, getProviderDisplayName, onSelec
 
   const fetchPlayers = async () => {
     const kpId = kinopoiskId
-    console.log("ЕБЛАН" + kinopoiskId)
 
     try {
       errorMessage.value = ''
@@ -136,27 +135,7 @@ export function usePlayerSources({  kinopoiskId, getProviderDisplayName, onSelec
 
   const openSourceModal = async () => {
     showSourceModal.value = true
-    sourceError.value = ''
-    sourceLoading.value = true
-
-    try {
-      const query =
-          kinopoiskId
-
-      let candidates = []
-      if (query) {
-        candidates = await searchKinoBDPlayerCandidates(query, { type: 'title', page: 1 })
-      }
-      if (!candidates.length && kinopoiskId) {
-        candidates = await searchKinoBDPlayerCandidates(kinopoiskId, { type: 'kp_id', page: 1 })
-      }
-      sourceCandidates.value = candidates
-    } catch (error) {
-      sourceError.value = 'Не удалось загрузить список источников'
-      console.error('Ошибка при загрузке источников KinoBD:', error)
-    } finally {
-      sourceLoading.value = false
-    }
+    sourceLoading.value = false
   }
 
   const closeSourceModal = () => {
