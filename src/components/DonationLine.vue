@@ -1,12 +1,9 @@
 <template>
   <a href="https://boosty.to/birdymafia/donate" referrerpolicy="no-referrer">
     <div class="donation-bar">
-      <img class="bird-icon" :src="BirdMafiaIcon" alt="bird mafia icon"/>
 
       <div class="content">
-        <p class="title">
-          На разработку "<span class="bold">Птичьей мафии</span>"
-        </p>
+        <p class="title">На "<span class="bold">Птичью мафию</span>"</p>
 
         <div class="bottom-row">
           <div class="progress">
@@ -42,21 +39,12 @@ const progressPercent = computed(() => {
 .donation-bar {
   display: flex;
   gap: 16px;
-  width: 400px;
   background: linear-gradient(180deg, #3a3a3a 0%, #2f2f2f 50%, #252525 100%);
   border: 2px solid rgba(24, 24, 24);
   border-radius: 16px;
-  padding: 10px 16px;
+  padding: 14px 26px;
   color: #bdbdbd;
   align-items: flex-start;
-}
-
-.bird-icon {
-  width: 56px;
-  margin: auto;
-  flex-shrink: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(24, 24, 24);
 }
 
 
@@ -90,6 +78,7 @@ const progressPercent = computed(() => {
 .progress {
   flex: 1;
   height: 22px;
+  min-width: 120px;
   background: #555;
   border-radius: 30px;
   position: relative;

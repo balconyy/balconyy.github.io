@@ -1,5 +1,5 @@
 <script setup>
-import avatar from '@/assets/media/geek-avatar.jpg'
+import Avatar from '@/assets/media/geek-avatar.jpg'
 </script>
 
 <template>
@@ -8,7 +8,7 @@ import avatar from '@/assets/media/geek-avatar.jpg'
     <a href="https://t.me/qulyaba">
     <div class="geek-content">
         <div class="geek-content-wrapper">
-          <img class="avatar" :src="avatar" alt="Гик Новости. Аватарка"/>
+          <img class="avatar" :src="Avatar" alt="Гик Новости. Аватарка"/>
           <div class="search-block">
             <div class="channel-name">Гик Новости</div>
             <div class="channel-description">Для тех кто в теме</div>
