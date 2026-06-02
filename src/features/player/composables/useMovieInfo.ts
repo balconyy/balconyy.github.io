@@ -1,13 +1,7 @@
-import {ref, computed, toRefs, Ref} from 'vue'
-import {Movie} from "../../../models/movie";
+import {ref, computed} from 'vue'
 import {searchApi} from "../../../data/api/search";
-import {SearchMapper} from "../../../data/mapper/search.mapper";
 import {FilmMapper} from "../../../data/mapper/film.mapper";
 import {MovieFull} from "../../../models/movie.full";
-
-
-
-let controller: AbortController | null = null;
 
 export function useMovieInfo() {
     const state = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -24,6 +18,7 @@ export function useMovieInfo() {
         try {
             const rawRes = await searchApi.film(kpId)
             state.value = 'success'
+            console.log(rawRes.data)
             return movie.value = FilmMapper.toMovieFull(rawRes.data)
         } catch (e) {
             state.value = 'error'

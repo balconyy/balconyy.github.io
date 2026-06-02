@@ -1,5 +1,5 @@
 import {FilmDto} from "../dto/filmDTO";
-import {MovieFull} from "../../models/movie.full";
+import {MovieFull} from "@/models/movie.full";
 
 export class FilmMapper {
     static toMovieFull(film: FilmDto): MovieFull {
@@ -10,7 +10,7 @@ export class FilmMapper {
             posterUrl: film.posterUrl || undefined,
             year: film.year ? String(film.year) : undefined,
             type: film.type || undefined,
-            imdbId: film.imdbId ?? undefined,
+            imdbId: film.imdbId || undefined,
             ratingKp: film.ratingKinopoisk !== null
                     ? String(film.ratingKinopoisk)
                     : undefined,

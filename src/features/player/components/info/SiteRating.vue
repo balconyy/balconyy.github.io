@@ -1,5 +1,6 @@
 <script setup>
-import { SquareArrowOutUpRight } from '@lucide/vue';
+import {SquareArrowOutUpRight} from '@lucide/vue';
+
 defineProps({
   iconSrc: {
     type: Object,
@@ -20,8 +21,8 @@ defineProps({
       target="_blank"
       rel="noopener noreferrer"
   >
-    <img class="referer-logo" :src="iconSrc" alt="icon" />
-    <SquareArrowOutUpRight class="link-icon" />
+    <img class="referer-logo" :src="iconSrc" alt="icon"/>
+    <SquareArrowOutUpRight class="link-icon"/>
   </a>
 </template>
 
@@ -49,8 +50,8 @@ defineProps({
 }
 
 .icon-link:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(var(--accent-color-rgb)/0.2);
+  border-color: rgba(var(--accent-color-rgb)/0.5) ;
 }
 
 .referer-logo {

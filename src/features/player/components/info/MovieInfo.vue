@@ -14,8 +14,8 @@ const IMDB_MOVIE_LINK="https://www.imdb.com/title/"
 <template>
   <h1 class="content-title">{{movie?.titleMain || ''}}</h1>
   <div class="movie-links">
-    <SiteRating :href="KINOPOISK_MOVIE_LINK+movie?.kpId" :icon-src="KpLogo"/>
-    <SiteRating :href="IMDB_MOVIE_LINK+movie?.imdbId" :icon-src="ImdbLogo"/>
+    <SiteRating v-if="movie?.kpId" :href="KINOPOISK_MOVIE_LINK+movie?.kpId" :icon-src="KpLogo"/>
+    <SiteRating v-if="movie?.imdbId" :href="IMDB_MOVIE_LINK+movie?.imdbId" :icon-src="ImdbLogo"/>
   </div>
 </template>
 
@@ -24,7 +24,7 @@ const IMDB_MOVIE_LINK="https://www.imdb.com/title/"
   position: relative;
   color: var(--white);
   z-index: 2;
-  font-size: clamp(38px, 4.2vw, 580px);
+  font-size: clamp(30px, 2vw, 42px);
   margin: 0;
   padding: 18px;
   line-height: 1.05;
