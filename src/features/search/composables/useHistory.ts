@@ -2,8 +2,6 @@ import {ref} from "vue";
 import {Movie} from "@/models/movie";
 import {useRouter} from "vue-router";
 import {useMovieStore} from "../../../store/movie";
-import {searchApi} from "../../../data/api/search";
-import {SearchMapper} from "../../../data/mapper/search.mapper";
 
 
 export function useHistory() {
@@ -14,7 +12,18 @@ export function useHistory() {
     const history = ref<Movie[]>([])
     const errorMessage = ref<string>()
 
-    const getLocalHistory = (query: string) => {
+    const getLocalHistory = () => {
+        history.value = movieStore.getFullHistory()
+        if (history.value.length > 0) state.value = 'success'
+        else {
+            state.value = 'error'
+            errorMessage.value = `Ваша история пустая`
+        }
+
+    }
+
+    const removeMovieFromHistory = (movie: Movie) => {
+        movieStore.removeFromHistory(movie.id)
         history.value = movieStore.getFullHistory()
         if (history.value.length > 0) state.value = 'success'
         else {
@@ -27,6 +36,7 @@ export function useHistory() {
     return {
         history,
         errorMessage,
-        getLocalHistory
+        getLocalHistory,
+        removeMovieFromHistory
     }
 }

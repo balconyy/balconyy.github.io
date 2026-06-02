@@ -8,7 +8,8 @@ import {onMounted} from "vue";
 const {
   history,
   errorMessage,
-  getLocalHistory
+  getLocalHistory,
+  removeMovieFromHistory,
 } = useHistory()
 
 
@@ -26,7 +27,9 @@ onMounted(() => {
     <MovieCard
         v-for="movie in history"
         :movie="movie"
+        :showDeleteButton="true"
         @selectMovie="$emit('selectMovie', $event)"
+        @deleteMovie="removeMovieFromHistory"
     />
   </div>
 </template>

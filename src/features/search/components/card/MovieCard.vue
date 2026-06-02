@@ -1,11 +1,15 @@
 <script setup>
 import emptyPoster from '@/assets/empty-poster.jpg'
-
+import { X } from '@lucide/vue';
 let props = defineProps({
-  movie: Object
+  movie: Object,
+  showDeleteButton: {
+    type: Boolean,
+    default: false
+  }
 })
 
-defineEmits(['selectMovie'])
+defineEmits(['selectMovie', 'deleteMovie'])
 
 function onImgError(e) {
   if (e.target.src !== emptyPoster) {
@@ -18,6 +22,10 @@ function onImgError(e) {
 
 <template>
   <div class="movie-card" @click="$emit('selectMovie', props.movie)">
+    <button v-if="showDeleteButton"
+        class="delete-button" @click.stop="$emit('deleteMovie', props.movie)">
+      <X color="#f1f" />
+    </button>
     <div class="old-school-effect"/>
     <div class="card-inner">
       <div class="poster-wrapper">
@@ -138,6 +146,46 @@ function onImgError(e) {
   pointer-events: none;
   z-index: 4;
   border-radius: 12px;
+}
+
+.delete-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 20;
+
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+
+  opacity: 0;
+  transform: scale(0.8);
+
+  transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      background 0.2s ease;
+}
+
+.movie-card:hover .delete-button {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.delete-button:hover {
+  background: rgba(0, 0, 0, 0.95);
+}
+
+.delete-button:active {
+  transform: scale(0.9);
 }
 
 
