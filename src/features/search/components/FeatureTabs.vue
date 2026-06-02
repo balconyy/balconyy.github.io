@@ -1,19 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import FeatureTab from './Tab.vue'
 
-const tabs = ['Запрос']
-const activeTab = ref('Запрос')
+defineProps<{
+  tabs: { id: number; label: string }[]
+  modelValue: number
+}>()
+
+defineEmits<{
+  (e: 'update:modelValue', value: number): void
+}>()
+
 </script>
 
 <template>
   <div class="tabs">
     <FeatureTab
         v-for="tab in tabs"
-        :key="tab"
-        :label="tab"
-        :active="activeTab === tab"
-        @click="activeTab = tab"
+        :key="tab.id"
+        :label="tab.label"
+        :active="modelValue === tab.id"
+        @clickTab="$emit('update:modelValue', tab.id)"
     />
   </div>
 </template>
@@ -23,7 +29,7 @@ const activeTab = ref('Запрос')
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 20px;
   padding: 0 0 16px 0;
 }
 </style>

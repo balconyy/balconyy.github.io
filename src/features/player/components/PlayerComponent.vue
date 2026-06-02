@@ -58,9 +58,6 @@
           />
           <div v-else-if="playersEmptyMessage" class="player-empty-state">
             <p>{{ playersEmptyMessage }}</p>
-            <button v-if="showSourceButton" type="button" @click="openSourceModal">
-              Выбрать источник
-            </button>
           </div>
         </div>
 

@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 
 const normalizePlayerKey = (key) => String(key || '').toUpperCase()
 const KINOBOX_LOW_PRIORITY_PROVIDERS = new Set(['YOUTUBE'])
-const NO_PLAYERS_MESSAGE = 'Плееры не найдены. Попробуйте выбрать другой источник или включить VPN.'
+const NO_PLAYERS_MESSAGE = 'Плееры не найдены.'
 
 export function usePlayerSources({  kinopoiskId, getProviderDisplayName, onSelectedPlayerChange }) {
   const playerStore = usePlayerStore()

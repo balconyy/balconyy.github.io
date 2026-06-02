@@ -6,7 +6,7 @@ defineProps<{
 }>()
 
 defineEmits<{
-  (e: 'click'): void
+  (e: 'clickTab'): void
 }>()
 </script>
 
@@ -14,7 +14,7 @@ defineEmits<{
   <button
       class="feature-tab"
       :class="{ active }"
-      @click="$emit('click')"
+      @click="$emit('clickTab')"
   >
     {{ label }}
   </button>
@@ -23,15 +23,15 @@ defineEmits<{
 <style scoped>
 .feature-tab {
   position: relative;
-  padding: 10px 0;
+  padding: 8px 12px;
   border: none;
+  border-radius: 1px;
   background: transparent;
 
   color: #8b8b8b;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-
   transition:
       color 0.2s ease,
       opacity 0.2s ease;
@@ -43,18 +43,7 @@ defineEmits<{
 
 .feature-tab.active {
   color: #ffffff;
+  border-bottom: 3px solid #8b5cf6;
 }
 
-.feature-tab.active::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -2px;
-
-  width: 100%;
-  height: 2px;
-
-  background: #8b5cf6;
-  border-radius: 999px;
-}
 </style>

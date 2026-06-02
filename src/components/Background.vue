@@ -16,16 +16,15 @@
   pointer-events: none;
   z-index: -1;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100dvh;
-  min-height: 100%;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   background: radial-gradient(circle at 50% 50%,
   #0f0a1a 0%,
   #08060c 50%,
   #040308 100%
   );
+
 }
 
 .square-pattern {

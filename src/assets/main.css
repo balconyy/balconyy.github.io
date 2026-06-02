@@ -13,3 +13,12 @@ body {
   height: 100%;
   z-index: 0;
 }
+
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 226px);
+  justify-content: center;
+  align-items: stretch;
+  gap: 18px;
+  padding: 0;
+}

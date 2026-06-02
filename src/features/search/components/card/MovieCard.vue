@@ -5,11 +5,7 @@ let props = defineProps({
   movie: Object
 })
 
-const emit = defineEmits(['select'])
-
-function handleClick() {
-  emit('select', props.movie)
-}
+defineEmits(['selectMovie'])
 
 function onImgError(e) {
   if (e.target.src !== emptyPoster) {
@@ -21,7 +17,7 @@ function onImgError(e) {
 
 
 <template>
-  <div class="movie-card" @click="handleClick">
+  <div class="movie-card" @click="$emit('selectMovie', props.movie)">
     <div class="old-school-effect"/>
     <div class="card-inner">
       <div class="poster-wrapper">
@@ -100,7 +96,7 @@ function onImgError(e) {
   letter-spacing: -0.5px;
   text-transform: uppercase;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* или 3 */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

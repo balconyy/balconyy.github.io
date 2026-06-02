@@ -7,8 +7,7 @@ type HistoryItem = Movie & {
 
 export const useMovieStore = defineStore('movie', {
     state: () => ({
-        history: {} as Record<string, HistoryItem>,
-        selected: null as HistoryItem | null,
+        history: {} as Record<string, HistoryItem>
     }),
 
     actions: {
@@ -30,18 +29,10 @@ export const useMovieStore = defineStore('movie', {
             this.history[movie.id] = item
             this.selected = item
         },
-        getSelected() {
-            return this.selected
-        },
-
-        getByKPId(kpId: string) {
-            return this.history[kpId] || null
-        },
-
-        getFullHistory() {
-            return Object.values(this.history).sort(
-                (a: HistoryItem, b: HistoryItem) => b.lastViewedAt - a.lastViewedAt
-            )
+        getFullHistory(): Movie[] {
+            return Object.values(this.history)
+                .sort((a: HistoryItem, b: HistoryItem) => b.lastViewedAt - a.lastViewedAt)
+                .map(item => item as Movie);
         },
 
         removeFromHistory(kpId: string) {
@@ -55,4 +46,7 @@ export const useMovieStore = defineStore('movie', {
             this.selected = null
         },
     },
+
+    persist: true
+
 })

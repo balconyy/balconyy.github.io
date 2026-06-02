@@ -45,7 +45,6 @@ const onSearch = () => {
   flex-direction: column;
   justify-content: center;
   position: relative;
-  overflow: hidden;
   padding: 12px 0;
   gap: 8px;
   margin: 0 auto;

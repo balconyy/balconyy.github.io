@@ -1,6 +1,7 @@
 <template>
   <div>
     <div v-if="message" class="error-message">
+      <h2 class="error-title">Кукарака!</h2>
       <p>{{ message }}</p>
     </div>
   </div>
@@ -21,6 +22,9 @@ const {message} = defineProps({
 .error-message {
   color: var(--white);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   padding: 20px;
   font-size: 1.2rem;
   border: 1px solid var(--accent-color);
@@ -30,11 +34,4 @@ const {message} = defineProps({
   background: var(--accent-transparent);
 }
 
-.buttons-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
 </style>

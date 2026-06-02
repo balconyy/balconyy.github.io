@@ -1,14 +1,13 @@
 import {ref, computed} from 'vue'
-import {searchApi} from "../../data/api/search";
-import {SearchMapper} from "../../data/mapper/search.mapper";
-import {Movie} from "../../models/movie";
+import {searchApi} from "../../../data/api/search";
+import {SearchMapper} from "../../../data/mapper/search.mapper";
+import {Movie} from "../../../models/movie";
 import {useRouter} from "vue-router";
-import {useMovieStore} from "../../store/movie";
+import {useMovieStore} from "../../../store/movie";
 
 let controller: AbortController | null = null;
 
 export function useSearch() {
-    const router = useRouter();
     const movieStore = useMovieStore();
 
     const state = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -48,24 +47,13 @@ export function useSearch() {
         }
     }
 
-    const onMovieClick =  (movie: Movie) => {
-        movieStore.addToHistory(movie)
-        router.push({
-            name: 'movie',
-            params: {
-                kpId: movie.id
-            }
-        }).then(r => 404)
 
-
-    }
 
     return {
         movieList,
         error,
         isSuccess,
         isLoading,
-        searchMovie: searchMovies,
-        onMovieClick
+        searchMovies,
     }
 }
