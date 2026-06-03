@@ -48,7 +48,7 @@ export const useMovieStore = defineStore('movie', {
     },
 
     persist: {
-        key: 'movie',
+        key: 'movie-history',
         storage: localStorage,
         pick: ['history', '_version'],
     }
