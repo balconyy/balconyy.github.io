@@ -1,4 +1,4 @@
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {Movie} from "@/models/movie";
 import {useRouter} from "vue-router";
 import {useMovieStore} from "../../../store/movie";
@@ -17,7 +17,7 @@ export function useHistory() {
         if (history.value.length > 0) state.value = 'success'
         else {
             state.value = 'error'
-            errorMessage.value = `Ваша история пустая`
+            errorMessage.value = `Ваша история пуста`
         }
 
     }
@@ -25,13 +25,17 @@ export function useHistory() {
     const removeMovieFromHistory = (movie: Movie) => {
         movieStore.removeFromHistory(movie.id)
         history.value = movieStore.getFullHistory()
-        if (history.value.length > 0) state.value = 'success'
-        else {
-            state.value = 'error'
-            errorMessage.value = `Ваша история пустая`
-        }
-
     }
+
+    watch(history, (newVal) => {
+        if (newVal.length > 0) {
+            state.value = 'success'
+            errorMessage.value = ''
+        } else {
+            state.value = 'error'
+            errorMessage.value = 'Ваша история пуста'
+        }
+    }, {immediate: true})
 
     return {
         history,

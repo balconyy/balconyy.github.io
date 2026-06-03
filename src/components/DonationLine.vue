@@ -3,13 +3,13 @@
     <div class="donation-bar">
 
       <div class="content">
-        <p class="title">На "<span class="bold">Птичью мафию</span>"</p>
+        <p class="title">На красивый домен "<span class="bold">balcony.su</span>"</p>
 
         <div class="bottom-row">
           <div class="progress">
             <div class="fill" :style="{ width: progressPercent + '%' }"></div>
             <div class="progress-text">
-              {{ current }} / {{ goalText }} руб
+              {{ current }} / {{ goal }} руб
             </div>
           </div>
 
@@ -24,14 +24,12 @@
 
 <script setup>
 import {computed, ref} from 'vue'
-import BirdMafiaIcon from "@/assets/bird-mafia.png";
 
-const current = ref(30)
-const goal = 1000
-const goalText = "10 000"
+const current = ref(0)
+const goal = ref(445)
 
 const progressPercent = computed(() => {
-  return Math.min((current.value / goal) * 100, 100)
+  return Math.min((current.value / goal.value) * 100, 100)
 })
 </script>
 
@@ -57,12 +55,12 @@ const progressPercent = computed(() => {
 
 .title {
   margin: 0;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: #c0c0c0;
   text-align: center;
   text-shadow: 1px 1px 3px #000000;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.10em;
 }
 
 .title .bold {

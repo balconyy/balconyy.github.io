@@ -5,11 +5,13 @@ import LogoMain from "@/components/logo/LogoMain.vue";
 import GeekTelegram from "@/components/GeekTelegram.vue";
 import DonationLine from "@/components/DonationLine.vue";
 import AboutFooter from "@/components/AboutFooter.vue";
+import AdminAlert from "@/components/AdminAlert.vue";
 </script>
 
 <template>
   <header>
     <LogoMain/>
+    <AdminAlert/>
   </header>
 
   <main>
