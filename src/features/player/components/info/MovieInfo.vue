@@ -2,17 +2,37 @@
 import SiteRating from "@/features/player/components/info/SiteRating.vue";
 import KpLogo from '@/assets/kp-logo.svg'
 import ImdbLogo from '@/assets/imdb-logo.svg'
-defineProps({
-  movie: Object
+import {useMovieStore} from "@/store/movie.ts";
+import {ref, watchEffect} from "vue";
+import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
+
+const props = defineProps({
+  kpId: {
+    type: Number,
+    required: true
+  }
 })
 
-const KINOPOISK_MOVIE_LINK="https://www.kinopoisk.ru/film/"
-const IMDB_MOVIE_LINK="https://www.imdb.com/title/"
+const movieInfo = useMovieInfo()
+const movieStore = useMovieStore()
+const movie = ref(null)
+
+watchEffect(async () => {
+  if (props.kpId) {
+    const data = await movieInfo.getMovieInfo(props.kpId)
+    movie.value = data
+    movieStore.addToHistory(data)
+  }
+})
+
+
+const KINOPOISK_MOVIE_LINK = "https://www.kinopoisk.ru/film/"
+const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
 
 </script>
 
 <template>
-  <h1 class="content-title">{{movie?.titleMain || ''}}</h1>
+  <h1 class="content-title">{{ movie?.titleMain || '' }}</h1>
   <div class="movie-links">
     <SiteRating v-if="movie?.kpId" :href="KINOPOISK_MOVIE_LINK+movie?.kpId" :icon-src="KpLogo"/>
     <SiteRating v-if="movie?.imdbId" :href="IMDB_MOVIE_LINK+movie?.imdbId" :icon-src="ImdbLogo"/>
@@ -38,7 +58,8 @@ const IMDB_MOVIE_LINK="https://www.imdb.com/title/"
   overflow-wrap: anywhere;
   transition: all 0.3s ease;
 }
-.movie-links{
+
+.movie-links {
   position: relative;
   display: flex;
   justify-content: center;

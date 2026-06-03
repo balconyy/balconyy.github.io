@@ -14,7 +14,9 @@ const index = [
         path: "/movie/:kpId",
         name: "movie",
         component: Movie,
-        props: true,
+        props: (route) => ({
+            kpId: Number(route.params.kpId)
+        })
     }
 ]
 

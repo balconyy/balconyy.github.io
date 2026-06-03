@@ -2,14 +2,10 @@ import {ref, computed} from 'vue'
 import {searchApi} from "../../../data/api/search";
 import {SearchMapper} from "../../../data/mapper/search.mapper";
 import {Movie} from "../../../models/movie";
-import {useRouter} from "vue-router";
-import {useMovieStore} from "../../../store/movie";
 
 let controller: AbortController | null = null;
 
 export function useSearch() {
-    const movieStore = useMovieStore();
-
     const state = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
 
 

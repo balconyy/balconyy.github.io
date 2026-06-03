@@ -1,7 +1,7 @@
 import {ref, computed} from 'vue'
 import {searchApi} from "../../../data/api/search";
 import {FilmMapper} from "../../../data/mapper/film.mapper";
-import {MovieFull} from "../../../models/movie.full";
+import {MovieExtended} from "../../../models/movie";
 
 export function useMovieInfo() {
     const state = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -9,17 +9,16 @@ export function useMovieInfo() {
     const isLoading = computed(() => state.value === 'loading')
 
     const error = ref<Error | null>(null)
-    const movie = ref<MovieFull>()
+    const movie = ref<MovieExtended>()
 
-    const searchMovie = async (kpId: number) => {
+    const getMovieInfo = async (kpId: number) => {
         error.value = null
         state.value = 'loading'
 
         try {
             const rawRes = await searchApi.film(kpId)
             state.value = 'success'
-            console.log(rawRes.data)
-            return movie.value = FilmMapper.toMovieFull(rawRes.data)
+            return movie.value = FilmMapper.toMovieExtended(rawRes.data)
         } catch (e) {
             state.value = 'error'
             error.value = e
@@ -31,6 +30,6 @@ export function useMovieInfo() {
         error,
         isSuccess,
         isLoading,
-        searchMovie,
+        getMovieInfo,
     }
 }

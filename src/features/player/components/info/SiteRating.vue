@@ -3,7 +3,7 @@ import {SquareArrowOutUpRight} from '@lucide/vue';
 
 defineProps({
   iconSrc: {
-    type: Object,
+    type: String,
     required: true,
   },
   href: {

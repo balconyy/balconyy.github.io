@@ -1,11 +1,11 @@
-import {Movie} from "../../models/movie";
+import {Movie} from "@/models/movie";
 import {SearchDTO} from "../dto/searchDTO";
 
 
 export class SearchMapper {
     static toDomain(dto: SearchDTO): Movie {
         return {
-            id: dto.filmId.toString(),
+            kpId: dto.filmId,
             titleMain: dto.nameRu,
             titleSecond: dto.nameEn,
             posterUrl: dto.posterUrlPreview,

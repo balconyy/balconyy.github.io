@@ -6,20 +6,15 @@ import {useSearch} from "@/features/search/composables/useSearch";
 import {HISTORY_TAB_ID, SEARCH_TAB_ID, useTabs} from "@/features/search/composables/useTabs";
 import HistoryList from "@/features/search/components/HistoryList.vue";
 import {useRouter} from "vue-router";
-import {useMovieStore} from "@/store/movie";
 import {Movie} from "@/models/movie";
 
 const router = useRouter()
-const movieStore = useMovieStore()
-
 const onMovieClick = (movie: Movie) => {
-  movieStore.addToHistory(movie)
   router.push({
     name: 'movie',
-    params: {kpId: movie.id}
+    params: {kpId: movie.kpId},
   })
 }
-
 
 const {
   movieList,

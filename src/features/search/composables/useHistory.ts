@@ -1,13 +1,11 @@
 import {ref, watch} from "vue";
 import {Movie} from "@/models/movie";
-import {useRouter} from "vue-router";
 import {useMovieStore} from "../../../store/movie";
 
 
 export function useHistory() {
-    const router = useRouter();
     const movieStore = useMovieStore();
-
+    movieStore.checkVersion()
     const state = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
     const history = ref<Movie[]>([])
     const errorMessage = ref<string>()
@@ -23,7 +21,7 @@ export function useHistory() {
     }
 
     const removeMovieFromHistory = (movie: Movie) => {
-        movieStore.removeFromHistory(movie.id)
+        movieStore.removeFromHistory(movie.kpId)
         history.value = movieStore.getFullHistory()
     }
 
