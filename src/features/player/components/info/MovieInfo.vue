@@ -3,8 +3,13 @@ import SiteRating from "@/features/player/components/info/SiteRating.vue";
 import KpLogo from '@/assets/kp-logo.svg'
 import ImdbLogo from '@/assets/imdb-logo.svg'
 import {useMovieStore} from "@/store/movie.ts";
-import {ref, watchEffect} from "vue";
+import {ref, watch, watchEffect} from "vue";
 import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
+import TimingIcon from "@/features/player/components/info/timing/TimingIcon.vue";
+import TimingScreen from "@/features/player/components/info/timing/TimingScreen.vue";
+
+const KINOPOISK_MOVIE_LINK = "https://www.kinopoisk.ru/film/"
+const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
 
 const props = defineProps({
   kpId: {
@@ -13,21 +18,32 @@ const props = defineProps({
   }
 })
 
-const movieInfo = useMovieInfo()
+const {
+  movie,
+  timings,
+  error,
+  isSuccess,
+  isLoading,
+  getMovieInfo,
+} = useMovieInfo()
+
 const movieStore = useMovieStore()
-const movie = ref(null)
 
 watchEffect(async () => {
   if (props.kpId) {
-    const data = await movieInfo.getMovieInfo(props.kpId)
-    movie.value = data
-    movieStore.addToHistory(data)
+    await getMovieInfo(props.kpId)
   }
 })
 
+watch(movie, (newVal) => {
+  movieStore.addToHistory(newVal)
+})
 
-const KINOPOISK_MOVIE_LINK = "https://www.kinopoisk.ru/film/"
-const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
+
+const isTimingOpen = ref(false)
+const toggleTiming = () => {
+  isTimingOpen.value = !isTimingOpen.value
+}
 
 </script>
 
@@ -36,6 +52,14 @@ const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
   <div class="movie-links">
     <SiteRating v-if="movie?.kpId" :href="KINOPOISK_MOVIE_LINK+movie?.kpId" :icon-src="KpLogo"/>
     <SiteRating v-if="movie?.imdbId" :href="IMDB_MOVIE_LINK+movie?.imdbId" :icon-src="ImdbLogo"/>
+    <div class="timing-wrapper">
+      <TimingIcon v-if="timings.length" @click="toggleTiming"/>
+      <TimingScreen
+          v-if="isTimingOpen"
+          :timings="timings"
+          @close="isTimingOpen = false"
+      />
+    </div>
   </div>
 </template>
 
@@ -64,6 +88,11 @@ const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
   display: flex;
   justify-content: center;
   gap: 12px;
+}
+
+.timing-wrapper {
+  position: relative;
+  display: inline-flex;
 }
 
 </style>

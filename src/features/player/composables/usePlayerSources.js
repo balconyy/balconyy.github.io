@@ -1,4 +1,4 @@
-import { getPlayers} from '@/data/api/movies'
+import { getPlayers} from '@/data/api/player.js'
 import { usePlayerStore } from '@/store/player'
 import { computed, ref } from 'vue'
 

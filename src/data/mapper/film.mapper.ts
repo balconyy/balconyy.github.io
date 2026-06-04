@@ -25,6 +25,7 @@ export class FilmMapper {
                 : undefined,
             kpVoteCount: film.ratingKinopoiskVoteCount ?? undefined,
             imdbVoteCount: film.ratingImdbVoteCount ?? undefined,
+            timings: film.timings ?? undefined,
         };
     }
 }

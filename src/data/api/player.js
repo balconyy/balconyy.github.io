@@ -2,7 +2,7 @@ const PLAYER_PROVIDER_TIMEOUT_MS = 15000
 
 
 const providerImporters = {
-    ddbb: () => import('@/data/api/movies.ddbb')
+    ddbb: () => import('@/data/api/player.ddbb.js')
 }
 
 const loadProvider = () => {
