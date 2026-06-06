@@ -1,9 +1,27 @@
+<script setup>
+import {computed, ref} from 'vue'
+import {useAnalytics} from "@/composables/useAnalytics.ts";
+
+const current = ref(0)
+const goal = ref(70)
+
+const progressPercent = computed(() => {
+  return Math.min((current.value / goal.value) * 100, 100)
+})
+
+const analytics = useAnalytics()
+
+function onDonationClicked() {
+  analytics.track('donation_clicked');
+}
+</script>
+
 <template>
-  <a href="https://boosty.to/birdymafia/donate" referrerpolicy="no-referrer">
+  <a href="https://www.donationalerts.com/r/birdy_mafia" @click="onDonationClicked" referrerpolicy="no-referrer">
     <div class="donation-bar">
 
       <div class="content">
-        <p class="title">На красивый домен "<span class="bold">balcony.su</span>"</p>
+        <p class="title">На покушать дониссиму</p>
 
         <div class="bottom-row">
           <div class="progress">
@@ -21,17 +39,6 @@
     </div>
   </a>
 </template>
-
-<script setup>
-import {computed, ref} from 'vue'
-
-const current = ref(0)
-const goal = ref(445)
-
-const progressPercent = computed(() => {
-  return Math.min((current.value / goal.value) * 100, 100)
-})
-</script>
 
 <style scoped>
 .donation-bar {
@@ -61,10 +68,6 @@ const progressPercent = computed(() => {
   text-align: center;
   text-shadow: 1px 1px 3px #000000;
   letter-spacing: 0.10em;
-}
-
-.title .bold {
-  font-weight: 800;
 }
 
 .bottom-row {
@@ -112,6 +115,7 @@ const progressPercent = computed(() => {
   transition: background 0.2s ease;
   white-space: nowrap;
 }
+
 .donation-bar:hover .donate-button {
   background: #ffa726;
 }

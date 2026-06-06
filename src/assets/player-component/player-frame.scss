@@ -43,7 +43,6 @@
 }
 
 .player-empty-state {
-  min-height: 180px;
   position: absolute;
   display: flex;
   top: 0;
@@ -63,7 +62,6 @@
 
 .player-empty-state p {
   margin: 0;
-  max-width: 560px;
   line-height: 1.45;
 }
 

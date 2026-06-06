@@ -58,6 +58,7 @@
           />
           <div v-else-if="playersEmptyMessage" class="player-empty-state">
             <p>{{ playersEmptyMessage }}</p>
+            <button v-if="playersButtonIsActive" @click="fetchPlayers">Обновить</button>
           </div>
         </div>
 
@@ -195,6 +196,7 @@ const {
   errorMessage,
   errorCode,
   playersEmptyMessage,
+  playersButtonIsActive,
   showSourceButton,
   selectedPlayerLabel,
   fetchPlayers,

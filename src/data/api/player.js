@@ -1,4 +1,4 @@
-const PLAYER_PROVIDER_TIMEOUT_MS = 15000
+const PLAYER_PROVIDER_TIMEOUT_MS = 5000
 
 
 const providerImporters = {
@@ -29,6 +29,7 @@ const hasPlayers = (players) => {
 const createProviderTimeoutError = (provider) => {
     const error = new Error(`getPlayers timed out on ${provider}`)
     error.name = 'PlayerProviderTimeoutError'
+    error.code = 'ECONNABORTED'
     return error
 }
 
@@ -55,22 +56,17 @@ const withProviderTimeout = async (promise, provider) => {
 const getPlayersWithFallback = async (...args) => {
     const currentProvider = getCurrentProvider()
 
+    const providerApi = await loadProvider(currentProvider)
+    const players = await withProviderTimeout(providerApi.getPlayers(...args), currentProvider)
 
-    try {
-        const providerApi = await loadProvider(currentProvider)
-        const players = await withProviderTimeout(providerApi.getPlayers(...args), currentProvider)
-
-        if (hasPlayers(players)) {
-            return players
-        }
-        console.warn(`[movies] getPlayers returned no players on ${currentProvider}`)
-    } catch (error) {
-        console.warn(`[movies] getPlayers failed on ${currentProvider}`, error)
+    if (hasPlayers(players)) {
+        return players
     }
+    console.warn(`[movies] getPlayers returned no players on ${currentProvider}`)
+
 
     return {}
 }
-
 
 
 export {

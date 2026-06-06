@@ -1,11 +1,18 @@
 <script setup>
 import Avatar from '@/assets/media/geek-avatar.jpg'
+import {useAnalytics} from "@/composables/useAnalytics.ts";
+
+const analytics = useAnalytics()
+function onGeekClicked(){
+  window.location.assign('tg://resolve?domain=qulyaba');
+  analytics.track('geeknews_clicked');
+}
 </script>
 
 <template>
   <section class="telegram-geek">
     <div class="support-title">При поддержке тг-канала</div>
-    <a href="https://t.me/qulyaba">
+    <a @click="onGeekClicked">
     <div class="geek-content">
         <div class="geek-content-wrapper">
           <img class="avatar" :src="Avatar" alt="Гик Новости. Аватарка"/>
