@@ -1,7 +1,7 @@
-import {ref, computed} from 'vue'
-import {searchApi} from "../../../data/api/movie";
+import {computed, ref} from 'vue'
+import {searchApi} from "../../../data/api/search";
 import {SearchMapper} from "../../../data/mapper/search.mapper";
-import {Movie} from "../../../models/movie";
+import {useMovieStore} from "../../../store/movie";
 
 let controller: AbortController | null = null;
 
@@ -13,7 +13,10 @@ export function useSearch() {
     const isLoading = computed(() => state.value === 'loading')
 
     const error = ref<Error | null>(null)
-    const movieList = ref<Movie[]>([])
+
+    const store = useMovieStore()
+    const searchText = computed(() => store.searchText)
+    const movieList = computed(() => store.query)
 
     const searchMovies = async (query: string) => {
         if (controller) {
@@ -26,13 +29,15 @@ export function useSearch() {
 
         try {
             const rawRes = await searchApi.search(query, controller)
-
-            movieList.value = SearchMapper.toDomainList(rawRes.data.films).slice(0,18)
-            if (movieList.value.length > 0) state.value = 'success'
-            else {
+            const list = SearchMapper.toDomainList(rawRes.data.films).slice(0, 18)
+            if (list.length > 0) {
+                state.value = 'success'
+                store.saveQuery(query, list)
+            } else {
                 state.value = 'error'
                 error.value = new Error(`По запросу "${query}" ничего не найдено`)
             }
+
         } catch (e) {
             if (e.name === 'CanceledError') {
                 return;
@@ -43,13 +48,18 @@ export function useSearch() {
         }
     }
 
+    const initSearch = () => {
+        store.hydrateQuery()
+    }
 
 
     return {
         movieList,
+        searchText,
         error,
         isSuccess,
         isLoading,
+        initSearch,
         searchMovies,
     }
 }

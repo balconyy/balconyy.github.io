@@ -1,9 +1,6 @@
-<script setup>
-import Background from "@/components/Background.vue";
-</script>
+<script setup></script>
 
 <template>
-  <Background/>
   <div class="layout">
     <main class="main-content">
       <RouterView/>

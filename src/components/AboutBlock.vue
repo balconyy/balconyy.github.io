@@ -7,7 +7,7 @@
         <div class="contact-item">
           <span class="icon">📢</span>
           <a
-              href="https://t.me/balcony_dev"
+              href="tg://resolve?domain=balcony_dev"
               target="_blank"
               rel="noopener noreferrer"
               class="contact-link"
@@ -19,7 +19,7 @@
         <div class="contact-item">
           <span class="icon">💬</span>
           <a
-              href="https://t.me/nigeriam"
+              href="tg://resolve?domain=nigeriam"
               target="_blank"
               rel="noopener noreferrer"
               class="contact-link"
@@ -48,7 +48,7 @@ import Kryptonymous from '@/assets/media/kryptonymous.png'
   background: black;
   border: 2px solid;
   border-color: #bdbdbd #7f7f7f #7f7f7f #bdbdbd;
-  box-shadow: 1px 1px 0px 0px #00000022;
+  box-shadow: 1px 1px 0 0 #00000022;
   font-family: 'Segoe UI', 'Tahoma', 'MS Sans Serif', sans-serif;
   font-size: 11px;
   user-select: none;

@@ -7,6 +7,7 @@ import {HISTORY_TAB_ID, SEARCH_TAB_ID, useTabs} from "@/features/search/composab
 import HistoryList from "@/features/search/components/HistoryList.vue";
 import {useRouter} from "vue-router";
 import {Movie} from "@/models/movie";
+import {onMounted} from "vue";
 
 const router = useRouter()
 const onMovieClick = (movie: Movie) => {
@@ -18,8 +19,11 @@ const onMovieClick = (movie: Movie) => {
 
 const {
   movieList,
+  searchText,
   error,
+  isSuccess,
   isLoading,
+  initSearch,
   searchMovies,
 } = useSearch();
 
@@ -34,6 +38,12 @@ function search(query: string) {
   openSearchTab(query)
 }
 
+onMounted(() => {
+  initSearch()
+  if (searchText.value.length > 0) {
+    openSearchTab(searchText.value)
+  }
+})
 
 </script>
 
@@ -53,6 +63,7 @@ function search(query: string) {
     <HistoryList v-else-if="activeTabId === HISTORY_TAB_ID"
                  @selectMovie="onMovieClick"
     />
+
 
   </div>
 </template>

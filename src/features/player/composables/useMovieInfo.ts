@@ -1,5 +1,5 @@
 import {ref, computed} from 'vue'
-import {searchApi} from "../../../data/api/movie";
+import {searchApi} from "../../../data/api/search";
 import {FilmMapper} from "../../../data/mapper/film.mapper";
 import {MovieExtended} from "../../../models/movie";
 import {Timing} from "../../../models/timing";

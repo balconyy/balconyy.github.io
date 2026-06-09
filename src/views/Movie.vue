@@ -1,6 +1,7 @@
 <script setup>
 import PlayerComponent from "@/features/player/components/PlayerComponent.vue";
 import MovieInfo from "@/features/player/components/info/MovieInfo.vue";
+import Background from "@/components/Background.vue";
 
 defineProps({
   kpId: {
@@ -11,6 +12,7 @@ defineProps({
 </script>
 
 <template>
+  <Background/>
   <MovieInfo :kpId="kpId"/>
   <PlayerComponent/>
 

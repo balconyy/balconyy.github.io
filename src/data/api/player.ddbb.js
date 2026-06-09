@@ -3,14 +3,14 @@ import axios from 'axios'
 let isErrorSimulationEnabled = false
 const simulatedErrorCode = 500
 
-const DDBB_BASE_URL = import.meta.env.VITE_DDBB_API_URL || 'https://p2.ddbb.lol'
+const DDBB_BASE_URL = 'https://p2.ddbb.lol'
 
 const api = axios.create({
     baseURL: DDBB_BASE_URL,
     headers: {
         'Content-Type': 'application/json'
     },
-    timeout: 5000,
+    timeout: 10000,
 })
 
 const simulateErrorIfNeeded = async () => {

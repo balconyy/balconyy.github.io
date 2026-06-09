@@ -2,6 +2,9 @@ import {createRouter, createWebHistory} from 'vue-router'
 
 import Home from '../views/Home.vue'
 import Movie from "@/views/Movie.vue";
+import Admin from "@/views/Admin.vue";
+import AdminLogin from "@/views/AdminLogin.vue";
+import {adminAuthApi} from "@/data/api/admin.auth.ts";
 
 const index = [
     {
@@ -17,7 +20,19 @@ const index = [
         props: (route) => ({
             kpId: Number(route.params.kpId)
         })
+    },
+    {
+        path: "/admin/login",
+        name: "adminLogin",
+        component: AdminLogin,
+    },
+    {
+        path: "/admin",
+        name: "admin",
+        component: Admin,
+        meta: {requiresAuth: true}
     }
+
 ]
 
 const router = createRouter({
@@ -28,6 +43,17 @@ const router = createRouter({
         },
     },
 )
+
+router.beforeEach(async (to) => {
+    if (to.meta.requiresAuth) {
+        try {
+            await adminAuthApi.check()
+        } catch (error) {
+            return '/admin/login'
+        }
+    }
+})
+
 router.afterEach((to) => {
     window.gtag?.('event', 'page_view', {
         page_path: to.fullPath,

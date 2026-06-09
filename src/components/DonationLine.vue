@@ -1,12 +1,26 @@
 <script setup>
-import {computed, ref} from 'vue'
+import {computed} from 'vue'
 import {useAnalytics} from "@/composables/useAnalytics.ts";
 
-const current = ref(0)
-const goal = ref(70)
+const {donationText, currentValue, goalValue} = defineProps({
+  donationText: {
+    type: String,
+    required: true
+  },
+
+  currentValue: {
+    type: Number,
+    required: true
+  },
+
+  goalValue: {
+    type: Number,
+    required: true
+  }
+})
 
 const progressPercent = computed(() => {
-  return Math.min((current.value / goal.value) * 100, 100)
+  return Math.min((currentValue / goalValue) * 100, 100)
 })
 
 const analytics = useAnalytics()
@@ -17,17 +31,19 @@ function onDonationClicked() {
 </script>
 
 <template>
-  <a href="https://www.donationalerts.com/r/birdy_mafia" @click="onDonationClicked" referrerpolicy="no-referrer">
+  <a href="https://www.donationalerts.com/r/birdy_mafia"
+     @click="onDonationClicked"
+     referrerpolicy="no-referrer">
     <div class="donation-bar">
 
       <div class="content">
-        <p class="title">На покушать дониссиму</p>
+        <p class="title">{{ donationText }}</p>
 
         <div class="bottom-row">
           <div class="progress">
             <div class="fill" :style="{ width: progressPercent + '%' }"></div>
             <div class="progress-text">
-              {{ current }} / {{ goal }} руб
+              {{ currentValue }} / {{ goalValue }} руб
             </div>
           </div>
 

@@ -1,15 +1,15 @@
-import {client} from "../http";
+import {baseClient} from "../http";
 import {SearchListDTO} from "../dto/searchDTO";
 import {FilmDto} from "../dto/filmDTO";
 
 export const searchApi = {
     search(query: string, controller: AbortController) {
-        return client.get<SearchListDTO>("/search", {
+        return baseClient.get<SearchListDTO>("/search", {
             params: { name: query },
             signal: controller.signal
         });
     },
     film(id: number) {
-        return client.get<FilmDto>(`/film/${id}`);
+        return baseClient.get<FilmDto>(`/film/${id}`);
     }
 };

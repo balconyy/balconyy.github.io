@@ -4,12 +4,25 @@ import SearchMain from "@/features/search/components/SearchMain.vue";
 import LogoMain from "@/components/logo/LogoMain.vue";
 import GeekTelegram from "@/components/GeekTelegram.vue";
 import DonationLine from "@/components/DonationLine.vue";
-import AboutFooter from "@/components/AboutFooter.vue";
+import AboutBlock from "@/components/AboutBlock.vue";
+import Background from "@/components/Background.vue";
+import {useRemoteConfigStore} from "@/store/remoteConfig.ts";
+import {computed} from "vue";
+import AdminAlert from "@/components/AdminAlert.vue";
+
+const configStore = useRemoteConfigStore();
+const isConfigLoaded = computed(() => configStore.loaded);
+const donation = computed(() => configStore.remoteConfig.donationInfo);
+const adminAlert = computed(() => configStore.remoteConfig.adminAlert);
 </script>
 
 <template>
+  <Background/>
   <header>
     <LogoMain/>
+    <AdminAlert v-if="isConfigLoaded && adminAlert.message"
+                :message="adminAlert.message"
+                :link="adminAlert.link"/>
   </header>
 
   <main>
@@ -18,9 +31,19 @@ import AboutFooter from "@/components/AboutFooter.vue";
 
   <footer>
     <div class="page-wrapper">
-      <div class="left"><DonationLine/></div>
-      <div class="center"><GeekTelegram/></div>
-      <div class="right"><AboutFooter/></div>
+      <div class="left">
+        <DonationLine v-if="isConfigLoaded"
+                      :donation-text="donation.donationText"
+                      :current-value="donation.moneyNow"
+                      :goal-value="donation.moneyTotal"
+        />
+      </div>
+      <div class="center">
+        <GeekTelegram/>
+      </div>
+      <div class="right">
+        <AboutBlock/>
+      </div>
     </div>
   </footer>
 </template>
@@ -50,6 +73,7 @@ import AboutFooter from "@/components/AboutFooter.vue";
 .right {
   justify-self: center;
 }
+
 footer {
   padding-bottom: 120px;
 }

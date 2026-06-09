@@ -9,6 +9,8 @@ export const useMovieStore = defineStore('movie', {
     state: () => ({
         _version: 2,
         history: {} as Record<string, HistoryItem>,
+        searchText: '' as string,
+        query: [] as Movie [],
     }),
 
     actions: {
@@ -41,10 +43,33 @@ export const useMovieStore = defineStore('movie', {
                 delete this.history[kpId]
             }
         },
-
         clearHistory() {
             this.history = {}
         },
+        saveQuery(searchText: string, list: Movie[]) {
+            this.searchText = searchText
+            this.query = list
+            sessionStorage.setItem('query_cache', searchText)
+            sessionStorage.setItem('movies_cache', JSON.stringify(list))
+        },
+
+        hydrateQuery() {
+            const cachedText = sessionStorage.getItem('query_cache')
+            const cachedList = sessionStorage.getItem('movies_cache')
+            if (cachedText) {
+                this.searchText = cachedText
+            }
+            if (cachedList) {
+                this.query = JSON.parse(cachedList)
+            }
+        },
+
+        clearQuery() {
+            this.query = []
+            this.searchText = ''
+            sessionStorage.removeItem('query_cache')
+            sessionStorage.removeItem('movies_cache')
+        }
     },
 
     persist: {
