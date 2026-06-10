@@ -32,7 +32,6 @@ function applyConfig() {
       moneyTotal: Number(form.donationInfo.moneyTotal),
     },
   };
-  console.log(config);
   configStore.setConfig(config);
 }
 </script>

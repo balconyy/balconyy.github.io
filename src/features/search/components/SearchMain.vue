@@ -30,18 +30,22 @@ const {
 const {
   tabs,
   activeTabId,
-  openSearchTab
+  createSearchTab,
+  activateTabById,
+  initTabs
 } = useTabs()
 
 function search(query: string) {
   searchMovies(query)
-  openSearchTab(query)
+  createSearchTab(query)
+  activateTabById(SEARCH_TAB_ID)
 }
 
 onMounted(() => {
   initSearch()
+  initTabs()
   if (searchText.value.length > 0) {
-    openSearchTab(searchText.value)
+    createSearchTab(searchText.value)
   }
 })
 
@@ -51,7 +55,9 @@ onMounted(() => {
   <div class="search-main">
     <MovieSearch @search="search"/>
 
-    <FeatureTabs v-model="activeTabId" :tabs="tabs"/>
+    <FeatureTabs  :tabs="tabs"
+                  :active-tab-id="activeTabId"
+                  @clickTab="activateTabById"/>
 
     <SearchList v-if="activeTabId === SEARCH_TAB_ID"
                 :movies="movieList"

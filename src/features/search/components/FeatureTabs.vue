@@ -3,11 +3,11 @@ import FeatureTab from './Tab.vue'
 
 defineProps<{
   tabs: { id: number; label: string }[]
-  modelValue: number
+  activeTabId: number
 }>()
 
 defineEmits<{
-  (e: 'update:modelValue', value: number): void
+  (e: 'clickTab', id: number): void
 }>()
 
 </script>
@@ -18,8 +18,8 @@ defineEmits<{
         v-for="tab in tabs"
         :key="tab.id"
         :label="tab.label"
-        :active="modelValue === tab.id"
-        @clickTab="$emit('update:modelValue', tab.id)"
+        :active="activeTabId === tab.id"
+        @clickTab="$emit('clickTab', tab.id)"
     />
   </div>
 </template>

@@ -11,6 +11,7 @@ export const useMovieStore = defineStore('movie', {
         history: {} as Record<string, HistoryItem>,
         searchText: '' as string,
         query: [] as Movie [],
+        tabId: 1 as number
     }),
 
     actions: {
