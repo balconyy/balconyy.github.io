@@ -9,11 +9,13 @@ import Background from "@/components/Background.vue";
 import {useRemoteConfigStore} from "@/store/remoteConfig.ts";
 import {computed} from "vue";
 import AdminAlert from "@/components/AdminAlert.vue";
+import DailyJoke from "@/components/DailyJoke.vue";
 
 const configStore = useRemoteConfigStore();
 const isConfigLoaded = computed(() => configStore.loaded);
 const donation = computed(() => configStore.remoteConfig.donationInfo);
 const adminAlert = computed(() => configStore.remoteConfig.adminAlert);
+const dailyJoke = computed(() => configStore.remoteConfig.dailyJoke);
 </script>
 
 <template>
@@ -26,6 +28,11 @@ const adminAlert = computed(() => configStore.remoteConfig.adminAlert);
   </header>
 
   <main>
+    <DailyJoke v-if="isConfigLoaded && dailyJoke.url"
+               :url="dailyJoke.url"
+               :defaultHeight="dailyJoke.height"
+               :defaultWeight="dailyJoke.width"
+    />
     <SearchMain/>
   </main>
 

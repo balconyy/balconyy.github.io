@@ -1,15 +1,22 @@
 export interface Config {
     adminAlert: AdminAlert
     donationInfo: DonationInfo
+    dailyJoke: DailyJoke
 }
 
 export interface DonationInfo {
+    donationText: string
     moneyTotal: number
     moneyNow: number
-    donationText: string
 }
 
 export interface AdminAlert {
     message: string
     link: string
+}
+
+export interface DailyJoke {
+    url: string
+    height: number
+    weight: number
 }

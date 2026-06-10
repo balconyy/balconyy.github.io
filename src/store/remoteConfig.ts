@@ -23,7 +23,7 @@ export const useRemoteConfigStore = defineStore('remoteConfig', {
             try {
                 await configApi.setConfig(config)
                 this.remoteConfig = config
-                console.log(this.remoteConfig )
+                console.log(this.remoteConfig)
             } catch (e) {
                 console.error('Failed to send remote config', e)
             }
