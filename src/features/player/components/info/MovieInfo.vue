@@ -5,9 +5,8 @@ import ImdbLogo from '@/assets/imdb-logo.svg'
 import {useMovieStore} from "@/store/movie.ts";
 import {ref, watch, watchEffect} from "vue";
 import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
-import TimingIcon from "@/features/player/components/info/timing/TimingIcon.vue";
+import TimingButton from "@/features/player/components/info/timing/TimingButton.vue";
 import TimingScreen from "@/features/player/components/info/timing/TimingScreen.vue";
-import {onClickOutside} from "@vueuse/core";
 
 const KINOPOISK_MOVIE_LINK = "https://www.kinopoisk.ru/film/"
 const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
@@ -38,19 +37,13 @@ watchEffect(async () => {
 
 watch(movie, (newVal) => {
   movieStore.addToHistory(newVal)
-  document.title = `${movie.value.titleMain} — Balcony`
 })
 
-const timingScreen = ref(null)
+
 const isTimingOpen = ref(false)
 const toggleTiming = () => {
   isTimingOpen.value = !isTimingOpen.value
 }
-onClickOutside(timingScreen, () => {
-  if (isTimingOpen.value)
-    isTimingOpen.value = false
-})
-
 
 </script>
 
@@ -60,10 +53,9 @@ onClickOutside(timingScreen, () => {
     <SiteRating v-if="movie?.kpId" :href="KINOPOISK_MOVIE_LINK+movie?.kpId" :icon="KpLogo"/>
     <SiteRating v-if="movie?.imdbId" :href="IMDB_MOVIE_LINK+movie?.imdbId" :icon="ImdbLogo"/>
     <div class="timing-wrapper">
-      <TimingIcon v-if="timings.length" @click="toggleTiming"/>
+      <TimingButton v-if="timings.length" @click="toggleTiming"/>
       <TimingScreen
           v-if="isTimingOpen"
-          ref="timingScreen"
           :timings="timings"
           @close="isTimingOpen = false"
       />
