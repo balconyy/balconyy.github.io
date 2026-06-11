@@ -1,12 +1,8 @@
 <script setup>
 import {ref, onBeforeUnmount} from 'vue'
 
-const {defaultHeight, defaultWeight} = defineProps({
+const {defaultHeight} = defineProps({
   defaultHeight: {
-    type: Number,
-    required: true
-  },
-  defaultWeight: {
     type: Number,
     required: true
   }
@@ -15,20 +11,15 @@ const {defaultHeight, defaultWeight} = defineProps({
 
 const MIN_SIZE = 250
 const height = ref(defaultHeight)
-const width = ref(defaultWeight)
 
 
-let startX = 0
 let startY = 0
-let startW = 0
 let startH = 0
 
 function startResize(e) {
   e.preventDefault()
 
-  startX = e.clientX
   startY = e.clientY
-  startW = width.value
   startH = height.value
 
   window.addEventListener('mousemove', resize)
@@ -36,10 +27,8 @@ function startResize(e) {
 }
 
 function resize(e) {
-  const dx = e.clientX - startX
   const dy = e.clientY - startY
 
-  width.value = Math.max(MIN_SIZE, startW - dx)
   height.value = Math.max(MIN_SIZE, startH + dy)
 }
 
@@ -53,7 +42,7 @@ onBeforeUnmount(stop)
 
 <template>
   <div class="wrapper">
-    <div class="box" :style="{ width: width + 'px', height: height + 'px' }">
+    <div class="box" :style="{ height: height + 'px' }">
       <slot/>
       <div class="resize-handle" @mousedown="startResize"/>
     </div>

@@ -23,7 +23,7 @@ onMounted(() => {
                :message="errorMessage"
   />
 
-  <div v-else-if="history" class="movie-list">
+  <ul v-else-if="history" class="movie-list">
     <MovieCard
         v-for="movie in history"
         :movie="movie"
@@ -31,7 +31,7 @@ onMounted(() => {
         @selectMovie="$emit('selectMovie', $event)"
         @deleteMovie="removeMovieFromHistory"
     />
-  </div>
+  </ul>
 </template>
 
 <style scoped>

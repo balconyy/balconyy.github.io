@@ -11,15 +11,22 @@ const index = [
         path: '/',
         name: 'home',
         component: Home,
+        meta: {
+            title: 'Balcony - Фильмы и сериалы'
+        }
 
     },
     {
         path: "/movie/:kpId",
         name: "movie",
         component: Movie,
+        meta: {
+            title: 'Balcony - {{kpId}}',
+        },
         props: (route) => ({
             kpId: Number(route.params.kpId)
         })
+
     },
     {
         path: "/admin/login",

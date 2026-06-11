@@ -16,8 +16,8 @@ function onGeekClicked(){
     <div class="geek-content">
         <div class="geek-content-wrapper">
           <img class="avatar" :src="Avatar" alt="Гик Новости. Аватарка"/>
-          <div class="search-block">
-            <div class="channel-name">Гик Новости</div>
+          <div class="text-block">
+            <h3 class="channel-name">Гик Новости</h3>
             <div class="channel-description">Для тех кто в теме</div>
           </div>
         </div>
@@ -100,7 +100,7 @@ function onGeekClicked(){
   border: 1px solid var(--white);
 }
 
-.search-block {
+.text-block {
   display: flex;
   flex-direction: column;
   gap: 2px;

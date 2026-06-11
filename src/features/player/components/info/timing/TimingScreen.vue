@@ -9,6 +9,8 @@ defineProps<{
 defineEmits<{
   close: []
 }>()
+
+
 </script>
 
 <template>
@@ -26,13 +28,6 @@ defineEmits<{
         <div class="timing-text">
           {{ timing.timingText }}
         </div>
-      </div>
-
-      <div
-          v-if="!timings.length"
-          class="empty"
-      >
-        Пусто.
       </div>
     </div>
   </div>
@@ -108,9 +103,5 @@ defineEmits<{
   overflow-wrap: anywhere;
 }
 
-.empty {
-  color: #666;
-  text-align: center;
-  padding: 20px;
-}
+
 </style>

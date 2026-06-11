@@ -37,7 +37,7 @@ function onDonationClicked() {
     <div class="donation-bar">
 
       <div class="content">
-        <p class="title">{{ donationText }}</p>
+        <h3 class="title">{{ donationText }}</h3>
 
         <div class="bottom-row">
           <div class="progress">

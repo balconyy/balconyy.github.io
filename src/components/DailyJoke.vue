@@ -4,7 +4,6 @@ import {Minus} from '@lucide/vue';
 import grinIcon from '@/assets/media/ebalo.png'
 import ResizableContainer from "@/components/ResizableContainer.vue";
 
-const isExpanded = ref(true)
 
 const {url, defaultHeight, defaultWeight} = defineProps({
   url: {
@@ -14,43 +13,44 @@ const {url, defaultHeight, defaultWeight} = defineProps({
   defaultHeight: {
     type: Number,
     required: true
-  },
-  defaultWeight: {
-    type: Number,
-    required: true
   }
 })
 
+const isExpanded = ref(true)
 const currentJoke = ref({
   image: url,
   alt: 'Прикол дня'
 })
+const isLoaded = ref(false)
 
 const toggleExpand = () => {
   isExpanded.value = !isExpanded.value
 }
 
+function onLoad() {
+  isLoaded.value = true
+}
 
 </script>
 
 <template>
-  <div class="joke-container">
+  <div class="joke-main">
 
-    <div class="forum-header">
+    <div class="joke-header">
       <img class="joke-icon" :class="{ hidden: !isExpanded }" :src="grinIcon" alt="">
-      <span class="forum-title" :class="{ hidden: !isExpanded }">Прикол дня</span>
+      <span class="joke-title" :class="{ hidden: !isExpanded }">Прикол дня</span>
       <button @click="toggleExpand" class="trigger-btn">
         <Minus class="joke-icon" v-if="isExpanded"/>
         <img class="joke-icon" v-else :src="grinIcon" alt=""/>
       </button>
     </div>
 
-    <ResizableContainer v-show="isExpanded" class="forum-content" :defaultHeight="defaultHeight"
-                        :defaultWeight="defaultWeight">
+    <ResizableContainer v-show="isExpanded" class="joke-content" :defaultHeight="defaultHeight">
 
-      <img class="image-container"
+      <img class="joke-container"
            :src="currentJoke.image"
            :alt="currentJoke.alt"
+           @load="onLoad"
       />
 
     </ResizableContainer>
@@ -61,7 +61,7 @@ const toggleExpand = () => {
 
 <style scoped>
 
-.joke-container {
+.joke-main{
   position: absolute;
   top: 20px;
   right: 20px;
@@ -76,7 +76,7 @@ const toggleExpand = () => {
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-.forum-header {
+.joke-header {
   background: var(--accent-black);
   border-bottom: 2px solid #3a3a3a;
   display: flex;
@@ -87,14 +87,14 @@ const toggleExpand = () => {
   width: 100%;
 }
 
-.forum-title {
+.joke-title {
   flex: 1;
   font-size: 14px;
   letter-spacing: 1px;
   color: white;
 }
 
-.forum-title.hidden {
+.joke-title.hidden {
   display: none;
 }
 
@@ -126,11 +126,11 @@ const toggleExpand = () => {
   transform: scale(0.95);
 }
 
-.forum-content {
+.joke-content {
   background: #1e1e1e;
 }
 
-.image-container {
+.joke-container {
   width: 90%;
   height: 90%;
   display: flex;

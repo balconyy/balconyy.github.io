@@ -2,8 +2,8 @@
 import {SquareArrowOutUpRight} from '@lucide/vue';
 
 defineProps({
-  iconSrc: {
-    type: String,
+  icon: {
+    type: Object,
     required: true,
   },
   href: {
@@ -21,7 +21,7 @@ defineProps({
       target="_blank"
       rel="noopener noreferrer"
   >
-    <img class="referer-logo" :src="iconSrc" alt="icon"/>
+    <img class="referer-logo" :src="icon" alt="icon"/>
     <SquareArrowOutUpRight class="link-icon"/>
   </a>
 </template>

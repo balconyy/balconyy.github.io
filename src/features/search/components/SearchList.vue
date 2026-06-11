@@ -22,13 +22,13 @@ defineEmits(['selectMovie'])
                :message="errorMessage"
   />
 
-  <div v-else-if="movies" class="movie-list">
+  <ul v-else-if="movies" class="movie-list">
     <MovieCard
         v-for="movie in movies"
         :movie="movie"
         @selectMovie="$emit('selectMovie', $event)"
     />
-  </div>
+  </ul>
 </template>
 
 <style scoped>

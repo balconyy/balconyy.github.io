@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@lucide/vue": "^1.16.0",
+    "@vueuse/core": "^14.3.0",
+    "@vueuse/head": "^0.9.8",
     "axios": "^1.16.1",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",

@@ -9,10 +9,17 @@ defineProps({
     required: true
   }
 })
+// const configStore = useRemoteConfigStore();
+// const dailyJoke = computed(() => configStore.remoteConfig?.dailyJoke);
+// const isConfigLoaded = computed(() => configStore.loaded);
 </script>
 
 <template>
   <Background/>
+<!--  <DailyJoke v-if="isConfigLoaded && dailyJoke.url"-->
+<!--             :url="dailyJoke.url"-->
+<!--             :defaultHeight="dailyJoke.height"-->
+<!--  />-->
   <MovieInfo :kpId="kpId"/>
   <PlayerComponent/>
 

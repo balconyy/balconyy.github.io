@@ -388,8 +388,6 @@ onMounted(() => {
   iframeLoading.value = true
   fetchPlayers()
   updateScaleFactor()
-  window.addEventListener('resize', updateScaleFactor)
-  window.addEventListener('resize', updateTooltipPosition)
   if (isCentered.value) centerPlayer()
 })
 

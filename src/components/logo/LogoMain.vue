@@ -10,25 +10,23 @@ const question = "-Эээ... бэлкони?"
 </script>
 
 <template>
-  <section class="logo-main">
-    <div class="search-block">
-      <div class="upper-block">
-        <p class="question">
-          <span v-for="letter in question">{{ letter }}</span>
-        </p>
-        <FaceView class="face secondary" :video-main="bolvanWebm" :image-pressed="zaebPng"/>
-      </div>
+  <div class="logo-main">
+    <div class="upper-block">
+      <p class="question">
+        <span v-for="letter in question">{{ letter }}</span>
+        <FaceView class="face secondary" :videoMain="bolvanWebm" :imagePressed="zaebPng"/>
+      </p>
+    </div>
 
-      <div class="main-block">
-        <div class="circle-shadow"/>
-          <FaceView class="face main" :video-main="blinkWebm" :image-pressed="zaebPng"/>
-          <h1 class="titles-container">
-            <span class="balcony-title">Balcony</span>
-            <span class="sub-title">Именно Balcony</span>
-          </h1>
-        </div>
+    <div class="main-block">
+      <div class="circle-shadow"/>
+      <FaceView class="face main" :videoMain="blinkWebm" :imagePressed="zaebPng"/>
+      <div class="titles-container">
+        <h1 class="balcony-title">Balcony</h1>
+        <h2 class="sub-title">Именно Balcony</h2>
       </div>
-  </section>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -40,32 +38,29 @@ const question = "-Эээ... бэлкони?"
   position: relative;
   margin: auto;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
   padding: 12px 0 12px 0;
-}
-
-.search-block {
-  position: relative;
+  gap: 8px;
   z-index: 2;
 }
 
 .upper-block {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  margin: 0 0 12px -48px;
+  justify-content: center;
 }
 
 .question {
-  gap: 4px;
+  position: relative;
+  left: -8%;
   display: flex;
   letter-spacing: 0.035em;
   color: var(--accent-dark);
+  gap: 4px;
+
 }
 
 .question span {
-  display: inline-block;
   font-size: clamp(10px, 2vw, 24px);
   font-weight: 200;
   font-style: italic;
@@ -79,15 +74,24 @@ const question = "-Эээ... бэлкони?"
   transform: rotate(2deg) translateY(1px);
 }
 
+.face.secondary {
+  overflow: hidden;
+  position: relative;
+  width: clamp(24px, 6vw, 36px);
+  aspect-ratio: 1 / 1;
+  margin-left: 10px;
+}
+
+
 .main-block {
   display: flex;
-  align-items: flex-start;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   gap: 12px;
 }
 
 .titles-container {
-  margin: 0;
-  display: flex;
   flex-direction: column;
   line-height: 0.85;
 }
@@ -97,7 +101,7 @@ const question = "-Эээ... бэлкони?"
   font-weight: 900;
   letter-spacing: -0.095em;
   color: white;
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
 }
 
 .sub-title {
@@ -110,33 +114,14 @@ const question = "-Эээ... бэлкони?"
   color: var(--accent-dark);
 }
 
-.face.secondary {
-  overflow: hidden;
-  position: relative;
-  width: clamp(24px, 6vw, 36px);
-  aspect-ratio: 1 / 1;
-}
-
 .face.main {
   position: relative;
-  margin: auto;
   width: clamp(64px, 8vw, 82px);
   aspect-ratio: 1 / 1;
-}
-
-.face.main::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-
-  width: clamp(64px, 8vw, 60px);
-  aspect-ratio: 1 / 1;
-
   border-radius: 50%;
-  box-shadow: 0 0 30px rgba(255 255 255 / 0.6);
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.3));
 }
+
 
 
 </style>

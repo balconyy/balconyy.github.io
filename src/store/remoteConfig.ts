@@ -13,10 +13,10 @@ export const useRemoteConfigStore = defineStore('remoteConfig', {
             try {
                 const res = await configApi.getConfig();
                 this.remoteConfig = res.data;
+                this.loaded = true
             } catch (e) {
                 this.remoteConfig = {}
-            } finally {
-                this.loaded = true
+                console.error('Failed to get remote config', e)
             }
         },
         async setConfig(config: Config) {

@@ -1,22 +1,15 @@
-<script setup></script>
+<script setup>
+</script>
 
 <template>
-  <div class="layout">
-    <main class="main-content">
-      <RouterView/>
-    </main>
-  </div>
+  <main class="main-content">
+    <RouterView/>
+  </main>
 </template>
 
 <style scoped>
-.layout {
-  display: flex;
-  flex-direction: row;
+.main-content {
   height: 100%;
   width: 100%;
-}
-
-.main-content {
-  flex: 1;
 }
 </style>
