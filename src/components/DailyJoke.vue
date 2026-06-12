@@ -2,7 +2,7 @@
 import {Minus} from '@lucide/vue';
 import grinIcon from '@/assets/media/ebalo.png'
 import ResizableContainer from "@/components/ResizableContainer.vue";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 
 
 const {url, currentHeight, minHeight, isOpen} = defineProps({
@@ -24,6 +24,7 @@ const {url, currentHeight, minHeight, isOpen} = defineProps({
   },
 })
 const isWindowOpen = ref(isOpen);
+const imgBlocked = ref(false)
 
 const emit = defineEmits(['stopResizing', 'buttonClicked'])
 
@@ -35,14 +36,14 @@ function buttonClicked() {
   isWindowOpen.value = !isWindowOpen.value;
   emit('buttonClicked', isWindowOpen.value)
 }
-onMounted(() => {
-  console.log(isWindowOpen.value)
-})
+
+function onImgError() {
+  imgBlocked.value = true
+}
 </script>
 
 <template>
-  <div class="joke-main">
-
+  <div v-if="!imgBlocked" class="joke-main">
     <div class="joke-header">
       <img class="joke-icon" :class="{ hidden: !isOpen }" :src="grinIcon" alt="">
       <span class="joke-title" :class="{ hidden: !isOpen }">Прикол дня</span>
@@ -59,6 +60,7 @@ onMounted(() => {
 
       <img class="joke-container"
            :src="url"
+           @error="onImgError"
            alt="Прикол дня"
       />
 
