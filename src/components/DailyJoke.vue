@@ -1,56 +1,65 @@
 <script setup>
-import {ref} from 'vue'
 import {Minus} from '@lucide/vue';
 import grinIcon from '@/assets/media/ebalo.png'
 import ResizableContainer from "@/components/ResizableContainer.vue";
+import {onMounted, ref} from "vue";
 
 
-const {url, defaultHeight, defaultWeight} = defineProps({
+const {url, currentHeight, minHeight, isOpen} = defineProps({
   url: {
     type: String,
     required: true
   },
-  defaultHeight: {
+  currentHeight: {
     type: Number,
     required: true
-  }
+  },
+  minHeight: {
+    type: Number,
+    required: true
+  },
+  isOpen: {
+    type: Boolean,
+    required: true
+  },
 })
+const isWindowOpen = ref(isOpen);
 
-const isExpanded = ref(true)
-const currentJoke = ref({
-  image: url,
-  alt: 'Прикол дня'
-})
-const isLoaded = ref(false)
+const emit = defineEmits(['stopResizing', 'buttonClicked'])
 
-const toggleExpand = () => {
-  isExpanded.value = !isExpanded.value
+function stopResizing(height) {
+  emit('stopResizing', height)
 }
 
-function onLoad() {
-  isLoaded.value = true
+function buttonClicked() {
+  isWindowOpen.value = !isWindowOpen.value;
+  emit('buttonClicked', isWindowOpen.value)
 }
-
+onMounted(() => {
+  console.log(isWindowOpen.value)
+})
 </script>
 
 <template>
   <div class="joke-main">
 
     <div class="joke-header">
-      <img class="joke-icon" :class="{ hidden: !isExpanded }" :src="grinIcon" alt="">
-      <span class="joke-title" :class="{ hidden: !isExpanded }">Прикол дня</span>
-      <button @click="toggleExpand" class="trigger-btn">
-        <Minus class="joke-icon" v-if="isExpanded"/>
+      <img class="joke-icon" :class="{ hidden: !isOpen }" :src="grinIcon" alt="">
+      <span class="joke-title" :class="{ hidden: !isOpen }">Прикол дня</span>
+      <button @click="buttonClicked" class="trigger-btn">
+        <Minus class="joke-icon" v-if="isOpen"/>
         <img class="joke-icon" v-else :src="grinIcon" alt=""/>
       </button>
     </div>
 
-    <ResizableContainer v-show="isExpanded" class="joke-content" :defaultHeight="defaultHeight">
+    <ResizableContainer v-show="isOpen" class="joke-content"
+                        :currentHeight="currentHeight"
+                        :minHeight="minHeight"
+                        @stopResizing="stopResizing">
 
       <img class="joke-container"
-           :src="currentJoke.image"
-           :alt="currentJoke.alt"
-           @load="onLoad"
+           :src="url"
+           alt="Прикол дня"
       />
 
     </ResizableContainer>
@@ -61,7 +70,7 @@ function onLoad() {
 
 <style scoped>
 
-.joke-main{
+.joke-main {
   position: absolute;
   top: 20px;
   right: 20px;

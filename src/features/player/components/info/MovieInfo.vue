@@ -37,6 +37,7 @@ watchEffect(async () => {
 
 watch(movie, (newVal) => {
   movieStore.addToHistory(newVal)
+  document.title = `${movie.value.titleMain} — Balcony`
 })
 
 

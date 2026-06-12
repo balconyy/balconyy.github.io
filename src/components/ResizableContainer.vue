@@ -1,16 +1,20 @@
 <script setup>
 import {ref, onBeforeUnmount} from 'vue'
 
-const {defaultHeight} = defineProps({
-  defaultHeight: {
+const {currentHeight, minHeight} = defineProps({
+  currentHeight: {
+    type: Number,
+    required: true
+  },
+  minHeight: {
     type: Number,
     required: true
   }
 })
 
+const emit = defineEmits(['stopResizing'])
 
-const MIN_SIZE = 250
-const height = ref(defaultHeight)
+const height = ref(currentHeight)
 
 
 let startY = 0
@@ -28,13 +32,13 @@ function startResize(e) {
 
 function resize(e) {
   const dy = e.clientY - startY
-
-  height.value = Math.max(MIN_SIZE, startH + dy)
+  height.value = Math.max(minHeight, startH + dy)
 }
 
 function stop() {
   window.removeEventListener('mousemove', resize)
   window.removeEventListener('mouseup', stop)
+  emit('stopResizing', height.value)
 }
 
 onBeforeUnmount(stop)

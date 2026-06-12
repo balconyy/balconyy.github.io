@@ -6,14 +6,31 @@ import GeekTelegram from "@/components/GeekTelegram.vue";
 import DonationLine from "@/components/DonationLine.vue";
 import AboutBlock from "@/components/AboutBlock.vue";
 import Background from "@/components/Background.vue";
-import {useRemoteConfigStore} from "@/store/remoteConfig.ts";
-import {computed} from "vue";
 import AdminAlert from "@/components/AdminAlert.vue";
 import DailyJoke from "@/components/DailyJoke.vue";
+import {useConfigResults} from "@/features/admin/composables/config/useConfigResults.ts";
+import {useDailyWindow} from "@/features/admin/composables/config/useDailyWindow.ts";
+import {onMounted} from "vue";
 import {useHead} from "@vueuse/head";
 
+const {
+  isConfigLoaded,
+  donation,
+  adminAlert
+} = useConfigResults();
+
+const {
+  dailyJokeUrl,
+  minHeight,
+  currentHeight,
+  isOpen,
+  initDailyScreen,
+  changeWindowState,
+  setWindowHeight
+} = useDailyWindow()
+
 useHead({
-  title: 'Главная страница — Balcony',
+  title: 'Главная — Balcony',
   meta: [
     {
       name: 'description',
@@ -23,11 +40,9 @@ useHead({
 })
 
 
-const configStore = useRemoteConfigStore();
-const isConfigLoaded = computed(() => configStore.loaded);
-const donation = computed(() => configStore.remoteConfig?.donationInfo);
-const adminAlert = computed(() => configStore.remoteConfig?.adminAlert);
-const dailyJoke = computed(() => configStore.remoteConfig?.dailyJoke);
+onMounted(() => {
+  initDailyScreen()
+})
 </script>
 
 <template>
@@ -40,9 +55,13 @@ const dailyJoke = computed(() => configStore.remoteConfig?.dailyJoke);
   </header>
 
   <main>
-    <DailyJoke v-if="isConfigLoaded && dailyJoke.url"
-               :url="dailyJoke.url"
-               :defaultHeight="dailyJoke.height"
+    <DailyJoke v-if="dailyJokeUrl"
+               :url="dailyJokeUrl"
+               :currentHeight="currentHeight"
+               :minHeight="minHeight"
+               :isOpen="isOpen"
+               @stopResizing="setWindowHeight"
+               @buttonClicked="changeWindowState"
     />
     <SearchMain/>
   </main>
