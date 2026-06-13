@@ -7,6 +7,7 @@ import {ref, watch, watchEffect} from "vue";
 import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
 import TimingButton from "@/features/player/components/info/timing/TimingButton.vue";
 import TimingScreen from "@/features/player/components/info/timing/TimingScreen.vue";
+import {useAnalytics} from "@/composables/useAnalytics.ts";
 
 const KINOPOISK_MOVIE_LINK = "https://www.kinopoisk.ru/film/"
 const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
@@ -28,6 +29,7 @@ const {
 } = useMovieInfo()
 
 const movieStore = useMovieStore()
+const analytics = useAnalytics()
 
 watchEffect(async () => {
   if (props.kpId) {
@@ -37,6 +39,10 @@ watchEffect(async () => {
 
 watch(movie, (newVal) => {
   movieStore.addToHistory(newVal)
+  analytics.track("movie_loaded", {
+    movie: newVal.titleMain ?? newVal.titleSecond,
+    year: newVal.year,
+  })
   document.title = `${movie.value.titleMain} — Balcony`
 })
 
