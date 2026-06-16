@@ -1,37 +1,30 @@
-import axios from 'axios'
+import {baseClient} from "@/data/http.ts";
+import axios from "axios";
 
-let isErrorSimulationEnabled = false
-const simulatedErrorCode = 500
-
-const DDBB_BASE_URL = 'https://p2.ddbb.lol'
-
-const api = axios.create({
-    baseURL: DDBB_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    timeout: 10000,
-})
-
-const simulateErrorIfNeeded = async () => {
-    if (isErrorSimulationEnabled && simulatedErrorCode) {
-        const status = parseInt(simulatedErrorCode, 10)
-        const error = new Error(`Simulated error ${status}`)
-        error.response = {status}
-        throw error
-    }
-}
-
-const apiCall = async (callFn) => {
-    await simulateErrorIfNeeded()
-    return await callFn(api)
-}
 
 const ensureUniqueKey = (obj) => {
     let idx = 0
     while (obj[`${idx}`]) idx++
     return `${idx}`
 }
+
+
+const altClient1 = axios.create({
+    baseURL: "https://p2.ddbb.lol",
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    timeout: 10000,
+})
+
+
+export const altClient2 = axios.create({
+    baseURL: "https://nazeleniy.site/api",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    timeout: 15000,
+});
 
 const normalizePlayerType = (value) => String(value || 'Player').trim()
 
@@ -86,18 +79,37 @@ const toPlayersMap = (providers = [], {type = null, translationId = null} = {}) 
             }
         }
     }
-
+    console.log(players)
     return players
 }
 
+const getPlayersAlt1 = async (kpId) => {
+    const {data} = await altClient2.get(`/movie/${kpId}`);
+    console.log(data)
+}
+const getPlayersAlt2 = async (kpId) => {
+    const {data} = await baseClient.get('/players', {
+            params: {
+                kinopoiskId: String(kpId)
+            },
+            withCredentials: true
+        }
+    )
+    console.log(data)
+
+}
+
+
 const getPlayersRaw = async (kpId, {n = 0} = {}) => {
-    const {data} = await apiCall((client) =>
-        client.get('/api/players', {
+    getPlayersAlt1(kpId).then()
+    getPlayersAlt2(kpId).then()
+
+    const {data} = await altClient1.get('/api/players', {
             params: {
                 kinopoisk: String(kpId),
                 n
             }
-        })
+        }
     )
 
     return Array.isArray(data?.data) ? data.data : []
@@ -108,11 +120,56 @@ const getPlayers = async (kpId, options = {}) => {
     return toPlayersMap(providers, options)
 }
 
+
+
+
+function transform(source) {
+    const data = [];
+
+    // Alloha
+    if (source.alloha?.baseUrl) {
+        data.push({
+            type: "Alloha",
+            iframeUrl: source.alloha.baseUrl,
+            translations: [
+                {
+                    iframeUrl: source.alloha.baseUrl
+                }
+            ]
+        });
+    }
+
+    // Collaps
+    if (source.collapsUrl) {
+        data.push({
+            type: "Collaps",
+            iframeUrl: source.collapsUrl,
+            translations: [
+                {
+                    iframeUrl: source.collapsUrl
+                }
+            ]
+        });
+    }
+
+    // Turbo
+    if (source.turbo?.baseUrl) {
+        data.push({
+            type: "Turbo",
+            iframeUrl: source.turbo.baseUrl,
+            translations: [
+                {
+                    iframeUrl: source.turbo.baseUrl
+                }
+            ]
+        });
+    }
+
+    return { data };
+}
+
+
 export {
     getPlayers,
     getPlayersRaw
-}
-
-export const toggleErrorSimulation = (enabled) => {
-    isErrorSimulationEnabled = enabled
 }
