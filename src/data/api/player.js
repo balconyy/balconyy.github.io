@@ -1,3 +1,5 @@
+import {getPlayersAlt2} from "@/data/api/player.ddbb.js";
+
 const providerImporters = {
     ddbb: () => import('@/data/api/player.ddbb.js')
 }
@@ -27,7 +29,7 @@ const getPlayersWithFallback = async (...args) => {
     const currentProvider = getCurrentProvider()
 
     const providerApi = await loadProvider(currentProvider)
-    const players = await providerApi.getPlayers(...args)
+    const players = await providerApi.getPlayersAlt2(...args)
 
     if (hasPlayers(players)) {
         return players

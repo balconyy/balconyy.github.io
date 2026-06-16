@@ -85,7 +85,7 @@ const toPlayersMap = (providers = [], {type = null, translationId = null} = {}) 
 
 const getPlayersAlt1 = async (kpId) => {
     const {data} = await altClient2.get(`/movie/${kpId}`);
-    console.log(data)
+    return transformAlt1(data)
 }
 const getPlayersAlt2 = async (kpId) => {
     const {data} = await baseClient.get('/players', {
@@ -95,15 +95,12 @@ const getPlayersAlt2 = async (kpId) => {
             withCredentials: true
         }
     )
-    console.log(data)
-
+    const a = transformAlt2(data)
+    return toPlayersMap(a.data)
 }
 
 
-const getPlayersRaw = async (kpId, {n = 0} = {}) => {
-    getPlayersAlt1(kpId).then()
-    getPlayersAlt2(kpId).then()
-
+const getPlayersAlt3 = async (kpId, {n = 0} = {}) => {
     const {data} = await altClient1.get('/api/players', {
             params: {
                 kinopoisk: String(kpId),
@@ -112,18 +109,15 @@ const getPlayersRaw = async (kpId, {n = 0} = {}) => {
         }
     )
 
-    return Array.isArray(data?.data) ? data.data : []
-}
-
-const getPlayers = async (kpId, options = {}) => {
-    const providers = await getPlayersRaw(kpId, options)
-    return toPlayersMap(providers, options)
+    return toPlayersMap(data)
 }
 
 
+function transformAlt1(){
 
+}
 
-function transform(source) {
+function transformAlt2(source) {
     const data = [];
 
     // Alloha
@@ -131,11 +125,6 @@ function transform(source) {
         data.push({
             type: "Alloha",
             iframeUrl: source.alloha.baseUrl,
-            translations: [
-                {
-                    iframeUrl: source.alloha.baseUrl
-                }
-            ]
         });
     }
 
@@ -143,12 +132,7 @@ function transform(source) {
     if (source.collapsUrl) {
         data.push({
             type: "Collaps",
-            iframeUrl: source.collapsUrl,
-            translations: [
-                {
-                    iframeUrl: source.collapsUrl
-                }
-            ]
+            iframeUrl: source.collapsUrl
         });
     }
 
@@ -157,11 +141,6 @@ function transform(source) {
         data.push({
             type: "Turbo",
             iframeUrl: source.turbo.baseUrl,
-            translations: [
-                {
-                    iframeUrl: source.turbo.baseUrl
-                }
-            ]
         });
     }
 
@@ -170,6 +149,6 @@ function transform(source) {
 
 
 export {
-    getPlayers,
-    getPlayersRaw
+    getPlayersAlt2,
+    getPlayersAlt3,
 }
