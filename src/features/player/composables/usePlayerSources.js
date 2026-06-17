@@ -2,12 +2,10 @@ import {getPlayers} from '@/data/api/player.js'
 import {usePlayerStore} from '@/store/player'
 import {computed, ref} from 'vue'
 
-const normalizePlayerKey = (key) => String(key || '').toUpperCase()
-const KINOBOX_LOW_PRIORITY_PROVIDERS = new Set(['YOUTUBE'])
 const NO_PLAYERS_MESSAGE = 'Плееры не найдены.'
 const SERVER_TIMEOUT_MESSAGE = 'Иногда сервер не отвечает с первого раза. Попробуйте повторить запрос.'
 
-export function usePlayerSources({kinopoiskId, getProviderDisplayName, onSelectedPlayerChange}) {
+export function usePlayerSources({kinopoiskId}) {
     const playerStore = usePlayerStore()
 
     const playersInternal = ref([])
@@ -22,15 +20,12 @@ export function usePlayerSources({kinopoiskId, getProviderDisplayName, onSelecte
     const playersEmptyMessage = ref('')
     const playersButtonIsActive = ref(false)
 
-    const preferredPlayer = computed(() => playerStore.preferredPlayer)
-    const isKinoBdProvider = true
-    const canPickKinoBdSource = true
     const showSourceButton = computed(
-        () => isKinoBdProvider.value || (canPickKinoBdSource.value && !!playersEmptyMessage.value)
+        () => !!playersEmptyMessage.value
     )
     const selectedPlayerLabel = computed(() => {
         if (selectedPlayerInternal.value) {
-            return getProviderDisplayName(selectedPlayerInternal.value).toUpperCase()
+            return selectedPlayerInternal.value.name
         }
         if (playersEmptyMessage.value) {
             return 'Плееры не найдены'
@@ -40,95 +35,44 @@ export function usePlayerSources({kinopoiskId, getProviderDisplayName, onSelecte
 
     const setSelectedPlayer = (player) => {
         selectedPlayerInternal.value = player
-        onSelectedPlayerChange?.(player)
     }
-
-    const isKinoboxPlayer = (player) =>
-        normalizePlayerKey(player?.source) === 'KINOBOX' ||
-        normalizePlayerKey(player?.key).startsWith('KINOBOX>')
-
-    const isLowPriorityKinoboxPlayer = (player) =>
-        isKinoboxPlayer(player) &&
-        KINOBOX_LOW_PRIORITY_PROVIDERS.has(normalizePlayerKey(getProviderDisplayName(player)))
 
     const getDefaultPlayer = () => {
         return playersInternal.value[0]
     }
 
     const applyPlayersData = (players) => {
-        const dedupedPlayers = []
-        const seenProviders = new Set()
-
-        for (const [key, value] of Object.entries(players || {})) {
-            const player = {
-                key: normalizePlayerKey(key),
-                ...value
-            }
-            const providerName = normalizePlayerKey(getProviderDisplayName(player))
-            if (providerName && seenProviders.has(providerName)) {
-                continue
-            }
-            if (providerName) {
-                seenProviders.add(providerName)
-            }
-            dedupedPlayers.push(player)
-        }
-
-        playersInternal.value = dedupedPlayers
+        playersInternal.value = players
 
         if (playersInternal.value.length === 0) {
             setSelectedPlayer(null)
             return false
-        }
-
-        if (preferredPlayer.value) {
-            const normalizedPreferred = normalizePlayerKey(preferredPlayer.value)
-            const preferred = playersInternal.value.find(
-                (player) =>
-                    normalizePlayerKey(player.key) === normalizedPreferred ||
-                    normalizePlayerKey(getProviderDisplayName(player)) === normalizedPreferred
-            )
-            setSelectedPlayer(
-                isLowPriorityKinoboxPlayer(preferred) ? getDefaultPlayer() : preferred || getDefaultPlayer()
-            )
         } else {
             setSelectedPlayer(getDefaultPlayer())
+            return true
         }
-
-        return true
     }
 
     const fetchPlayers = async () => {
-        const kpId = kinopoiskId
-
         try {
             errorMessage.value = ''
             errorCode.value = null
             playersEmptyMessage.value = ''
             playersButtonIsActive.value = false
 
-            let players
-
-            const savedInid = playerStore.kinobdSourceByKpId?.[kpId] || null
-            players = await getPlayers(kpId, {
-                mode: 'kpId',
-                usePlayerData: true,
-                forceInid: isKinoBdProvider.value ? savedInid : null
-            })
+            let players = await getPlayers(kinopoiskId)
 
             const hasPlayers = applyPlayersData(players)
             if (!hasPlayers) {
                 playersEmptyMessage.value = NO_PLAYERS_MESSAGE
             }
         } catch (error) {
+            console.log(error)
             if (error.code === "ECONNABORTED") {
                 playersEmptyMessage.value = SERVER_TIMEOUT_MESSAGE
                 playersButtonIsActive.value = true
             } else {
-                const {message, code} = handleApiError(error)
-                errorMessage.value = message
-                errorCode.value = code
-                console.error('Ошибка при загрузке плееров:', error)
+                errorMessage.value = error.value
             }
         }
     }
@@ -157,9 +101,7 @@ export function usePlayerSources({kinopoiskId, getProviderDisplayName, onSelecte
         sourceError.value = ''
 
         try {
-            const players = await getKinoBDPlayerDataByInid(candidate.id, {
-                playerUrl: candidate.iframe
-            })
+            const players = {}
             const hasPlayers = applyPlayersData(players)
             if (!hasPlayers) {
                 sourceError.value = NO_PLAYERS_MESSAGE
@@ -188,7 +130,6 @@ export function usePlayerSources({kinopoiskId, getProviderDisplayName, onSelecte
         errorCode,
         playersEmptyMessage,
         playersButtonIsActive,
-        isKinoBdProvider,
         showSourceButton,
         selectedPlayerLabel,
         fetchPlayers,
@@ -197,51 +138,6 @@ export function usePlayerSources({kinopoiskId, getProviderDisplayName, onSelecte
         openSourceModal,
         closeSourceModal,
         applySourceCandidate,
-        normalizePlayerKey
-    }
-}
-
-const handleApiError = (error) => {
-    if (error.code === 'ECONNABORTED') {
-        return {
-            message: 'Ошибка: сервер не отвечает (таймаут)',
-            code: 408
-        }
-    } else if (error.response) {
-        if (error.response.isLoading >= 500) {
-            return {
-                message: 'Ошибка на сервере. Пожалуйста, попробуйте позже',
-                code: error.response.isLoading
-            }
-        }
-
-        switch (error.response.isLoading) {
-            case 403:
-                return {
-                    message: 'Упс, недоступно по требованию правообладателя',
-                    code: 403
-                }
-            case 404:
-                return {
-                    message: 'Данные не найдены',
-                    code: 404
-                }
-            case 401:
-                return {
-                    message: 'Не авторизован, попробуйте перезайти',
-                    code: 401
-                }
-            default:
-                return {
-                    message: `Произошла неизвестная ошибка. Ошибка: ${error.response.data?.isLoading ?? error.response.isLoading}`,
-                    code: error.response.isLoading
-                }
-        }
-    } else {
-        return {
-            message: `Ошибка: ${error.message}`,
-            code: null
-        }
     }
 }
 

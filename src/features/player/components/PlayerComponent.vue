@@ -144,7 +144,6 @@ import {usePlayerSources} from '@/features/player/composables/usePlayerSources'
 import {usePlayerStore} from '@/store/player'
 import PlayerModal from '@/features/player/components/PlayerModal.vue'
 import PlayerSelectorBar from '@/features/player/components/PlayerSelectorBar.vue'
-import {debugLog} from '@/utils/logger'
 import {getProviderDisplayName} from '@/utils/playerUtils'
 import {Fullscreen} from '@lucide/vue';
 
@@ -156,7 +155,6 @@ const playerStore = usePlayerStore()
 const route = useRoute()
 const kinopoiskId = route.params.kpId
 
-const emit = defineEmits(['update:selectedPlayer'])
 
 const iframeLoading = ref(true)
 const playerIframe = ref(null)
@@ -205,22 +203,14 @@ const {
   openSourceModal,
   closeSourceModal,
   applySourceCandidate,
-  normalizePlayerKey
 } = usePlayerSources({
-  kinopoiskId,
-  getProviderDisplayName,
-  onSelectedPlayerChange: (player) => emit('update:selectedPlayer', player)
-})
+      kinopoiskId
+    }
+)
 
 const activeTooltip = ref(null)
 const tooltipHovered = ref(false)
 let hideTimeout = null
-
-const videoPositionInterval = ref(null)
-const overlayTimingsCheckInterval = ref(null)
-const currentOverlayElement = ref(null)
-const overlayControlsTimeout = ref(null)
-const overlayCreationInProgress = ref(false)
 
 const updateTooltipPosition = (tooltipName) => {
   const container = document.querySelector(`[data-tooltip-container="${tooltipName}"]`)
@@ -280,113 +270,31 @@ const onIframeLoad = () => {
 }
 
 const handlePlayerSelect = (player) => {
-  if (selectedPlayerInternal.value?.key === player.key) {
+  if (selectedPlayerInternal.value?.name === player.value) {
     closePlayerModal()
     return
   }
 
   selectedPlayerInternal.value = player
   iframeLoading.value = true
-  if (currentOverlayElement.value) {
-    removeVideoOverlay()
-  }
-  if (videoPositionInterval.value) {
-    clearInterval(videoPositionInterval.value)
-    videoPositionInterval.value = null
-  }
-  if (!player.key.toLowerCase().includes('torrents')) {
-    playerStore.updatePreferredPlayer(normalizePlayerKey(player.key))
-  }
-  // Note: emit('update:selectedPlayer') is handled by the watcher on selectedPlayerInternal
+
+
   closePlayerModal()
 }
 
 watch(selectedPlayerInternal, (newVal) => {
   if (newVal) {
     iframeLoading.value = true
-
+    //Костыль для не попадания iframe в backstack
     iframeKey.value++
-
-    if (currentOverlayElement.value) {
-      removeVideoOverlay()
-    }
-    if (videoPositionInterval.value) {
-      clearInterval(videoPositionInterval.value)
-      videoPositionInterval.value = null
-    }
-    if (!newVal.key.toLowerCase().includes('torrents')) {
-      playerStore.updatePreferredPlayer(normalizePlayerKey(newVal.key))
-    }
-    emit('update:selectedPlayer', newVal)
   }
 })
-
-const removeVideoOverlay = () => {
-  if (currentOverlayElement.value) {
-    try {
-      if (currentOverlayElement.value._monitorInterval) {
-        clearInterval(currentOverlayElement.value._monitorInterval)
-      }
-      if (currentOverlayElement.value._mutationObserver) {
-        currentOverlayElement.value._mutationObserver.disconnect()
-      }
-      if (currentOverlayElement.value._resizeHandler && currentOverlayElement.value._iframeDoc) {
-        currentOverlayElement.value._iframeDoc.defaultView.removeEventListener(
-            'resize',
-            currentOverlayElement.value._resizeHandler
-        )
-      }
-      if (
-          currentOverlayElement.value._fullscreenHandler &&
-          currentOverlayElement.value._iframeDoc
-      ) {
-        currentOverlayElement.value._iframeDoc.removeEventListener(
-            'fullscreenchange',
-            currentOverlayElement.value._fullscreenHandler
-        )
-        currentOverlayElement.value._iframeDoc.removeEventListener(
-            'webkitfullscreenchange',
-            currentOverlayElement.value._fullscreenHandler
-        )
-
-        if (currentOverlayElement.value._videoElement) {
-          currentOverlayElement.value._videoElement.removeEventListener(
-              'webkitbeginfullscreen',
-              currentOverlayElement.value._fullscreenHandler
-          )
-          currentOverlayElement.value._videoElement.removeEventListener(
-              'webkitendfullscreen',
-              currentOverlayElement.value._fullscreenHandler
-          )
-        }
-      }
-      if (currentOverlayElement.value._mouseHandler && currentOverlayElement.value._iframeDoc) {
-        currentOverlayElement.value._iframeDoc.removeEventListener(
-            'mousemove',
-            currentOverlayElement.value._mouseHandler
-        )
-      }
-
-      currentOverlayElement.value.remove()
-    } catch (e) {
-      debugLog('Error removing overlay:', e)
-    }
-    currentOverlayElement.value = null
-  }
-
-  overlayCreationInProgress.value = false
-
-  if (overlayControlsTimeout.value) {
-    clearTimeout(overlayControlsTimeout.value)
-    overlayControlsTimeout.value = null
-  }
-}
-
 
 
 onMounted(() => {
   iframeLoading.value = true
   fetchPlayers()
+  console.log("ULOO")
   updateScaleFactor()
   if (isCentered.value) centerPlayer()
 })
@@ -395,17 +303,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', updateScaleFactor)
   window.removeEventListener('resize', updateTooltipPosition)
   cleanupPlayerLayout()
-
-  if (videoPositionInterval.value) {
-    clearInterval(videoPositionInterval.value)
-  }
-  if (overlayTimingsCheckInterval.value) {
-    clearInterval(overlayTimingsCheckInterval.value)
-  }
-  removeVideoOverlay()
-
-  delete window.obsSources
-  delete window.obsFiltersFound
 })
 </script>
 

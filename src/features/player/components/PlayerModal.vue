@@ -17,10 +17,7 @@
                 :class="['player-item', { active: isSelected(item.data) }]"
                 @click="selectPlayer(item.data)"
             >
-              {{ formatPlayerLabel(item.data) }}
-              <span v-if="item.data.warning" class="warning-icon material-icons" title="Внимание!"
-              >warning</span
-              >
+              {{ item.data.name }}
             </button>
             <button
                 v-else
@@ -87,37 +84,8 @@ const mixedPlayersList = computed(() => {
 const isVeoVeo = (player) => player.name.toUpperCase().includes('VEOVEO')
 const isKodik = (player) => player.name.toUpperCase().includes('KODIK')
 
-const cleanName = (name) =>
-    String(name || '')
-        .replace(/VEOVEO>/, '')
-        .replace(/KODIK>/, '')
-        .replace(/KINOBOX>/, '')
-        .trim()
-
-const getProviderName = (player) => {
-  const directProvider = String(player?.provider || '').trim()
-  if (directProvider) return cleanName(directProvider)
-
-  const rawName = String(player?.name || player?.key || '')
-  if (!rawName.includes('>')) return ''
-
-  const segments = rawName
-      .split('>')
-      .map((segment) => segment.trim())
-      .filter(Boolean)
-  if (!segments.length) return ''
-
-  const root = segments[0].toUpperCase()
-  if ((root === 'KINOBOX' || root === 'KINOBD' || root === 'RHSERV') && segments[1]) {
-    return cleanName(segments[1])
-  }
-
-  return cleanName(segments[0])
-}
-
 const formatPlayerLabel = (player) => {
-  const provider = getProviderName(player)
-  return provider || cleanName(player?.translate) || 'Плеер'
+  return player.name
 }
 
 const selectPlayer = (player) => {
@@ -125,7 +93,7 @@ const selectPlayer = (player) => {
   emit('close')
 }
 
-const isSelected = (player) => props.selectedPlayer && props.selectedPlayer.key === player.key
+const isSelected = (player) => props.selectedPlayer && props.selectedPlayer.name === player.name
 
 const isGroupSelected = (group) => {
   if (!props.selectedPlayer) return false
