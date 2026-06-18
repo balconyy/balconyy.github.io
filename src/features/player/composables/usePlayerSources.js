@@ -67,7 +67,6 @@ export function usePlayerSources({kinopoiskId}) {
                 playersEmptyMessage.value = NO_PLAYERS_MESSAGE
             }
         } catch (error) {
-            console.log(error)
             if (error.code === "ECONNABORTED") {
                 playersEmptyMessage.value = SERVER_TIMEOUT_MESSAGE
                 playersButtonIsActive.value = true
@@ -95,7 +94,7 @@ export function usePlayerSources({kinopoiskId}) {
     }
 
     const applySourceCandidate = async (candidate) => {
-        if (!candidate?.id) return
+        if (!candidate?.name) return
 
         sourceLoading.value = true
         sourceError.value = ''

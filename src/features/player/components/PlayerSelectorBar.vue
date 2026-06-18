@@ -9,15 +9,6 @@
     >
       {{ selectedLabel }}
     </button>
-    <button
-      v-if="showSourceButton"
-      class="source-btn"
-      type="button"
-      aria-label="Выбрать источник"
-      @click="$emit('open-source-modal')"
-    >
-      Источник
-    </button>
   </div>
 </template>
 
@@ -26,14 +17,10 @@ defineProps({
   selectedLabel: {
     type: String,
     required: true
-  },
-  showSourceButton: {
-    type: Boolean,
-    default: false
   }
 })
 
-defineEmits(['open-player-modal', 'open-source-modal'])
+defineEmits(['open-player-modal'])
 </script>
 
 <style scoped>

@@ -1,22 +1,20 @@
 const providerImporters = {
-    ddbb: () => import('@/data/api/player.ddbb.js')
+    balcony: () => import('@/data/api/player.balcony.js')
 }
 
 const loadProvider = () => {
-    return providerImporters.ddbb()
+    return providerImporters.balcony()
 }
 
 const getCurrentProvider = () => {
-    return 'ddbb'
+    return 'balcony'
 }
 
 
 const getPlayers = async (...args) => {
     const currentProvider = getCurrentProvider()
     const providerApi = await loadProvider(currentProvider)
-    const players = await providerApi.getPlayersAlt2(...args)
-    console.log("wtf",players)
-    return players
+    return await providerApi.getPlayers(...args)
 }
 
 

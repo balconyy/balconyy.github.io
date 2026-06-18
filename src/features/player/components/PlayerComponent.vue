@@ -4,9 +4,7 @@
   <template v-else>
     <PlayerSelectorBar
         :selected-label="selectedPlayerLabel"
-        :show-source-button="showSourceButton"
         @open-player-modal="openPlayerModal"
-        @open-source-modal="openSourceModal"
     />
     <!-- Модальное окно выбора плеера -->
     <PlayerModal
@@ -195,12 +193,10 @@ const {
   errorCode,
   playersEmptyMessage,
   playersButtonIsActive,
-  showSourceButton,
   selectedPlayerLabel,
   fetchPlayers,
   openPlayerModal,
   closePlayerModal,
-  openSourceModal,
   closeSourceModal,
   applySourceCandidate,
 } = usePlayerSources({
@@ -270,14 +266,13 @@ const onIframeLoad = () => {
 }
 
 const handlePlayerSelect = (player) => {
-  if (selectedPlayerInternal.value?.name === player.value) {
+  if (selectedPlayerInternal.value?.name === player.name) {
     closePlayerModal()
     return
   }
 
   selectedPlayerInternal.value = player
   iframeLoading.value = true
-
 
   closePlayerModal()
 }
@@ -294,7 +289,6 @@ watch(selectedPlayerInternal, (newVal) => {
 onMounted(() => {
   iframeLoading.value = true
   fetchPlayers()
-  console.log("ULOO")
   updateScaleFactor()
   if (isCentered.value) centerPlayer()
 })
