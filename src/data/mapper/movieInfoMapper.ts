@@ -10,7 +10,6 @@ export class MovieInfoMapper {
             posterUrl: dto.posterUrl,
             year: dto.year?.toString(),
             type: dto.type,
-            ratingKP: dto.ratingKinopoisk?.toString(),
             imdbId: dto.imdbId,
             ratingKp: dto.ratingKinopoisk?.toString(),
             ratingImdb: dto.ratingImdb?.toString(),

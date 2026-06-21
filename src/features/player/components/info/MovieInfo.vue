@@ -1,52 +1,22 @@
-<script setup>
+<script setup lang="ts">
 import SiteReferer from "@/features/player/components/info/SiteReferer.vue";
 import KpLogo from '@/assets/icons/kp-logo.svg'
 import ImdbLogo from '@/assets/icons/imdb-logo.svg'
 import LBLogo from '@/assets/icons/letterboxd-logo.svg'
-import {useMovieStore} from "@/store/movie.ts";
-import {ref, watch, watchEffect} from "vue";
-import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
+import {ref} from "vue";
 import TimingButton from "@/features/player/components/info/timing/TimingButton.vue";
 import TimingScreen from "@/features/player/components/info/timing/TimingScreen.vue";
-import {useAnalytics} from "@/composables/useAnalytics.ts";
+import {MovieExtended} from "@/models/movie";
+import {Timing} from "@/models/timing";
 
 const KINOPOISK_MOVIE_LINK = "https://www.kinopoisk.ru/film/"
 const LETTERBOXD_MOVIE_LINK = "https://letterboxd.com/imdb/"
 const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
 
-const props = defineProps({
-  kpId: {
-    type: Number,
-    required: true
-  }
-})
-
-const {
-  movie,
-  timings,
-  error,
-  isSuccess,
-  isLoading,
-  getMovieInfo,
-} = useMovieInfo()
-
-const movieStore = useMovieStore()
-const analytics = useAnalytics()
-
-watchEffect(async () => {
-  if (props.kpId) {
-    await getMovieInfo(props.kpId)
-  }
-})
-
-watch(movie, (newVal) => {
-  movieStore.addToHistory(newVal)
-  analytics.track("movie_loaded", {
-    movie: newVal.titleMain ?? newVal.titleSecond,
-    year: newVal.year,
-  })
-  document.title = `${movie.value.titleMain} — Balcony`
-})
+const {movie} = defineProps<{
+  movie: MovieExtended;
+  timings: Timing[];
+}>();
 
 
 const isTimingOpen = ref(false)

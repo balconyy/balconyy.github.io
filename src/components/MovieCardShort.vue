@@ -18,7 +18,7 @@ function onImgError(e) {
 
 
 <template>
-  <div class="movie-card" @click="$emit('selectMovie', movie)">
+  <div class="movie-card" @click="$emit('selectMovie', movie)" :title="movie.titleMain">
     <div class="old-school-effect"/>
     <div class="card-inner">
       <div class="poster-wrapper">
@@ -29,7 +29,8 @@ function onImgError(e) {
             alt="poster"
         >
       </div>
-      <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }} {{ movie?.year ? " (" + movie?.year + ")" : '' }}</h3>
+      <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}
+        {{ movie?.year ? " (" + movie?.year + ")" : '' }}</h3>
     </div>
   </div>
 </template>

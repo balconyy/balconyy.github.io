@@ -1,47 +1,20 @@
 <script setup lang="ts">
 import MovieCardShort from "@/components/MovieCardShort.vue";
-import {computed, onMounted, ref} from 'vue'
 import {Movie} from "@/models/movie";
 
 const {movies} = defineProps<{
   movies: Movie[];
 }>();
 
-const grid = ref(null)
-const itemsPerRow = ref(1)
-
-
-const visibleItems = computed(() =>
-    movies.slice(0, itemsPerRow.value)
-)
-
-function calculateItemsPerRow() {
-  const list = grid.value
-  if (!list) return
-
-  const firstChild = list.children[0]
-  if (!firstChild) return
-
-  const containerWidth = list.clientWidth
-  const itemWidth = firstChild.offsetWidth + 20
-
-  itemsPerRow.value = Math.floor(containerWidth / itemWidth)
-}
-
 defineEmits(['selectMovie'])
-
-onMounted(() => {
-  calculateItemsPerRow()
-  window.addEventListener('resize', calculateItemsPerRow)
-})
 
 </script>
 
 <template>
-  <h2 class="relations-title">Смотрели недавно</h2>
-  <ul class="relations-list" ref="grid">
+  <h2 class="relations-title">Другие части</h2>
+  <ul class="relations-list">
     <MovieCardShort
-        v-for="movie in visibleItems"
+        v-for="movie in movies"
         :movie="movie"
         @selectMovie="$emit('selectMovie', $event)"
     />
@@ -52,10 +25,8 @@ onMounted(() => {
 
 .relations-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  grid-auto-rows: auto;
+  grid-template-columns: repeat(auto-fit, 130px);
   justify-content: center;
-  align-items: stretch;
   gap: 18px;
   padding: 0 30px;
 }
