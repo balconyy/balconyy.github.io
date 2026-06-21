@@ -142,8 +142,9 @@ function onImgError() {
 }
 
 .joke-container {
-  width: 90%;
-  height: 90%;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
