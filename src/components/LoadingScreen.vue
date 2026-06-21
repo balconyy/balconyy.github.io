@@ -1,5 +1,5 @@
 <script setup>
-import Waiter from '@/assets/waiter.svg'
+import Waiter from '@/assets/icons/waiter.svg'
 
 const {message} = defineProps({
   message: {
@@ -11,7 +11,7 @@ const {message} = defineProps({
 
 <template>
   <div class="loading-screen">
-    <img class="loading-icon" :src="Waiter" alt="logo"/>
+    <Waiter class="loading-icon"/>
     <p class="loading-message">{{ message }}</p>
   </div>
 </template>
@@ -31,6 +31,7 @@ const {message} = defineProps({
 .loading-icon {
   padding: 10px;
   width: 90px;
+  margin: auto;
   animation: spin 10s linear infinite;
 }
 

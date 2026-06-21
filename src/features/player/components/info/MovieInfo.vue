@@ -1,7 +1,8 @@
 <script setup>
-import SiteRating from "@/features/player/components/info/SiteRating.vue";
-import KpLogo from '@/assets/kp-logo.svg'
-import ImdbLogo from '@/assets/imdb-logo.svg'
+import SiteReferer from "@/features/player/components/info/SiteReferer.vue";
+import KpLogo from '@/assets/icons/kp-logo.svg'
+import ImdbLogo from '@/assets/icons/imdb-logo.svg'
+import LBLogo from '@/assets/icons/letterboxd-logo.svg'
 import {useMovieStore} from "@/store/movie.ts";
 import {ref, watch, watchEffect} from "vue";
 import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
@@ -10,6 +11,7 @@ import TimingScreen from "@/features/player/components/info/timing/TimingScreen.
 import {useAnalytics} from "@/composables/useAnalytics.ts";
 
 const KINOPOISK_MOVIE_LINK = "https://www.kinopoisk.ru/film/"
+const LETTERBOXD_MOVIE_LINK = "https://letterboxd.com/imdb/"
 const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
 
 const props = defineProps({
@@ -57,8 +59,9 @@ const toggleTiming = () => {
 <template>
   <h1 class="content-title">{{ movie?.titleMain || '' }}</h1>
   <div class="movie-links">
-    <SiteRating v-if="movie?.kpId" :href="KINOPOISK_MOVIE_LINK+movie?.kpId" :icon="KpLogo"/>
-    <SiteRating v-if="movie?.imdbId" :href="IMDB_MOVIE_LINK+movie?.imdbId" :icon="ImdbLogo"/>
+    <SiteReferer v-if="movie?.kpId" :href="KINOPOISK_MOVIE_LINK+movie?.kpId" :icon="KpLogo" hint="Кинопоиск"/>
+    <SiteReferer v-if="movie?.imdbId" :href="LETTERBOXD_MOVIE_LINK+movie?.imdbId" :icon="LBLogo" hint="Letterboxd"/>
+    <SiteReferer v-if="movie?.imdbId" :href="IMDB_MOVIE_LINK+movie?.imdbId" :icon="ImdbLogo" hint="IMDB"/>
     <div class="timing-wrapper">
       <TimingButton v-if="timings.length" @click="toggleTiming"/>
       <TimingScreen
@@ -80,7 +83,6 @@ const toggleTiming = () => {
   padding: 18px;
   line-height: 1.05;
   font-weight: 800;
-  display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -94,6 +96,7 @@ const toggleTiming = () => {
   position: relative;
   display: flex;
   justify-content: center;
+  align-content: center;
   gap: 12px;
 }
 

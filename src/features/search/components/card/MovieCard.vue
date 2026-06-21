@@ -1,5 +1,5 @@
 <script setup>
-import emptyPoster from '@/assets/empty-poster.jpg'
+import emptyPoster from '@/assets/media/empty-poster.jpg'
 import { X } from '@lucide/vue';
 let props = defineProps({
   movie: Object,

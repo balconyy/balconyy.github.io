@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Banana} from '@lucide/vue';
+import Omega from '@/assets/icons/omega-icon.svg'
 import {ref} from "vue";
 
 const emit = defineEmits<{
@@ -15,24 +15,21 @@ const handleClick = () => {
 </script>
 
 
-
 <template>
-  <button class="banana-button" :class="{ 'no-animation': isClicked }" @click="handleClick">
-    <Banana/>
+  <button class="timing-button" :class="{ 'no-animation': isClicked }" @click="handleClick">
+    <Omega/>
   </button>
 </template>
 
 <style scoped>
-.banana-button {
-  position: relative;
-  display: inline-block;
+.timing-button {
   width: 42px;
   height: 42px;
+  display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   border-radius: 8px;
-  padding: 6px;
   background: rgba(128, 128, 128, 0.1);
   border: 1px solid #ff3300;
   color: #ff3300;
@@ -41,13 +38,11 @@ const handleClick = () => {
   animation: attention-pulse 1.5s ease-in-out infinite;
 }
 
-.banana-button.no-animation {
+.timing-button.no-animation {
   animation: none;
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255, 0.7);
   box-shadow: 0 0 0;
-}
-.banana-button.no-animation:hover {
 }
 
 @keyframes attention-pulse {

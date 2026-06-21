@@ -111,7 +111,6 @@ export function usePlayerSources({kinopoiskId}) {
             closeSourceModal()
         } catch (error) {
             sourceError.value = 'Не удалось применить выбранный источник'
-            console.error('Ошибка применения источника KinoBD:', error)
         } finally {
             sourceLoading.value = false
         }

@@ -119,7 +119,22 @@ const question = "-Эээ... бэлкони?"
   width: clamp(64px, 8vw, 82px);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.3));
+}
+
+.face.main::before {
+  content: "";
+  position: absolute;
+
+  width: 80%;
+  height: 80%;
+
+  inset: 0;
+  margin: auto;
+
+  border-radius: 50%;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+  z-index: -1;
+
 }
 
 

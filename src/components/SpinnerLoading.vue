@@ -1,12 +1,5 @@
-<template>
-  <div class="spinner-wrapper">
-    <img class="spinner" :src="Waiter" alt="logo"/>
-    <p v-if="text" class="spinner-text">{{ text }}</p>
-  </div>
-</template>
-
 <script setup>
-import Waiter from "@/assets/waiter.svg";
+import Waiter from "@/assets/icons/waiter.svg";
 
 defineProps({
   loading: {
@@ -19,6 +12,13 @@ defineProps({
   }
 })
 </script>
+
+<template>
+  <div class="spinner-wrapper">
+    <Waiter class="spinner"/>
+    <p v-if="text" class="spinner-text">{{ text }}</p>
+  </div>
+</template>
 
 <style scoped>
 .spinner-wrapper {
