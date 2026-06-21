@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 
 import SearchMain from "@/features/search/components/SearchMain.vue";
 import LogoMain from "@/components/logo/LogoMain.vue";
@@ -8,10 +8,27 @@ import AboutBlock from "@/components/AboutBlock.vue";
 import Background from "@/components/Background.vue";
 import AdminAlert from "@/components/AdminAlert.vue";
 import DailyJoke from "@/components/DailyJoke.vue";
-import {useConfigResults} from "@/features/admin/composables/config/useConfigResults.ts";
-import {useDailyWindow} from "@/features/admin/composables/config/useDailyWindow.ts";
+
 import {onMounted} from "vue";
 import {useHead} from "@vueuse/head";
+import RecentlyWatchList from "@/features/resently/components/RecentlyWatchList.vue";
+
+import {useRouter} from "vue-router";
+import {useConfigResults} from "@/features/admin/composables/config/useConfigResults";
+import {useDailyWindow} from "@/features/admin/composables/config/useDailyWindow";
+import {useRecentlyWatch} from "@/features/resently/composables/useRecentlyWatch";
+import {Movie} from "@/models/movie";
+
+
+useHead({
+  title: 'Главная — Balcony',
+  meta: [
+    {
+      name: 'description',
+      content: 'Поиск фильмов по названию и id, история просмотров, прикол дня'
+    }
+  ]
+})
 
 const {
   isConfigLoaded,
@@ -29,19 +46,23 @@ const {
   setWindowHeight
 } = useDailyWindow()
 
-useHead({
-  title: 'Главная — Balcony',
-  meta: [
-    {
-      name: 'description',
-      content: 'Поиск фильмов по названию и id, история просмотров, прикол дня'
-    }
-  ]
-})
+const {
+  recentlyWatched,
+  getRecentlyWatch
+} = useRecentlyWatch()
+
+const router = useRouter()
+const onMovieClick = (movie: Movie) => {
+  router.push({
+    name: 'movie',
+    params: {kpId: movie.kpId},
+  })
+}
 
 
 onMounted(() => {
   initDailyScreen()
+  getRecentlyWatch()
 })
 </script>
 
@@ -63,7 +84,11 @@ onMounted(() => {
                @stopResizing="setWindowHeight"
                @buttonClicked="changeWindowState"
     />
-    <SearchMain/>
+    <SearchMain @selectMovie="onMovieClick"/>
+
+    <RecentlyWatchList v-if="recentlyWatched && recentlyWatched.length"
+                       :movies="recentlyWatched"
+                       @selectMovie="onMovieClick"/>
   </main>
 
   <footer>
@@ -112,6 +137,6 @@ onMounted(() => {
 }
 
 footer {
-  padding-bottom: 120px;
+  padding-bottom: 130px;
 }
 </style>

@@ -1,21 +1,11 @@
 <script setup lang="ts">
-import MovieSearch from "./response/MovieSearch.vue";
+import MovieSearch from "./MovieSearch.vue";
 import SearchList from "./SearchList.vue";
 import FeatureTabs from "@/features/search/components/FeatureTabs.vue";
 import {useSearch} from "@/features/search/composables/useSearch";
 import {HISTORY_TAB_ID, SEARCH_TAB_ID, useTabs} from "@/features/search/composables/useTabs";
 import HistoryList from "@/features/search/components/HistoryList.vue";
-import {useRouter} from "vue-router";
-import {Movie} from "@/models/movie";
 import {onMounted} from "vue";
-
-const router = useRouter()
-const onMovieClick = (movie: Movie) => {
-  router.push({
-    name: 'movie',
-    params: {kpId: movie.kpId},
-  })
-}
 
 const {
   movieList,
@@ -40,7 +30,7 @@ function search(query: string) {
   createSearchTab(query)
   activateTabById(SEARCH_TAB_ID)
 }
-
+defineEmits(['selectMovie'])
 onMounted(() => {
   initSearch()
   initTabs()
@@ -63,11 +53,11 @@ onMounted(() => {
                 :movies="movieList"
                 :loading="isLoading"
                 :error-message="error?.message"
-                @selectMovie="onMovieClick"
+                @selectMovie="$emit('selectMovie', $event)"
     />
 
     <HistoryList v-else-if="activeTabId === HISTORY_TAB_ID"
-                 @selectMovie="onMovieClick"
+                 @selectMovie="$emit('selectMovie', $event)"
     />
 
 
@@ -75,12 +65,4 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
-.search-main {
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-}
 </style>

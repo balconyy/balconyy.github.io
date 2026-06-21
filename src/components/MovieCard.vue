@@ -1,7 +1,7 @@
 <script setup>
 import emptyPoster from '@/assets/media/empty-poster.jpg'
 import { X } from '@lucide/vue';
-let props = defineProps({
+let {movie, showDeleteButton} = defineProps({
   movie: Object,
   showDeleteButton: {
     type: Boolean,
@@ -17,13 +17,14 @@ function onImgError(e) {
   }
 }
 
+
 </script>
 
 
 <template>
-  <div class="movie-card" @click="$emit('selectMovie', props.movie)">
+  <div class="movie-card" @click="$emit('selectMovie', movie)">
     <button v-if="showDeleteButton"
-        class="delete-button" @click.stop="$emit('deleteMovie', props.movie)">
+        class="delete-button" @click.stop="$emit('deleteMovie', movie)">
       <X color="#f1f" />
     </button>
     <div class="old-school-effect"/>

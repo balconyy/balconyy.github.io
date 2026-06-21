@@ -1,13 +1,10 @@
-import {Timing} from "@/models/timing";
-
 export interface Movie {
     kpId: number;
     titleMain: string;
     titleSecond?: string;
     posterUrl?: string;
     year?: string;
-    type: string;
-    ratingKP?: string;
+    type?: string;
 }
 
 export interface MovieExtended extends Movie {
@@ -16,5 +13,4 @@ export interface MovieExtended extends Movie {
     ratingImdb?: string;
     kpVoteCount?: number;
     imdbVoteCount?: number;
-    timings?: Timing[];
 }

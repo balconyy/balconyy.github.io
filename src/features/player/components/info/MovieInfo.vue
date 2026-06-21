@@ -57,7 +57,10 @@ const toggleTiming = () => {
 </script>
 
 <template>
-  <h1 class="content-title">{{ movie?.titleMain || '' }}</h1>
+
+  <h1 class="content-title"><span class="title-bold">{{ movie?.titleMain || '' }}</span>
+    {{ movie?.year ? " (" + movie?.year + ")" : '' }}
+  </h1>
   <div class="movie-links">
     <SiteReferer v-if="movie?.kpId" :href="KINOPOISK_MOVIE_LINK+movie?.kpId" :icon="KpLogo" hint="Кинопоиск"/>
     <SiteReferer v-if="movie?.imdbId" :href="LETTERBOXD_MOVIE_LINK+movie?.imdbId" :icon="LBLogo" hint="Letterboxd"/>
@@ -76,13 +79,13 @@ const toggleTiming = () => {
 <style scoped>
 .content-title {
   position: relative;
+  font-size: clamp(30px, 2vw, 42px);
   color: var(--white);
   z-index: 2;
-  font-size: clamp(30px, 2vw, 42px);
   margin: 0;
   padding: 18px;
   line-height: 1.05;
-  font-weight: 800;
+  font-weight: 400;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -90,6 +93,9 @@ const toggleTiming = () => {
   word-break: break-word;
   overflow-wrap: anywhere;
   transition: all 0.3s ease;
+}
+.title-bold{
+  font-weight: 800;
 }
 
 .movie-links {

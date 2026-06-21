@@ -1,6 +1,6 @@
 import {ref, computed} from 'vue'
-import {searchApi} from "../../../data/api/search";
-import {FilmMapper} from "../../../data/mapper/film.mapper";
+import {movieApi} from "../../../data/api/movie";
+import {MovieInfoMapper} from "../../../data/mapper/movieInfoMapper";
 import {MovieExtended} from "../../../models/movie";
 import {Timing} from "../../../models/timing";
 
@@ -18,10 +18,10 @@ export function useMovieInfo() {
         state.value = 'loading'
 
         try {
-            const rawRes = await searchApi.film(kpId)
+            const rawRes = await movieApi.getMovie(kpId)
             state.value = 'success'
-            movie.value = FilmMapper.toMovieExtended(rawRes.data)
-            timings.value = movie.value.timings
+            movie.value = MovieInfoMapper.toMovieExtended(rawRes.data.movieInfo)
+            timings.value = rawRes.data.timings
         } catch (e) {
             state.value = 'error'
             error.value = e

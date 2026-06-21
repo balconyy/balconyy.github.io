@@ -1,16 +1,15 @@
 <script setup lang="ts">
 
 import {Movie} from "@/models/movie";
-import MovieCard from "@/features/search/components/card/MovieCard.vue";
+import MovieCard from "@/components/MovieCard.vue";
 import ErrorScreen from "@/components/ErrorScreen.vue";
 import LoadingScreen from "@/components/LoadingScreen.vue";
 
-defineProps<{
+const {movies, loading, errorMessage} = defineProps<{
   movies: Movie[];
   loading: Boolean,
   errorMessage?: string,
 }>();
-
 defineEmits(['selectMovie'])
 </script>
 

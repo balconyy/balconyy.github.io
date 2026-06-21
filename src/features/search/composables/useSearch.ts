@@ -1,6 +1,6 @@
 import {computed, ref} from 'vue'
-import {searchApi} from "../../../data/api/search";
-import {SearchMapper} from "../../../data/mapper/search.mapper";
+import {movieApi} from "../../../data/api/movie";
+import {SearchMapper} from "../../../data/mapper/searchMapper";
 import {useMovieStore} from "../../../store/movie";
 
 let controller: AbortController | null = null;
@@ -28,7 +28,7 @@ export function useSearch() {
         state.value = 'loading'
 
         try {
-            const rawRes = await searchApi.search(query, controller)
+            const rawRes = await movieApi.search(query, controller)
             const list = SearchMapper.toDomainList(rawRes.data.films).slice(0, 18)
             if (list.length > 0) {
                 state.value = 'success'
