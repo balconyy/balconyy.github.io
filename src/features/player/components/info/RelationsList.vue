@@ -24,20 +24,18 @@ defineEmits(['selectMovie'])
 <style scoped>
 
 .relations-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 130px);
+  display: flex;
+  gap: 16px;
   justify-content: center;
-  gap: 18px;
-  padding: 0 30px;
+  padding: 4px 16px;
 }
-
 .relations-title {
   position: relative;
   font-size: clamp(16px, 2vw, 28px);
   color: var(--white);
   z-index: 2;
   margin: 0;
-  padding: 28px 0 16px 0;
+  padding: 10px 0 6px 0;
   line-height: 1.05;
   font-weight: 800;
   align-items: center;

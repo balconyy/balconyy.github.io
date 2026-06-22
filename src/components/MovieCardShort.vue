@@ -42,7 +42,7 @@ function onImgError(e) {
   cursor: pointer;
   transition: 0.2s ease;
   width: 140px;
-  height: 188px;
+  height: 178px;
   border-radius: 12px;
   padding: 8px;
   background: radial-gradient(rgba(var(--white-rgb)/0.1) 40%, rgba(var(--accent-black-rgb)) 100%);
@@ -59,6 +59,8 @@ function onImgError(e) {
 
 
 .poster {
+  display: block;
+  margin: 0 auto;
   width: 120px;
   height: 120px;
   object-fit: cover;
@@ -67,7 +69,7 @@ function onImgError(e) {
 
 
 .title-main {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   margin: 6px 0 0 0;
   color: var(--white);
