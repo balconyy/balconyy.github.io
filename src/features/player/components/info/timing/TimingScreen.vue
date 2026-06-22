@@ -56,6 +56,7 @@ defineEmits<{
   max-height: 300px;
   overflow-y: auto;
   padding: 10px;
+  scrollbar-color: rgba(var(--accent-dark-rgb)/0.4) transparent;
 }
 
 .timing-list::-webkit-scrollbar {

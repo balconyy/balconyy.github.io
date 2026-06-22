@@ -1,6 +1,7 @@
 <script setup>
 import emptyPoster from '@/assets/media/empty-poster.jpg'
-import { X } from '@lucide/vue';
+import {X} from '@lucide/vue';
+
 let {movie, showDeleteButton} = defineProps({
   movie: Object,
   showDeleteButton: {
@@ -24,26 +25,24 @@ function onImgError(e) {
 <template>
   <div class="movie-card" @click="$emit('selectMovie', movie)">
     <button v-if="showDeleteButton"
-        class="delete-button" @click.stop="$emit('deleteMovie', movie)">
-      <X color="#f1f" />
+            class="delete-button" @click.stop="$emit('deleteMovie', movie)">
+      <X color="#f1f"/>
     </button>
     <div class="old-school-effect"/>
-    <div class="card-inner">
-      <div class="poster-wrapper">
-        <img
-            class="poster"
-            :src="movie.posterUrl"
-            @error="onImgError"
-            alt="poster"
-        >
-      </div>
+    <div class="poster-wrapper">
+      <img
+          class="poster"
+          :src="movie.posterUrl"
+          @error="onImgError"
+          alt="poster"
+      >
+    </div>
 
-      <div class="movie-info">
-        <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}</h3>
-        <p class="title-second">{{ movie.titleMain != null ? movie.titleSecond : "" }}</p>
-        <div class="info-container">
-          <span class="info">{{ movie.type + " | " + (movie.year !== 'null' ? movie.year : "???") }}</span>
-        </div>
+    <div class="movie-info">
+      <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}</h3>
+      <p class="title-second">{{ movie.titleMain != null ? movie.titleSecond : "" }}</p>
+      <div class="info-container">
+        <span class="info">{{ movie.type + " | " + (movie.year !== 'null' ? movie.year : "???") }}</span>
       </div>
     </div>
   </div>
@@ -57,25 +56,15 @@ function onImgError(e) {
   z-index: 2;
   position: relative;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-
-.card-inner {
-  flex: 1;
-  position: relative;
-  background: radial-gradient(rgba(var(--white-rgb)/0.1) 40%, rgba(var(--accent-black-rgb)) 100%);
+  transition: 0.2s ease;
   border-radius: 12px;
   padding: 8px;
   height: 400px;
-  transition: 0.2s ease;
+  background: radial-gradient(rgba(var(--white-rgb)/0.1) 40%, rgba(var(--accent-black-rgb)) 100%);
 }
 
 .movie-card:hover {
   transform: scale(1.05);
-}
-
-.movie-card:hover .card-inner {
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
@@ -170,10 +159,9 @@ function onImgError(e) {
   opacity: 0;
   transform: scale(0.8);
 
-  transition:
-      opacity 0.2s ease,
-      transform 0.2s ease,
-      background 0.2s ease;
+  transition: opacity 0.2s ease,
+  transform 0.2s ease,
+  background 0.2s ease;
 }
 
 .movie-card:hover .delete-button {

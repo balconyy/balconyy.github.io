@@ -7,33 +7,7 @@ const {movies} = defineProps<{
   movies: Movie[];
 }>();
 
-const grid = ref(null)
-const itemsPerRow = ref(1)
 
-
-const visibleItems = computed(() =>
-    movies.slice(0, itemsPerRow.value)
-)
-
-function calculateItemsPerRow() {
-  const list = grid.value
-  if (!list) return
-
-  const firstChild = list.children[0]
-  if (!firstChild) return
-
-  const containerWidth = list.clientWidth
-  const itemWidth = firstChild.offsetWidth + 20
-
-  itemsPerRow.value = Math.floor(containerWidth / itemWidth)
-}
-
-defineEmits(['selectMovie'])
-
-onMounted(() => {
-  calculateItemsPerRow()
-  window.addEventListener('resize', calculateItemsPerRow)
-})
 
 </script>
 
@@ -41,7 +15,7 @@ onMounted(() => {
   <h2 class="relations-title">Смотрели недавно</h2>
   <ul class="relations-list" ref="grid">
     <MovieCardShort
-        v-for="movie in visibleItems"
+        v-for="movie in movies"
         :movie="movie"
         @selectMovie="$emit('selectMovie', $event)"
     />
@@ -51,14 +25,19 @@ onMounted(() => {
 <style scoped>
 
 .relations-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  grid-auto-rows: auto;
-  justify-content: center;
-  align-items: stretch;
-  gap: 18px;
-  padding: 0 30px;
+  display: flex;
+  gap: 16px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding: 8px 16px;
+  margin: 0;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--accent-dark-rgb)/0.4) transparent;
 }
+
 
 .relations-title {
   position: relative;
@@ -66,7 +45,7 @@ onMounted(() => {
   color: var(--white);
   z-index: 2;
   margin: 0;
-  padding: 28px 0 16px 0;
+  padding: 28px 0 2px 0;
   line-height: 1.05;
   font-weight: 800;
   align-items: center;
