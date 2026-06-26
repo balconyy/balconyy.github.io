@@ -1,7 +1,6 @@
 import {baseClient} from "../http";
 import {SearchListDTO} from "../dto/searchDTO";
-import {MovieResponseDto} from "../dto/filmDTO";
-import {Movie} from "../../models/movie";
+import {MovieResponseDto} from "../dto/movieDTO";
 
 export const movieApi = {
     search(query: string, controller: AbortController) {
@@ -13,7 +12,4 @@ export const movieApi = {
     getMovie(id: number) {
         return baseClient.get<MovieResponseDto>(`/movie/${id}`);
     },
-    getRecentlyWatched() {
-        return baseClient.get<Movie[]>(`/movie/recently-watched`);
-    }
 };

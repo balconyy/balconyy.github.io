@@ -56,7 +56,6 @@
           />
           <div v-else-if="playersEmptyMessage" class="player-empty-state">
             <p>{{ playersEmptyMessage }}</p>
-            <button v-if="playersButtonIsActive" @click="fetchPlayers">Обновить</button>
           </div>
         </div>
 
@@ -132,7 +131,7 @@
 </template>
 
 <script setup>
-import {defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue'
+import {defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, ref, toRef, watch} from 'vue'
 import {useRoute} from 'vue-router'
 
 import ErrorScreen from '@/components/ErrorScreen.vue'
@@ -149,9 +148,13 @@ const PlayerSourceModal = defineAsyncComponent(
     () => import('@/features/player/components/PlayerSourceModal.vue')
 )
 
+const props = defineProps({
+  playerState: {
+    type: Object,
+    required: true
+  }
+})
 const playerStore = usePlayerStore()
-const route = useRoute()
-const kinopoiskId = route.params.kpId
 
 
 const iframeLoading = ref(true)
@@ -190,19 +193,13 @@ const {
   sourceLoading,
   sourceError,
   errorMessage,
-  errorCode,
   playersEmptyMessage,
-  playersButtonIsActive,
   selectedPlayerLabel,
-  fetchPlayers,
   openPlayerModal,
   closePlayerModal,
   closeSourceModal,
   applySourceCandidate,
-} = usePlayerSources({
-      kinopoiskId
-    }
-)
+} = usePlayerSources(toRef(props, 'playerState'))
 
 const activeTooltip = ref(null)
 const tooltipHovered = ref(false)
@@ -288,7 +285,6 @@ watch(selectedPlayerInternal, (newVal) => {
 
 onMounted(() => {
   iframeLoading.value = true
-  fetchPlayers()
   updateScaleFactor()
   if (isCentered.value) centerPlayer()
 })

@@ -2,7 +2,7 @@
   <div class="work-card">
     <div class="card-inner">
       <div class="contacts">
-        <h3 class="title-message">ИЩУ РАБОТУ В IT!</h3>
+        <h3 class="title-message">balcony.film@proton.me</h3>
 
         <div class="contact-item">
           <span class="icon">📢</span>
@@ -51,7 +51,6 @@ import Kryptonymous from '@/assets/media/kryptonymous.png'
   box-shadow: 1px 1px 0 0 #00000022;
   font-family: 'Segoe UI', 'Tahoma', 'MS Sans Serif', sans-serif;
   font-size: 11px;
-  user-select: none;
 }
 
 .card-inner {

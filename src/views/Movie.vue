@@ -33,6 +33,7 @@ onMounted(() => {
 })
 const {
   movie,
+  playerState,
   timings,
   relations,
   error,
@@ -81,7 +82,7 @@ watch(movie, (newVal) => {
              @buttonClicked="changeWindowState"
   />
   <MovieInfo :movie="movie" :timings="timings"/>
-  <PlayerComponent/>
+  <PlayerComponent :playerState="playerState"/>
   <RelationsList v-if="relations && relations.length"
                  :movies="relations"
                  @selectMovie="onMovieClick"/>

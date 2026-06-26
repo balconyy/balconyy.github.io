@@ -3,7 +3,8 @@ import {movieApi} from "../../../data/api/movie";
 import {MovieInfoMapper} from "../../../data/mapper/movieInfoMapper";
 import {MovieExtended} from "../../../models/movie";
 import {Timing} from "../../../models/timing";
-import {Relation} from "../../../data/dto/filmDTO";
+import {Relation} from "../../../data/dto/movieDTO";
+import {Player} from "../../../models/player";
 
 export function useMovieInfo() {
     const state = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -12,8 +13,16 @@ export function useMovieInfo() {
 
     const error = ref<Error | null>(null)
     const movie = ref<MovieExtended>()
+    const players = ref<Player[]>()
     const timings = ref<Timing[]>([])
     const relations = ref<Relation[]>([])
+
+    const playerState = computed(() => ({
+        data: players.value,
+        isLoading: state.value === 'loading',
+        isError: state.value === 'error',
+        error: error.value,
+    }))
 
     const getMovieInfo = async (kpId: number) => {
         error.value = null
@@ -25,6 +34,7 @@ export function useMovieInfo() {
             movie.value = MovieInfoMapper.toMovieExtended(rawRes.data.movieInfo)
             timings.value = rawRes.data.timings
             relations.value = rawRes.data.relations
+            players.value = rawRes.data.players
         } catch (e) {
             state.value = 'error'
             error.value = e
@@ -33,6 +43,7 @@ export function useMovieInfo() {
 
     return {
         movie,
+        playerState,
         timings,
         relations,
         error,

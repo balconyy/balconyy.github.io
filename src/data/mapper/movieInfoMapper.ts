@@ -1,8 +1,8 @@
-import {MovieInfoDto} from "../dto/filmDTO";
+import {MovieInfo} from "../dto/movieDTO";
 import {MovieExtended} from "@/models/movie";
 
 export class MovieInfoMapper {
-    static toMovieExtended(dto: MovieInfoDto): MovieExtended {
+    static toMovieExtended(dto: MovieInfo): MovieExtended {
         return {
             kpId: dto.kpId,
             titleMain: dto.titleMain,
