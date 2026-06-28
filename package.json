@@ -23,9 +23,14 @@
     "@vitejs/plugin-vue": "^6.0.6",
     "sass": "^1.100.0",
     "vite": "^8.0.8",
-    "vite-plugin-vue-devtools": "^8.1.1"
+    "vite-plugin-vue-devtools": "^8.1.1",
+    "vue-tsc": "^3.3.5"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.5.6": true,
+    "vue-demi@0.14.10": true
   }
 }

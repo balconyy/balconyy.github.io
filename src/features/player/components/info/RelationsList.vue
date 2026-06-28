@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import MovieCardShort from "@/components/MovieCardShort.vue";
-import {Movie} from "@/models/movie";
+import {Relation} from "@/data/dto/movieAddonDTO";
 
 const {movies} = defineProps<{
-  movies: Movie[];
+  movies: Relation[];
 }>();
 
 defineEmits(['selectMovie'])

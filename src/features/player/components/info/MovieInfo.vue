@@ -3,20 +3,34 @@ import SiteReferer from "@/features/player/components/info/SiteReferer.vue";
 import KpLogo from '@/assets/icons/kp-logo.svg'
 import ImdbLogo from '@/assets/icons/imdb-logo.svg'
 import LBLogo from '@/assets/icons/letterboxd-logo.svg'
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import TimingButton from "@/features/player/components/info/timing/TimingButton.vue";
 import TimingScreen from "@/features/player/components/info/timing/TimingScreen.vue";
-import {MovieExtended} from "@/models/movie";
 import {Timing} from "@/models/timing";
+import {Link} from "@/models/link";
+import {Movie} from "@/models/movie";
 
 const KINOPOISK_MOVIE_LINK = "https://www.kinopoisk.ru/film/"
-const LETTERBOXD_MOVIE_LINK = "https://letterboxd.com/imdb/"
+const LETTERBOXD_MOVIE_LINK = "https://letterboxd.com/film/"
 const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
 
-const {movie} = defineProps<{
-  movie: MovieExtended;
+const props = defineProps<{
+  movie: Movie;
   timings: Timing[];
+  links: Link[];
 }>();
+
+const kinopoisk = computed(() =>
+    props.links?.find(link => link.type === 'KP')
+);
+
+const letterboxd = computed(() =>
+    props.links?.find(link => link.type === 'LETTERBOXD')
+);
+
+const imdb = computed(() =>
+    props.links?.find(link => link.type === 'IMDB')
+);
 
 
 const isTimingOpen = ref(false)
@@ -32,9 +46,9 @@ const toggleTiming = () => {
     {{ movie?.year ? " (" + movie?.year + ")" : '' }}
   </h1>
   <div class="movie-links">
-    <SiteReferer v-if="movie?.kpId" :href="KINOPOISK_MOVIE_LINK+movie?.kpId" :icon="KpLogo" hint="Кинопоиск"/>
-    <SiteReferer v-if="movie?.imdbId" :href="LETTERBOXD_MOVIE_LINK+movie?.imdbId" :icon="LBLogo" hint="Letterboxd"/>
-    <SiteReferer v-if="movie?.imdbId" :href="IMDB_MOVIE_LINK+movie?.imdbId" :icon="ImdbLogo" hint="IMDB"/>
+    <SiteReferer v-if="kinopoisk" :href="KINOPOISK_MOVIE_LINK+kinopoisk.id" :icon="KpLogo" hint="Кинопоиск"/>
+    <SiteReferer v-if="letterboxd" :href="LETTERBOXD_MOVIE_LINK+letterboxd.id" :icon="LBLogo" hint="Letterboxd"/>
+    <SiteReferer v-if="imdb" :href="IMDB_MOVIE_LINK+imdb.id" :icon="ImdbLogo" hint="IMDB"/>
     <div class="timing-wrapper">
       <TimingButton v-if="timings.length" @click="toggleTiming"/>
       <TimingScreen
@@ -64,7 +78,8 @@ const toggleTiming = () => {
   overflow-wrap: anywhere;
   transition: all 0.3s ease;
 }
-.title-bold{
+
+.title-bold {
   font-weight: 800;
 }
 

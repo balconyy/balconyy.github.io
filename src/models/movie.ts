@@ -6,11 +6,3 @@ export interface Movie {
     year?: string;
     type?: string;
 }
-
-export interface MovieExtended extends Movie {
-    imdbId?: string;
-    ratingKp?: string;
-    ratingImdb?: string;
-    kpVoteCount?: number;
-    imdbVoteCount?: number;
-}

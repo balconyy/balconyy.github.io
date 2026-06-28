@@ -10,6 +10,7 @@ import {useMovieStore} from "@/store/movie.ts";
 import {useAnalytics} from "@/composables/useAnalytics.ts";
 import RelationsList from "@/features/player/components/info/RelationsList.vue";
 import {useRouter} from "vue-router";
+import ReviewsList from "@/features/player/components/info/review/ReviewsList.vue";
 
 const {kpId} = defineProps({
   kpId: {
@@ -34,12 +35,15 @@ onMounted(() => {
 const {
   movie,
   playerState,
+  links,
   timings,
   relations,
+  reviewsResponse,
   error,
   isSuccess,
   isLoading,
   getMovieInfo,
+  getMovieAddons
 } = useMovieInfo()
 
 const movieStore = useMovieStore()
@@ -81,11 +85,14 @@ watch(movie, (newVal) => {
              @stopResizing="setWindowHeight"
              @buttonClicked="changeWindowState"
   />
-  <MovieInfo :movie="movie" :timings="timings"/>
+  <MovieInfo :movie="movie" :links="links" :timings="timings"/>
   <PlayerComponent :playerState="playerState"/>
   <RelationsList v-if="relations && relations.length"
                  :movies="relations"
                  @selectMovie="onMovieClick"/>
+  <ReviewsList v-if="reviewsResponse && reviewsResponse.length"
+      :reviewsResponse="reviewsResponse"
+  />
 
 </template>
 

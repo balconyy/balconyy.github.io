@@ -9,8 +9,8 @@ export function useRecentlyWatch() {
     const getRecentlyWatch = async () => {
 
         try {
-            const rawRes = await movieApi.getRecentlyWatched()
-            recentlyWatched.value = rawRes.data
+            const response = await movieApi.getRecentlyWatched();
+            recentlyWatched.value = response.data
         } catch (e) {
             recentlyWatched.value = []
         }

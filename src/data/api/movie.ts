@@ -1,6 +1,8 @@
 import {baseClient} from "../http";
 import {SearchListDTO} from "../dto/searchDTO";
-import {MovieResponseDto} from "../dto/movieDTO";
+import {MovieDto} from "../dto/movieDTO";
+import {MovieAddonDto} from "../dto/movieAddonDTO";
+import {Movie} from "../../models/movie";
 
 export const movieApi = {
     search(query: string, controller: AbortController) {
@@ -10,6 +12,14 @@ export const movieApi = {
         });
     },
     getMovie(id: number) {
-        return baseClient.get<MovieResponseDto>(`/movie/${id}`);
+        return baseClient.get<MovieDto>(`/movie/by-id/${id}`);
     },
+    getMovieAddons(kpId: number, lbSlug: string | undefined) {
+        return baseClient.get<MovieAddonDto>("/movie/addons", {
+            params: {kpId: kpId, ...(lbSlug ? { lbSlug } : {})}
+        });
+    },
+    getRecentlyWatched() {
+        return baseClient.get<Movie[]>(`/movie/recently-watched`);
+    }
 };

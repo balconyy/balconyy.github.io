@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import MovieCardShort from "@/components/MovieCardShort.vue";
-import {computed, onMounted, ref} from 'vue'
 import {Movie} from "@/models/movie";
 
 const {movies} = defineProps<{
   movies: Movie[];
 }>();
-
-
 
 </script>
 
