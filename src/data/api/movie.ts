@@ -1,7 +1,7 @@
 import {baseClient} from "../http";
 import {SearchListDTO} from "../dto/searchDTO";
 import {MovieDto} from "../dto/movieDTO";
-import {MovieAddonDto} from "../dto/movieAddonDTO";
+import {MovieAddonDto, RecentlyLists} from "../dto/movieAddonDTO";
 import {Movie} from "../../models/movie";
 
 export const movieApi = {
@@ -20,6 +20,6 @@ export const movieApi = {
         });
     },
     getRecentlyWatched() {
-        return baseClient.get<Movie[]>(`/movie/recently-watched`);
+        return baseClient.get<RecentlyLists>(`/movie/recently-watched`);
     }
 };

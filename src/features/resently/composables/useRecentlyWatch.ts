@@ -1,18 +1,19 @@
 import {ref} from "vue";
 import {movieApi} from "@/data/api/movie";
-import {Movie} from "@/models/movie";
+import {RecentlyLists} from "../../../data/dto/movieAddonDTO";
 
 export function useRecentlyWatch() {
 
-    const recentlyWatched = ref<Movie[]>([])
+    const recentlyWatched = ref<RecentlyLists>()
 
     const getRecentlyWatch = async () => {
 
         try {
             const response = await movieApi.getRecentlyWatched();
             recentlyWatched.value = response.data
-        } catch (e) {
-            recentlyWatched.value = []
+        }
+        catch (error) {
+
         }
     }
 

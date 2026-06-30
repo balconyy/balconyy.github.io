@@ -1,3 +1,5 @@
+import {Movie} from "../../models/movie";
+
 export interface MovieAddonDto {
     timings: Timing[]
     relations: Relation[]
@@ -35,6 +37,13 @@ export interface Relation {
     name: string
     type: RelationType
 }
+
+
+export interface RecentlyLists {
+    movies: Movie[]
+    serials: Movie[]
+}
+
 
 
 

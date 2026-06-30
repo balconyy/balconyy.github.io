@@ -86,8 +86,8 @@ onMounted(() => {
     />
     <SearchMain @selectMovie="onMovieClick"/>
 
-    <RecentlyWatchList v-if="recentlyWatched && recentlyWatched.length"
-                       :movies="recentlyWatched"
+    <RecentlyWatchList v-if="recentlyWatched && recentlyWatched.movies.length + recentlyWatched.serials.length > 0"
+                       :recentlyLists="recentlyWatched"
                        @selectMovie="onMovieClick"/>
   </main>
 
