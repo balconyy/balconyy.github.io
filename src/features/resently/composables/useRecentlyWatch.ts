@@ -1,6 +1,6 @@
 import {ref} from "vue";
 import {movieApi} from "@/data/api/movie";
-import {RecentlyLists} from "../../../data/dto/movieAddonDTO";
+import {RecentlyLists} from "@/data/dto/movieAddonDTO";
 
 export function useRecentlyWatch() {
 

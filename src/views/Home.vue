@@ -7,7 +7,6 @@ import DonationLine from "@/components/DonationLine.vue";
 import AboutBlock from "@/components/AboutBlock.vue";
 import Background from "@/components/Background.vue";
 import AdminAlert from "@/components/AdminAlert.vue";
-import DailyJoke from "@/components/DailyJoke.vue";
 
 import {onMounted} from "vue";
 import {useHead} from "@vueuse/head";
@@ -15,9 +14,9 @@ import RecentlyWatchList from "@/features/resently/components/RecentlyWatchList.
 
 import {useRouter} from "vue-router";
 import {useConfigResults} from "@/features/admin/composables/config/useConfigResults";
-import {useDailyWindow} from "@/features/admin/composables/config/useDailyWindow";
 import {useRecentlyWatch} from "@/features/resently/composables/useRecentlyWatch";
 import {Movie} from "@/models/movie";
+import SidePanel from "@/components/SidePanel.vue";
 
 
 useHead({
@@ -37,16 +36,6 @@ const {
 } = useConfigResults();
 
 const {
-  dailyJokeUrl,
-  minHeight,
-  currentHeight,
-  isOpen,
-  initDailyScreen,
-  changeWindowState,
-  setWindowHeight
-} = useDailyWindow()
-
-const {
   recentlyWatched,
   getRecentlyWatch
 } = useRecentlyWatch()
@@ -61,7 +50,6 @@ const onMovieClick = (movie: Movie) => {
 
 
 onMounted(() => {
-  initDailyScreen()
   getRecentlyWatch()
 })
 </script>
@@ -70,20 +58,14 @@ onMounted(() => {
   <Background/>
   <header>
     <LogoMain/>
-    <AdminAlert v-if="isConfigLoaded && adminAlert.message"
+    <AdminAlert v-if="isConfigLoaded && adminAlert?.message"
                 :message="adminAlert.message"
                 :link="adminAlert.link"/>
   </header>
 
   <main>
-    <DailyJoke v-if="dailyJokeUrl"
-               :url="dailyJokeUrl"
-               :currentHeight="currentHeight"
-               :minHeight="minHeight"
-               :isOpen="isOpen"
-               @stopResizing="setWindowHeight"
-               @buttonClicked="changeWindowState"
-    />
+    <SidePanel/>
+
     <SearchMain @selectMovie="onMovieClick"/>
 
     <RecentlyWatchList v-if="recentlyWatched && recentlyWatched.movies.length + recentlyWatched.serials.length > 0"
@@ -94,10 +76,10 @@ onMounted(() => {
   <footer>
     <div class="page-wrapper">
       <div class="left">
-        <DonationLine v-if="isConfigLoaded"
-                      :donation-text="donation.donationText"
-                      :current-value="donation.moneyNow"
-                      :goal-value="donation.moneyTotal"
+        <DonationLine v-if="isConfigLoaded && donation"
+                      :donationText="donation.donationText"
+                      :currentValue="donation.moneyNow"
+                      :goalValue="donation.moneyTotal"
         />
       </div>
       <div class="center">

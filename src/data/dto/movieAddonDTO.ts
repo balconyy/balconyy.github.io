@@ -1,11 +1,5 @@
 import {Movie} from "../../models/movie";
 
-export interface MovieAddonDto {
-    timings: Timing[]
-    relations: Relation[]
-    reviews: ReviewResponse[]
-}
-
 
 export interface Timing {
     username: string
@@ -13,8 +7,8 @@ export interface Timing {
 }
 
 export interface ReviewResponse {
-    letterboxdAccount : LetterboxdAccount
-    review : Review
+    letterboxdAccount: LetterboxdAccount
+    review: Review
 }
 
 export interface LetterboxdAccount {
@@ -43,8 +37,6 @@ export interface RecentlyLists {
     movies: Movie[]
     serials: Movie[]
 }
-
-
 
 
 export type RelationType = 'SEQUEL' | 'PREQUEL' | 'SPIN_OFF' | string

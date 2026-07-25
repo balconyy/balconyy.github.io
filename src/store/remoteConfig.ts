@@ -4,7 +4,7 @@ import {Config} from "@/models/config";
 
 export const useRemoteConfigStore = defineStore('remoteConfig', {
     state: () => ({
-        remoteConfig: {} as Config,
+        remoteConfig: null as Config | null,
         loaded: false,
     }),
 
@@ -13,10 +13,12 @@ export const useRemoteConfigStore = defineStore('remoteConfig', {
             try {
                 const res = await configApi.getConfig();
                 this.remoteConfig = res.data;
-                this.loaded = true
             } catch (e) {
-                this.remoteConfig = {}
+                this.remoteConfig = null;
                 console.error('Failed to get remote config', e)
+            }
+            finally {
+                this.loaded = true
             }
         },
         async setConfig(config: Config) {

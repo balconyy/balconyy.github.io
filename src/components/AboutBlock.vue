@@ -1,3 +1,8 @@
+<script setup>
+import Kryptonymous from '@/assets/media/kryptonymous.png'
+
+</script>
+
 <template>
   <div class="work-card">
     <div class="card-inner">
@@ -36,15 +41,10 @@
   </div>
 </template>
 
-<script setup>
-import Kryptonymous from '@/assets/media/kryptonymous.png'
-
-</script>
-
 <style scoped>
 
 .work-card {
-  filter: contrast(2) brightness(1.2) ;
+  filter: contrast(2) brightness(1.2);
   background: black;
   border: 2px solid;
   border-color: #bdbdbd #7f7f7f #7f7f7f #bdbdbd;

@@ -8,7 +8,11 @@ const props = defineProps<{
 }>();
 
 const starsRating = computed(() => {
-  return formatStars(props.reviewData.review.rating)
+  const rating = props.reviewData.review.rating
+  if (!rating) {
+    return ''
+  }
+  return formatStars(rating)
 })
 
 

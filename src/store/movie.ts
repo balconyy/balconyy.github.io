@@ -1,5 +1,6 @@
-import {defineStore} from 'pinia'
+
 import {Movie} from "@/models/movie";
+import {defineStore} from "pinia";
 
 type HistoryItem = Movie & {
     lastViewedAt: number

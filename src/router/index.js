@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 import Movie from "@/views/Movie.vue";
 import Admin from "@/views/Admin.vue";
 import AdminLogin from "@/views/AdminLogin.vue";
-import {adminAuthApi} from "@/data/api/admin.auth.ts";
+import {adminAuthApi} from "@/data/api/adminAuth.ts";
 
 const index = [
     {

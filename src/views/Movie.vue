@@ -2,15 +2,15 @@
 import PlayerComponent from "@/features/player/components/PlayerComponent.vue";
 import MovieInfo from "@/features/player/components/info/MovieInfo.vue";
 import Background from "@/components/Background.vue";
-import {useDailyWindow} from "@/features/admin/composables/config/useDailyWindow.ts";
-import {onMounted, watch, watchEffect} from "vue";
-import DailyJoke from "@/components/DailyJoke.vue";
+import {watch, watchEffect} from "vue";
 import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
 import {useMovieStore} from "@/store/movie.ts";
 import {useAnalytics} from "@/composables/useAnalytics.ts";
 import RelationsList from "@/features/player/components/info/RelationsList.vue";
 import {useRouter} from "vue-router";
 import ReviewsList from "@/features/player/components/info/review/ReviewsList.vue";
+import SidePanel from "@/components/SidePanel.vue";
+import MovieInfoSkeleton from "@/features/player/components/info/MovieInfoSkeleton.vue";
 
 const {kpId} = defineProps({
   kpId: {
@@ -18,20 +18,7 @@ const {kpId} = defineProps({
     required: true
   }
 })
-const {
-  dailyJokeUrl,
-  minHeight,
-  currentHeight,
-  isOpen,
-  initDailyScreen,
-  changeWindowState,
-  setWindowHeight
-} = useDailyWindow()
 
-
-onMounted(() => {
-  initDailyScreen()
-})
 const {
   movie,
   playerState,
@@ -43,7 +30,9 @@ const {
   isSuccess,
   isLoading,
   getMovieInfo,
-  getMovieAddons
+  getMovieTimings,
+  getMovieRelations,
+  getMovieReviews
 } = useMovieInfo()
 
 const movieStore = useMovieStore()
@@ -77,21 +66,16 @@ watch(movie, (newVal) => {
 
 <template>
   <Background/>
-  <DailyJoke v-if="dailyJokeUrl"
-             :url="dailyJokeUrl"
-             :currentHeight="currentHeight"
-             :minHeight="minHeight"
-             :isOpen="isOpen"
-             @stopResizing="setWindowHeight"
-             @buttonClicked="changeWindowState"
-  />
-  <MovieInfo :movie="movie" :links="links" :timings="timings"/>
+
+  <SidePanel/>
+  <MovieInfoSkeleton v-if="isLoading"/>
+  <MovieInfo v-else-if="movie" :movie="movie" :links="links" :timings="timings"/>
   <PlayerComponent :playerState="playerState"/>
   <RelationsList v-if="relations && relations.length"
                  :movies="relations"
                  @selectMovie="onMovieClick"/>
   <ReviewsList v-if="reviewsResponse && reviewsResponse.length"
-      :reviewsResponse="reviewsResponse"
+               :reviewsResponse="reviewsResponse"
   />
 
 </template>

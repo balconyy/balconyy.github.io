@@ -1,3 +1,14 @@
+<script setup>
+defineProps({
+  selectedLabel: {
+    type: String,
+    required: true
+  }
+})
+
+defineEmits(['open-player-modal'])
+</script>
+
 <template>
   <div class="players-list">
     <span>Плеер:</span>
@@ -12,16 +23,6 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  selectedLabel: {
-    type: String,
-    required: true
-  }
-})
-
-defineEmits(['open-player-modal'])
-</script>
 
 <style scoped>
 .players-list {

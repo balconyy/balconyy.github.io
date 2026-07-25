@@ -2,14 +2,14 @@ import {defineStore} from "pinia";
 
 export const useDailyStore = defineStore('dailyScreen', {
     state: () => ({
-        isOpen: null as boolean,
-        screenHeight: null as number,
+        isOpen: null as boolean | null,
+        screenHeight: null as number | null,
     }),
 
     actions: {
-        setWindowState(isOpen: boolean) {
-            this.isOpen = isOpen;
-            sessionStorage.setItem('daily_screen', String(isOpen))
+        toggleWindowState() {
+            this.isOpen = !this.isOpen;
+            sessionStorage.setItem('daily_screen', String(this.isOpen))
         },
         setCurrentHeight(height: number) {
             this.screenHeight = height

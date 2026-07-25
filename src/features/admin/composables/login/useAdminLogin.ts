@@ -1,5 +1,5 @@
 import {computed, ref} from "vue";
-import {adminAuthApi} from "@/data/api/admin.auth";
+import {adminAuthApi} from "@/data/api/adminAuth";
 
 
 export function useAdminLogin() {

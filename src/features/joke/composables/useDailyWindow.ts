@@ -34,8 +34,8 @@ export function useDailyWindow() {
         dailyStore.hydrateDailyScreen()
     }
 
-    function changeWindowState(isOpen: boolean) {
-        dailyStore.setWindowState(isOpen)
+    function toggleWindowState() {
+        dailyStore.toggleWindowState()
     }
 
     function setWindowHeight(height: number) {
@@ -49,7 +49,7 @@ export function useDailyWindow() {
         currentHeight,
         isOpen,
         initDailyScreen,
-        changeWindowState,
+        toggleWindowState,
         setWindowHeight
     }
 }

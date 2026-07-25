@@ -41,20 +41,41 @@ export function useMovieInfo() {
             const lbSlug = response.data.links.find(
                 (l) => l.type === 'LETTERBOXD'
             )?.id
-            await getMovieAddons(kpId, lbSlug)
+            await Promise.all([
+                getMovieTimings(kpId),
+                getMovieRelations(kpId),
+                getMovieReviews(lbSlug),
+            ])
 
         } catch (e) {
             state.value = 'error'
-            error.value = e
+            error.value = e as Error
         }
     }
 
-    const getMovieAddons = async (kpId: number, lbSlug :string | null) => {
+    const getMovieTimings = async (kpId: number) => {
         try {
-            const response = await movieApi.getMovieAddons(kpId, lbSlug)
-            timings.value = response.data.timings
-            relations.value = response.data.relations
-            reviewsResponse.value = response.data.reviews
+            const response = await movieApi.getTimings(kpId)
+            timings.value = response.data
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const getMovieRelations = async (kpId: number) => {
+        try {
+            const response = await movieApi.getRelations(kpId)
+            relations.value = response.data
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    const getMovieReviews = async (lbSlug: string | undefined) => {
+        if (!lbSlug) return
+        try {
+            const response = await movieApi.getReviews(lbSlug)
+            reviewsResponse.value = response.data
         } catch (e) {
             console.error(e)
         }
@@ -71,6 +92,9 @@ export function useMovieInfo() {
         isSuccess,
         isLoading,
         getMovieInfo,
-        getMovieAddons
+        getMovieTimings,
+        getMovieRelations,
+        getMovieReviews
+
     }
 }

@@ -41,21 +41,22 @@ const toggleTiming = () => {
 </script>
 
 <template>
-
-  <h1 class="content-title"><span class="title-bold">{{ movie?.titleMain || '' }}</span>
-    {{ movie?.year ? " (" + movie?.year + ")" : '' }}
-  </h1>
-  <div class="movie-links">
-    <SiteReferer v-if="kinopoisk" :href="KINOPOISK_MOVIE_LINK+kinopoisk.id" :icon="KpLogo" hint="Кинопоиск"/>
-    <SiteReferer v-if="letterboxd" :href="LETTERBOXD_MOVIE_LINK+letterboxd.id" :icon="LBLogo" hint="Letterboxd"/>
-    <SiteReferer v-if="imdb" :href="IMDB_MOVIE_LINK+imdb.id" :icon="ImdbLogo" hint="IMDB"/>
-    <div class="timing-wrapper">
-      <TimingButton v-if="timings.length" @click="toggleTiming"/>
-      <TimingScreen
-          v-if="isTimingOpen"
-          :timings="timings"
-          @close="isTimingOpen = false"
-      />
+  <div class="movie-info">
+    <h1 class="content-title"><span class="title-bold">{{ movie?.titleMain || '' }}</span>
+      {{ movie?.year ? " (" + movie?.year + ")" : '' }}
+    </h1>
+    <div class="movie-links">
+      <SiteReferer v-if="kinopoisk" :href="KINOPOISK_MOVIE_LINK+kinopoisk.id" :icon="KpLogo" hint="Кинопоиск"/>
+      <SiteReferer v-if="letterboxd" :href="LETTERBOXD_MOVIE_LINK+letterboxd.id" :icon="LBLogo" hint="Letterboxd"/>
+      <SiteReferer v-if="imdb" :href="IMDB_MOVIE_LINK+imdb.id" :icon="ImdbLogo" hint="IMDB"/>
+      <div class="timing-wrapper">
+        <TimingButton v-if="timings.length" @click="toggleTiming"/>
+        <TimingScreen
+            v-if="isTimingOpen"
+            :timings="timings"
+            @close="isTimingOpen = false"
+        />
+      </div>
     </div>
   </div>
 </template>

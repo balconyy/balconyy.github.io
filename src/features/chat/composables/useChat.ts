@@ -1,0 +1,69 @@
+import {onUnmounted, ref} from "vue";
+import {chatApi} from "@/data/api/chat";
+
+export function useChat() {
+    const isLoading = ref(false);
+    const chat = ref<Message[]>([])
+
+    const connected = ref(false)
+    let socket: WebSocket | null = null
+    let reconnectTimer: number | null = null
+
+    const getChatLogs = async () => {
+        try {
+            isLoading.value = true;
+            const response = await chatApi.getMessages()
+            chat.value = response.data
+        } catch (e) {
+
+        } finally {
+            isLoading.value = false;
+        }
+
+    }
+
+    const sendMessage = async (text: string) => {
+        try {
+            await chatApi.sendMessage(text)
+        } catch (e) {
+
+        }
+    }
+
+    function connectToChat() {
+        socket = new WebSocket(`${import.meta.env.VITE_API_URL
+            .replace('http', 'ws')}/chat/actual`)
+
+        socket.onopen = () => {
+            connected.value = true
+        }
+
+        socket.onmessage = (event) => {
+            const message: Message = JSON.parse(event.data)
+            chat.value.push(message)
+        }
+
+        socket.onclose = () => {
+            connected.value = false
+            reconnectTimer = window.setTimeout(connectToChat, 2000)
+        }
+
+        socket.onerror = () => {
+            console.log("error")
+            socket?.close()
+        }
+    }
+
+    onUnmounted(() => {
+        if (reconnectTimer) clearTimeout(reconnectTimer)
+        socket?.close()
+    })
+
+    return {
+        chat,
+        isLoading,
+        getChatLogs,
+        sendMessage,
+        connectToChat
+    }
+}

@@ -6,6 +6,7 @@ const {recentlyLists} = defineProps<{
   recentlyLists: RecentlyLists;
 }>();
 
+defineEmits(['selectMovie'])
 </script>
 
 <template>

@@ -5,17 +5,14 @@ import {useAnalytics} from "@/composables/useAnalytics.ts";
 const {donationText, currentValue, goalValue} = defineProps({
   donationText: {
     type: String,
-    required: true
   },
 
   currentValue: {
     type: Number,
-    required: true
   },
 
   goalValue: {
     type: Number,
-    required: true
   }
 })
 

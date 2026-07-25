@@ -6,9 +6,9 @@ import {Config} from "@/models/config";
 
 const configStore = useRemoteConfigStore();
 
-const donation = computed(() => configStore.remoteConfig.donationInfo);
-const adminAlert = computed(() => configStore.remoteConfig.adminAlert);
-const dailyJoke = computed(() => configStore.remoteConfig.dailyJoke);
+const donation = computed(() => configStore.remoteConfig?.donationInfo);
+const adminAlert = computed(() => configStore.remoteConfig?.adminAlert);
+const dailyJoke = computed(() => configStore.remoteConfig?.dailyJoke);
 
 const form = reactive({
   adminAlert: {

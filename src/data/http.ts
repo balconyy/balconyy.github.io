@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const baseClient = axios.create({
-    baseURL: "https://balcony-api.duckdns.org",
+    baseURL: import.meta.env.VITE_TEST_API_URL,
     headers: {
         "Content-Type": "application/json"
     },

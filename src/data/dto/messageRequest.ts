@@ -1,0 +1,3 @@
+interface MessageRequest {
+    message: string;
+}
