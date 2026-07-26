@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import messageIcon from "@/assets/icons/message-icon.png";
+import onlineIcon from "@/assets/icons/online-icon.png";
 
 const message = ref<string>('');
+const props = defineProps<{
+  online: number
+}>()
 const emit = defineEmits(['sendMessage'])
 
 
@@ -17,6 +21,10 @@ function sendMessage() {
 
 <template>
   <div class="chat-input">
+    <div class="online-container">
+      {{online}}
+      <img class="online-icon" :src="onlineIcon" alt="online"/>
+    </div>
     <input
         v-model="message"
         type="text"
@@ -37,6 +45,20 @@ function sendMessage() {
   padding: 6px 0;
   background: #3a3a3a;
   align-items: center;
+}
+
+.online-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 16px;
+  color: #CA0000;
+}
+
+.online-icon {
+  width: 24px;
+  flex-shrink: 0;
 }
 
 .input-field {

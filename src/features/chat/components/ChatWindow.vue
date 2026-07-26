@@ -17,6 +17,7 @@ const emit = defineEmits(['toggleWindow']);
 
 const {
   chat,
+  online,
   isLoading,
   getChatLogs,
   sendMessage,
@@ -46,7 +47,7 @@ onMounted(() => {
       <WindowLoading v-if="isLoading"/>
       <ChatList v-else :messages="chat" :isOpen="isOpen"/>
       <ChatAttention v-if="isLoading || isNotAuth" :isLoading="isLoading" :isNotAuth="isNotAuth"/>
-      <ChatInput v-else @sendMessage="sendMessage"/>
+      <ChatInput v-else @sendMessage="sendMessage" :online="online"/>
     </div>
 
   </BaseWindow>

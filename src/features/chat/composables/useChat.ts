@@ -4,6 +4,7 @@ import {chatApi} from "@/data/api/chat";
 export function useChat() {
     const isLoading = ref(false);
     const chat = ref<Message[]>([])
+    const online = ref<number>(0)
 
     const connected = ref(false)
     let socket: WebSocket | null = null
@@ -31,16 +32,20 @@ export function useChat() {
     }
 
     function connectToChat() {
-        socket = new WebSocket(`${import.meta.env.VITE_API_URL
-            .replace('http', 'ws')}/chat/actual`)
+        socket = new WebSocket(`${import.meta.env.VITE_BACKEND_URL.replace('http', 'ws')}/chat/actual`)
 
         socket.onopen = () => {
             connected.value = true
         }
 
         socket.onmessage = (event) => {
-            const message: Message = JSON.parse(event.data)
-            chat.value.push(message)
+            const data = JSON.parse(event.data)
+            console.log(data)
+            if (data.count) {
+                online.value = data.count
+            } else {
+                chat.value.push(data as Message)
+            }
         }
 
         socket.onclose = () => {
@@ -61,6 +66,7 @@ export function useChat() {
 
     return {
         chat,
+        online,
         isLoading,
         getChatLogs,
         sendMessage,

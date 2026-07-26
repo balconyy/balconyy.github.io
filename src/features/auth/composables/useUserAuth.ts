@@ -12,7 +12,7 @@ export function useUserAuth() {
     const login = () => {
         loading.value = true;
         const path = route.fullPath
-        window.location.href = `${import.meta.env.VITE_API_URL}/login?path=${encodeURIComponent(path)}`
+        window.location.href = `${import.meta.env.VITE_BACKEND_URL}/login?path=${encodeURIComponent(path)}`
     }
     const logout = async () => {
         try {
