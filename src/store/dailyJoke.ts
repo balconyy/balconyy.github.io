@@ -22,6 +22,9 @@ export const useDailyStore = defineStore('dailyScreen', {
             if (cachedHeight) {
                 this.screenHeight = Number(cachedHeight)
             }
+            else {
+                this.screenHeight = 100
+            }
         },
     },
 })
