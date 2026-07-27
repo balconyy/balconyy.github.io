@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {User} from "@/models/user";
 import authIcon from "@/assets/icons/auth-icon.png";
 import BaseWindow from "@/components/window/BaseWindow.vue";
 import LoginButton from "@/features/auth/components/LoginButton.vue";

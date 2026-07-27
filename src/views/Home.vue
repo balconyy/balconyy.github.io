@@ -119,6 +119,6 @@ onMounted(() => {
 }
 
 footer {
-  padding-bottom: 130px;
+  padding-bottom: 110px;
 }
 </style>

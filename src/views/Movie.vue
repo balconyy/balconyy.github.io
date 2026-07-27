@@ -11,6 +11,8 @@ import {useRouter} from "vue-router";
 import ReviewsList from "@/features/player/components/info/review/ReviewsList.vue";
 import SidePanel from "@/components/SidePanel.vue";
 import MovieInfoSkeleton from "@/features/player/components/info/MovieInfoSkeleton.vue";
+import WinIcon from "@/components/WinIcon.vue";
+import homeIcon from "@/assets/icons/home-icon.png";
 
 const {kpId} = defineProps({
   kpId: {
@@ -53,6 +55,12 @@ watchEffect(async () => {
   }
 })
 
+function toMainScreen() {
+  router.push({
+    name: 'home',
+  })
+}
+
 watch(movie, (newVal) => {
   movieStore.addToHistory(newVal)
   analytics.track("movie_loaded", {
@@ -66,7 +74,7 @@ watch(movie, (newVal) => {
 
 <template>
   <Background/>
-
+  <WinIcon class="home-icon" :icon="homeIcon" label="Главная" @open="toMainScreen"/>
   <SidePanel/>
   <MovieInfoSkeleton v-if="isLoading"/>
   <MovieInfo v-else-if="movie" :movie="movie" :links="links" :timings="timings"/>
@@ -79,4 +87,12 @@ watch(movie, (newVal) => {
   />
 
 </template>
+
+<style scoped>
+.home-icon{
+  z-index: 10;
+  position: fixed;
+  margin: 16px 0 0 16px;
+}
+</style>
 
