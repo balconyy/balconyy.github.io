@@ -1,18 +1,14 @@
 <script setup lang="ts">
-
 import {Timing} from "@/models/timing";
+import {SquareArrowOutUpRight} from "@lucide/vue";
 
 defineProps<{
   timings: Timing[]
 }>()
-
 defineEmits<{
   close: []
 }>()
-
-
 </script>
-
 <template>
   <div class="screen">
     <div class="timing-list">
@@ -24,33 +20,36 @@ defineEmits<{
         <div class="nickname">
           {{ timing.username }}
         </div>
-
         <div class="timing-text">
           {{ timing.timingText }}
         </div>
       </div>
     </div>
+
+    <a
+        href="https://chromewebstore.google.com/detail/ratecommunity-extension/fmhbfijcjgghlidigfecneahakjoiahm"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="timing-extention"
+    >
+      Расширение для Автоблюра
+      <SquareArrowOutUpRight class="link-icon"/>
+    </a>
   </div>
 </template>
 
 <style scoped>
-
 .screen {
   position: absolute;
-
   top: 30px;
   left: 42px;
-
   width: 320px;
   max-height: 350px;
-
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255, 0.7);
   background: rgba(0, 0, 0, 0.8);
-
   z-index: 10;
 }
-
 
 .timing-list {
   max-height: 300px;
@@ -84,25 +83,57 @@ defineEmits<{
 
 .nickname {
   margin-bottom: 6px;
-
   color: var(--accent-color);
   font-weight: bold;
   font-size: 13px;
-
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .timing-text {
   color: #b8b8b8;
-
   font-size: 12px;
   line-height: 1.45;
-
   white-space: pre-wrap;
   word-break: break-word;
   overflow-wrap: anywhere;
 }
 
+.timing-extention {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto 10px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 1px solid rgba(var(--accent-color-rgb) / 0.3);
+  background: rgba(var(--accent-color-rgb) / 0.4);
+  color: var(--accent-light);
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  border-radius: 8px;
+}
 
+.timing-extention:hover {
+  background: rgba(var(--accent-color-rgb) / 0.45);
+  border-color: rgba(var(--accent-color-rgb) / 0.5);
+}
+
+.timing-extention:active {
+  background: rgba(var(--accent-color-rgb) / 0.55);
+}
+
+.link-icon {
+  width: 12px;
+  height: 12px;
+  margin: 4px;
+  flex-shrink: 0;
+  color: var(--accent-light);
+}
 </style>
