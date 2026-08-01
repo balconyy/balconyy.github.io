@@ -43,8 +43,8 @@ defineEmits<{
   position: absolute;
   top: 30px;
   left: 42px;
-  width: 320px;
-  max-height: 350px;
+  width: 400px;
+  max-height: 600px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: rgba(255, 255, 255, 0.7);
   background: rgba(0, 0, 0, 0.8);
@@ -78,7 +78,7 @@ defineEmits<{
 }
 
 .timing-card:last-child {
-  margin-bottom: 0;
+  margin-bottom: -10px;
 }
 
 .nickname {
@@ -102,7 +102,7 @@ defineEmits<{
 .timing-extention {
   display: flex;
   width: fit-content;
-  margin: 0 auto 10px;
+  margin: 12px auto;
   align-items: center;
   justify-content: center;
   padding: 8px;
