@@ -1,9 +1,9 @@
-import {Movie} from "@/models/movie";
+import {MovieKp} from "@/models/movieKp";
 import {SearchDTO} from "../dto/searchDTO";
 
 
 export class SearchMapper {
-    static toDomain(dto: SearchDTO): Movie {
+    static toDomain(dto: SearchDTO): MovieKp {
         return {
             kpId: dto.filmId,
             titleMain: dto.nameRu,
@@ -15,7 +15,7 @@ export class SearchMapper {
         };
     }
 
-    static toDomainList(dtoList: SearchDTO[]): Movie[] {
+    static toDomainList(dtoList: SearchDTO[]): MovieKp[] {
         return dtoList.map(this.toDomain);
     }
 }

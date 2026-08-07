@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
-import {Movie} from "@/models/movie";
+import {MovieKp} from "@/models/movieKp";
 import MovieCard from "@/components/MovieCard.vue";
 import ErrorScreen from "@/components/ErrorScreen.vue";
 import LoadingScreen from "@/components/LoadingScreen.vue";
 
 const {movies, loading, errorMessage} = defineProps<{
-  movies: Movie[];
+  movies: MovieKp[];
   loading: Boolean,
   errorMessage?: string,
 }>();

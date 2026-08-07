@@ -15,7 +15,7 @@ import RecentlyWatchList from "@/features/resently/components/RecentlyWatchList.
 import {useRouter} from "vue-router";
 import {useConfigResults} from "@/features/admin/composables/config/useConfigResults";
 import {useRecentlyWatch} from "@/features/resently/composables/useRecentlyWatch";
-import {Movie} from "@/models/movie";
+import {MovieKp} from "@/models/movieKp";
 import SidePanel from "@/components/SidePanel.vue";
 
 
@@ -41,7 +41,7 @@ const {
 } = useRecentlyWatch()
 
 const router = useRouter()
-const onMovieClick = (movie: Movie) => {
+const onMovieClick = (movie: MovieKp) => {
   router.push({
     name: 'movie',
     params: {kpId: movie.kpId},

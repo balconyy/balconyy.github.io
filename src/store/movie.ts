@@ -1,8 +1,9 @@
 
-import {Movie} from "@/models/movie";
+import {MovieKp} from "@/models/movieKp";
 import {defineStore} from "pinia";
+import {MovieInfo} from "@/models/movie";
 
-type HistoryItem = Movie & {
+type HistoryItem = MovieInfo & {
     lastViewedAt: number
 }
 
@@ -11,7 +12,7 @@ export const useMovieStore = defineStore('movie', {
         _version: 2,
         history: {} as Record<string, HistoryItem>,
         searchText: '' as string,
-        query: [] as Movie [],
+        query: [] as MovieKp [],
         tabId: 1 as number
     }),
 
@@ -21,7 +22,7 @@ export const useMovieStore = defineStore('movie', {
                 this.history = {}
             }
         },
-        addToHistory(movie: Movie) {
+        addToHistory(movie: MovieInfo) {
             const now = Date.now()
             const existing = this.history[movie.kpId]
             if (existing) {
@@ -34,10 +35,10 @@ export const useMovieStore = defineStore('movie', {
                 lastViewedAt: now,
             }
         },
-        getFullHistory(): Movie[] {
+        getFullHistory(): MovieInfo[] {
             return Object.values(this.history)
                 .sort((a: HistoryItem, b: HistoryItem) => b.lastViewedAt - a.lastViewedAt)
-                .map(item => item as Movie);
+                .map(item => item as MovieInfo);
         },
 
         removeFromHistory(kpId: number) {
@@ -48,7 +49,7 @@ export const useMovieStore = defineStore('movie', {
         clearHistory() {
             this.history = {}
         },
-        saveQuery(searchText: string, list: Movie[]) {
+        saveQuery(searchText: string, list: MovieKp[]) {
             this.searchText = searchText
             this.query = list
             sessionStorage.setItem('query_cache', searchText)

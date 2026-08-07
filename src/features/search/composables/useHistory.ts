@@ -1,13 +1,14 @@
 import {ref, watch} from "vue";
-import {Movie} from "@/models/movie";
-import {useMovieStore} from "../../../store/movie";
+import {MovieKp} from "@/models/movieKp";
+import {useMovieStore} from "@/store/movie";
+import {MovieInfo} from "@/models/movie";
 
 
 export function useHistory() {
     const movieStore = useMovieStore();
     movieStore.checkVersion()
     const state = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
-    const history = ref<Movie[]>([])
+    const history = ref<MovieInfo[]>([])
     const errorMessage = ref<string>()
 
     const getLocalHistory = () => {
@@ -20,7 +21,7 @@ export function useHistory() {
 
     }
 
-    const removeMovieFromHistory = (movie: Movie) => {
+    const removeMovieFromHistory = (movie: MovieKp) => {
         movieStore.removeFromHistory(movie.kpId)
         history.value = movieStore.getFullHistory()
     }

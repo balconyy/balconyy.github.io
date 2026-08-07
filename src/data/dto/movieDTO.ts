@@ -1,11 +1,9 @@
-import {Player} from "../../models/player";
-import {Movie} from "../../models/movie";
-import {Link} from "../../models/link";
+import {Player} from "@/models/player";
+import {MovieInfo} from "@/models/movie";
 
 
 export interface MovieDto {
-    movieInfo: Movie
+    movie: MovieInfo
     players: Player[]
-    links: Link[]
 }
 

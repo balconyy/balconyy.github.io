@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MovieCardShort from "@/components/MovieCardShort.vue";
+import MovieShortCard from "@/components/MovieShortCard.vue";
 import {Relation} from "@/data/dto/movieAddonDTO";
 
 const {movies} = defineProps<{
@@ -13,7 +13,7 @@ defineEmits(['selectMovie'])
 <template>
   <h2 class="relations-title">Другие части</h2>
   <ul class="relations-list">
-    <MovieCardShort
+    <MovieShortCard
         v-for="movie in movies"
         :movie="movie"
         @selectMovie="$emit('selectMovie', $event)"

@@ -64,10 +64,10 @@ function toMainScreen() {
 watch(movie, (newVal) => {
   movieStore.addToHistory(newVal)
   analytics.track("movie_loaded", {
-    movie: newVal.titleMain ?? newVal.titleSecond,
+    movie: newVal.title,
     year: newVal.year,
   })
-  document.title = `${movie.value.titleMain} — Balcony`
+  document.title = `${movie.value.title} — Balcony`
 })
 
 </script>
@@ -89,7 +89,7 @@ watch(movie, (newVal) => {
 </template>
 
 <style scoped>
-.home-icon{
+.home-icon {
   z-index: 10;
   position: fixed;
   margin: 16px 0 0 16px;

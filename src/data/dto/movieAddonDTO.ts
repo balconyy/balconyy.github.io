@@ -1,4 +1,4 @@
-import {Movie} from "../../models/movie";
+import {MovieKp} from "@/models/movieKp";
 
 
 export interface Timing {
@@ -34,8 +34,8 @@ export interface Relation {
 
 
 export interface RecentlyLists {
-    movies: Movie[]
-    serials: Movie[]
+    movies: MovieKp[]
+    serials: MovieKp[]
 }
 
 

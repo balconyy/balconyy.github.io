@@ -30,6 +30,8 @@ coverage
 
 .vite
 
+.env
+
 # Cypress
 /cypress/videos/
 /cypress/screenshots/

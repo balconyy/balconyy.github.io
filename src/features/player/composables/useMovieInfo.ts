@@ -1,10 +1,10 @@
 import {computed, ref} from 'vue'
-import {movieApi} from "../../../data/api/movie";
-import {Timing} from "../../../models/timing";
-import {Player} from "../../../models/player";
-import {Movie} from "../../../models/movie";
-import {Link} from "../../../models/link";
-import {Relation, ReviewResponse} from "../../../data/dto/movieAddonDTO";
+import {movieApi} from "@/data/api/movie";
+import {Timing} from "@/models/timing";
+import {Player} from "@/models/player";
+import {Link} from "@/models/link";
+import {Relation, ReviewResponse} from "@/data/dto/movieAddonDTO";
+import {MovieInfo} from "@/models/movie";
 
 export function useMovieInfo() {
     const state = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -12,7 +12,7 @@ export function useMovieInfo() {
     const isLoading = computed(() => state.value === 'loading')
 
     const error = ref<Error | null>(null)
-    const movie = ref<Movie>()
+    const movie = ref<MovieInfo>()
     const links = ref<Link[]>()
     const players = ref<Player[]>()
 
@@ -35,16 +35,14 @@ export function useMovieInfo() {
         try {
             const response = await movieApi.getMovie(kpId)
             state.value = 'success'
-            movie.value = response.data.movieInfo
-            links.value = response.data.links
+            movie.value = response.data.movie
             players.value = response.data.players
-            const lbSlug = response.data.links.find(
-                (l) => l.type === 'LETTERBOXD'
-            )?.id
+            links.value = mapMovieLinks(response.data.movie)
+
             await Promise.all([
                 getMovieTimings(kpId),
                 getMovieRelations(kpId),
-                getMovieReviews(lbSlug),
+                getMovieReviews(response.data.movie.lbSlug),
             ])
 
         } catch (e) {
@@ -71,7 +69,7 @@ export function useMovieInfo() {
         }
     }
 
-    const getMovieReviews = async (lbSlug: string | undefined) => {
+    const getMovieReviews = async (lbSlug: string | null | undefined) => {
         if (!lbSlug) return
         try {
             const response = await movieApi.getReviews(lbSlug)
@@ -79,6 +77,23 @@ export function useMovieInfo() {
         } catch (e) {
             console.error(e)
         }
+    }
+
+    function mapMovieLinks(movie: MovieInfo): Link[] {
+        return [
+            movie.kpId && {
+                type: 'KP',
+                id: String(movie.kpId),
+            },
+            movie.lbSlug && {
+                type: 'LETTERBOXD',
+                id: movie.lbSlug,
+            },
+            movie.imdbId && {
+                type: 'IMDB',
+                id: movie.imdbId,
+            },
+        ].filter(Boolean) as Link[];
     }
 
     return {

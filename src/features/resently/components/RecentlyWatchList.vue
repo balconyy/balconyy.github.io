@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MovieCardShort from "@/components/MovieCardShort.vue";
+import MovieShortCard from "@/components/MovieShortCard.vue";
 import {RecentlyLists} from "@/data/dto/movieAddonDTO";
 
 const {recentlyLists} = defineProps<{
@@ -14,7 +14,7 @@ defineEmits(['selectMovie'])
   <div v-if="recentlyLists.movies && recentlyLists.movies.length">
     <h3 class="relations-subtitle">Фильмы</h3>
     <ul class="relations-list" ref="grid">
-      <MovieCardShort
+      <MovieShortCard
           v-for="movie in recentlyLists.movies"
           :movie="movie"
           @selectMovie="$emit('selectMovie', $event)"
@@ -24,7 +24,7 @@ defineEmits(['selectMovie'])
   <div v-if="recentlyLists.serials && recentlyLists.serials.length">
     <h3 class="relations-subtitle">Сериалы</h3>
     <ul class="relations-list" ref="grid">
-      <MovieCardShort
+      <MovieShortCard
           v-for="movie in recentlyLists.serials"
           :movie="movie"
           @selectMovie="$emit('selectMovie', $event)"

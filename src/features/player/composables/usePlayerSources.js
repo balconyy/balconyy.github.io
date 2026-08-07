@@ -1,7 +1,6 @@
 import {computed, ref, watch} from 'vue'
 
 const NO_PLAYERS_MESSAGE = 'Плееры не найдены.'
-const SERVER_TIMEOUT_MESSAGE = 'Иногда сервер не отвечает с первого раза. Попробуйте повторить запрос.'
 
 export function usePlayerSources(playerState) {
 
@@ -49,7 +48,6 @@ export function usePlayerSources(playerState) {
             const players = state.data
             applyPlayersData(players)
             if (!players || players.length === 0) {
-                console.log("EBANAT")
                 playersEmptyMessage.value = NO_PLAYERS_MESSAGE
             }
         },

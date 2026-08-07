@@ -40,7 +40,6 @@ export function useChat() {
 
         socket.onmessage = (event) => {
             const data = JSON.parse(event.data)
-            console.log(data)
             if (data.count) {
                 online.value = data.count
             } else {
@@ -54,7 +53,6 @@ export function useChat() {
         }
 
         socket.onerror = () => {
-            console.log("error")
             socket?.close()
         }
     }

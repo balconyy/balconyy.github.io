@@ -8,14 +8,14 @@ import TimingButton from "@/features/player/components/info/timing/TimingButton.
 import TimingScreen from "@/features/player/components/info/timing/TimingScreen.vue";
 import {Timing} from "@/models/timing";
 import {Link} from "@/models/link";
-import {Movie} from "@/models/movie";
+import {MovieInfo} from "@/models/movie";
 
 const KINOPOISK_MOVIE_LINK = "https://www.kinopoisk.ru/film/"
 const LETTERBOXD_MOVIE_LINK = "https://letterboxd.com/film/"
 const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
 
 const props = defineProps<{
-  movie: Movie;
+  movie: MovieInfo;
   timings: Timing[];
   links: Link[];
 }>();
