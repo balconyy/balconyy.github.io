@@ -64,10 +64,10 @@ function toMainScreen() {
 watch(movie, (newVal) => {
   movieStore.addToHistory(newVal)
   analytics.track("movie_loaded", {
-    movie: newVal.title,
+    movie: newVal.titleMain,
     year: newVal.year,
   })
-  document.title = `${movie.value.title} — Balcony`
+  document.title = `${movie.value.titleMain} — Balcony`
 })
 
 </script>
