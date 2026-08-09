@@ -13,7 +13,6 @@ import SidePanel from "@/components/SidePanel.vue";
 import MovieInfoSkeleton from "@/features/player/components/info/MovieInfoSkeleton.vue";
 import WinIcon from "@/components/WinIcon.vue";
 import homeIcon from "@/assets/icons/home-icon.png";
-import GeekPc from "@/components/banners/GeekPc.vue";
 
 const {kpId} = defineProps({
   kpId: {
@@ -81,7 +80,6 @@ watch(movie, (newVal) => {
                :reviewsResponse="reviewsResponse"
   />
 
-  <GeekPc class="geek-banner"/>
 </template>
 
 <style scoped>
@@ -89,18 +87,6 @@ watch(movie, (newVal) => {
   z-index: 10;
   position: fixed;
   margin: 16px 0 0 16px;
-}
-
-.geek-banner{
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  display: grid;
-  width: 100%;
-  align-items: center;
-  padding-bottom: 10px;
 }
 </style>
 
