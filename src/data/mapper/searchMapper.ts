@@ -11,7 +11,6 @@ export class SearchMapper {
             posterUrl: dto.posterUrlPreview,
             year: dto.year,
             type: dto.type,
-            ratingKP: dto.rating,
         };
     }
 

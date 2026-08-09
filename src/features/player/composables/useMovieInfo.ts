@@ -1,14 +1,13 @@
 import {computed, ref} from 'vue'
 import {movieApi} from "@/data/api/movie";
-import {Timing} from "@/models/timing";
 import {Player} from "@/models/player";
 import {Link} from "@/models/link";
 import {Relation, ReviewResponse} from "@/data/dto/movieAddonDTO";
 import {MovieInfo} from "@/models/movie";
+import {useTiming} from "@/features/player/composables/useTiming";
 
 export function useMovieInfo() {
     const state = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
-    const isSuccess = computed(() => state.value === 'success')
     const isLoading = computed(() => state.value === 'loading')
 
     const error = ref<Error | null>(null)
@@ -16,10 +15,12 @@ export function useMovieInfo() {
     const links = ref<Link[]>()
     const players = ref<Player[]>()
 
-
-    const timings = ref<Timing[]>([])
     const relations = ref<Relation[]>([])
     const reviewsResponse = ref<ReviewResponse[]>([])
+
+    const {
+        getTimings
+    } = useTiming()
 
     const playerState = computed(() => ({
         data: players.value,
@@ -40,7 +41,7 @@ export function useMovieInfo() {
             links.value = mapMovieLinks(response.data.movie)
 
             await Promise.all([
-                getMovieTimings(kpId),
+                getTimings(kpId),
                 getMovieRelations(kpId),
                 getMovieReviews(response.data.movie.lbSlug),
             ])
@@ -48,15 +49,6 @@ export function useMovieInfo() {
         } catch (e) {
             state.value = 'error'
             error.value = e as Error
-        }
-    }
-
-    const getMovieTimings = async (kpId: number) => {
-        try {
-            const response = await movieApi.getTimings(kpId)
-            timings.value = response.data
-        } catch (e) {
-            console.error(e)
         }
     }
 
@@ -100,16 +92,10 @@ export function useMovieInfo() {
         movie,
         playerState,
         links,
-        timings,
         relations,
         reviewsResponse,
         error,
-        isSuccess,
         isLoading,
-        getMovieInfo,
-        getMovieTimings,
-        getMovieRelations,
-        getMovieReviews
-
+        getMovieInfo
     }
 }

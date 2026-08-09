@@ -1,11 +1,6 @@
 import {MovieKp} from "@/models/movieKp";
 
 
-export interface Timing {
-    username: string
-    timingText: string
-}
-
 export interface ReviewResponse {
     letterboxdAccount: LetterboxdAccount
     review: Review

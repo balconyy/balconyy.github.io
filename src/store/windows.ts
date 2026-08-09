@@ -2,8 +2,8 @@ import {defineStore} from "pinia";
 
 export const useWindowsStore = defineStore('windows', {
     state: () => ({
-        isAuthOpen: null as boolean | null,
-        isChatOpen: null as boolean | null,
+        isAuthOpen: true as boolean,
+        isChatOpen: true as boolean,
     }),
 
     actions: {

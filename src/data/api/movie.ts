@@ -13,11 +13,6 @@ export const movieApi = {
     getMovie(id: number) {
         return baseClient.get<MovieDto>(`/movie/by-id/${id}`);
     },
-    getTimings(kpId: number) {
-        return baseClient.get("/movie/timings", {
-            params: { kpId }
-        });
-    },
     getRelations(kpId: number) {
         return baseClient.get("/movie/relations", {
             params: { kpId }

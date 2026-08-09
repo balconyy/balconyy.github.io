@@ -2,7 +2,7 @@ import {defineStore} from "pinia";
 
 export const useDailyStore = defineStore('dailyScreen', {
     state: () => ({
-        isOpen: null as boolean | null,
+        isOpen: true as boolean,
         screenHeight: null as number | null,
     }),
 

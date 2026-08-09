@@ -25,16 +25,10 @@ const {
   movie,
   playerState,
   links,
-  timings,
   relations,
   reviewsResponse,
-  error,
-  isSuccess,
   isLoading,
   getMovieInfo,
-  getMovieTimings,
-  getMovieRelations,
-  getMovieReviews
 } = useMovieInfo()
 
 const movieStore = useMovieStore()
@@ -77,7 +71,7 @@ watch(movie, (newVal) => {
   <WinIcon class="home-icon" :icon="homeIcon" label="Главная" @open="toMainScreen"/>
   <SidePanel/>
   <MovieInfoSkeleton v-if="isLoading"/>
-  <MovieInfo v-else-if="movie" :movie="movie" :links="links" :timings="timings"/>
+  <MovieInfo v-else-if="movie" :movie="movie" :links="links"/>
   <PlayerComponent :playerState="playerState"/>
   <RelationsList v-if="relations && relations.length"
                  :movies="relations"

@@ -3,10 +3,8 @@ import SiteReferer from "@/features/player/components/info/SiteReferer.vue";
 import KpLogo from '@/assets/icons/kp-logo.svg'
 import ImdbLogo from '@/assets/icons/imdb-logo.svg'
 import LBLogo from '@/assets/icons/letterboxd-logo.svg'
-import {computed, ref} from "vue";
-import TimingButton from "@/features/player/components/info/timing/TimingButton.vue";
+import {computed} from "vue";
 import TimingScreen from "@/features/player/components/info/timing/TimingScreen.vue";
-import {Timing} from "@/models/timing";
 import {Link} from "@/models/link";
 import {MovieInfo} from "@/models/movie";
 
@@ -16,7 +14,6 @@ const IMDB_MOVIE_LINK = "https://www.imdb.com/title/"
 
 const props = defineProps<{
   movie: MovieInfo;
-  timings: Timing[];
   links: Link[];
 }>();
 
@@ -32,12 +29,6 @@ const imdb = computed(() =>
     props.links?.find(link => link.type === 'IMDB')
 );
 
-
-const isTimingOpen = ref(false)
-const toggleTiming = () => {
-  isTimingOpen.value = !isTimingOpen.value
-}
-
 </script>
 
 <template>
@@ -50,12 +41,7 @@ const toggleTiming = () => {
       <SiteReferer v-if="letterboxd" :href="LETTERBOXD_MOVIE_LINK+letterboxd.id" :icon="LBLogo" hint="Letterboxd"/>
       <SiteReferer v-if="imdb" :href="IMDB_MOVIE_LINK+imdb.id" :icon="ImdbLogo" hint="IMDB"/>
       <div class="timing-wrapper">
-        <TimingButton v-if="timings.length" @click="toggleTiming"/>
-        <TimingScreen
-            v-if="isTimingOpen"
-            :timings="timings"
-            @close="isTimingOpen = false"
-        />
+        <TimingScreen :kpId="movie.kpId"/>
       </div>
     </div>
   </div>

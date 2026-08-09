@@ -3,37 +3,32 @@ import BaseWindow from "@/components/window/BaseWindow.vue";
 import chatIcon from "@/assets/icons/chat-icon.png";
 import ChatList from "@/features/chat/components/ChatList.vue";
 import ChatInput from "@/features/chat/components/ChatInput.vue";
-import {useChat} from "@/features/chat/composables/useChat";
-import {computed, onMounted} from "vue";
+import { storeToRefs } from "pinia";
+import { computed, onMounted } from "vue";
 import WindowLoading from "@/components/window/WindowLoading.vue";
 import ChatAttention from "@/features/chat/components/ChatAttention.vue";
-import {useUserAuth} from "@/features/auth/composables/useUserAuth";
+import { useUserAuth } from "@/features/auth/composables/useUserAuth";
+import {connectChatSocket} from "@/services/chatSocket";
+import {useChatStore} from "@/store/chat";
 
 defineProps<{
   isOpen: boolean,
 }>()
-
 const emit = defineEmits(['toggleWindow']);
 
-const {
-  chat,
-  online,
-  isLoading,
-  getChatLogs,
-  sendMessage,
-  connectToChat
-} = useChat();
+const chatStore = useChatStore();
+// storeToRefs сохраняет реактивность при деструктуризации state/getters
+const { chat, online, isLoading } = storeToRefs(chatStore);
+// actions можно деструктурировать напрямую, они не теряют контекст
+const { getChatLogs, sendMessage } = chatStore;
 
 const userAuth = useUserAuth();
-
 const isNotAuth = computed(() => userAuth.user.value == null);
 
 onMounted(() => {
-  getChatLogs()
-  connectToChat()
+  getChatLogs();
+  connectChatSocket();
 })
-
-
 </script>
 
 <template>
@@ -49,20 +44,14 @@ onMounted(() => {
       <ChatAttention v-if="isLoading || isNotAuth" :isLoading="isLoading" :isNotAuth="isNotAuth"/>
       <ChatInput v-else @sendMessage="sendMessage" :online="online"/>
     </div>
-
   </BaseWindow>
-
-
 </template>
 
 <style scoped>
-
 .chat-container {
   display: flex;
   flex-direction: column;
   padding: 8px;
   background: #3a3a3a;
 }
-
-
 </style>

@@ -1,5 +1,5 @@
 import {baseClient} from "../http";
-import {Config} from "../../models/config";
+import {Config} from "@/models/config";
 
 export const configApi = {
     getConfig() {

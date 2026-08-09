@@ -2,9 +2,8 @@
 
 import SearchMain from "@/features/search/components/SearchMain.vue";
 import LogoMain from "@/components/logo/LogoMain.vue";
-import GeekTelegram from "@/components/GeekTelegram.vue";
-import DonationLine from "@/components/DonationLine.vue";
-import AboutBlock from "@/components/AboutBlock.vue";
+import DonationLine from "@/components/banners/DonationLine.vue";
+import AboutBlock from "@/components/banners/AboutBlock.vue";
 import Background from "@/components/Background.vue";
 import AdminAlert from "@/components/AdminAlert.vue";
 
@@ -17,6 +16,7 @@ import {useConfigResults} from "@/features/admin/composables/config/useConfigRes
 import {useRecentlyWatch} from "@/features/resently/composables/useRecentlyWatch";
 import {MovieKp} from "@/models/movieKp";
 import SidePanel from "@/components/SidePanel.vue";
+import GeekPc from "@/components/banners/GeekPc.vue";
 
 
 useHead({
@@ -83,7 +83,7 @@ onMounted(() => {
         />
       </div>
       <div class="center">
-        <GeekTelegram/>
+        <GeekPc/>
       </div>
       <div class="right">
         <AboutBlock/>
