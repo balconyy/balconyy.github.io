@@ -13,6 +13,7 @@ import SidePanel from "@/components/SidePanel.vue";
 import MovieInfoSkeleton from "@/features/player/components/info/MovieInfoSkeleton.vue";
 import WinIcon from "@/components/WinIcon.vue";
 import homeIcon from "@/assets/icons/home-icon.png";
+import StreamerRatingList from "@/features/streamer/components/StreamerRatingList.vue";
 
 const {kpId} = defineProps({
   kpId: {
@@ -73,6 +74,7 @@ watch(movie, (newVal) => {
   <MovieInfoSkeleton v-if="isLoading"/>
   <MovieInfo v-else-if="movie" :movie="movie" :links="links"/>
   <PlayerComponent :playerState="playerState"/>
+  <StreamerRatingList :kpId="kpId"/>
   <RelationsList v-if="relations && relations.length"
                  :movies="relations"
                  @selectMovie="onMovieClick"/>
