@@ -21,14 +21,12 @@ onMounted(() => {
 <template>
   <div v-if="ratings && ratings.length">
     <h2 class="rating-title">Оценки стримеров</h2>
-    <div class="rating-list__content">
-      <ul class="rating-list" ref="grid">
-        <StreamerRating
-            v-for="rating in ratings"
-            :streamer="rating"
-        />
-      </ul>
-    </div>
+    <ul class="rating-list" ref="grid">
+      <StreamerRating
+          v-for="rating in ratings"
+          :streamer="rating"
+      />
+    </ul>
   </div>
 </template>
 
@@ -40,9 +38,8 @@ onMounted(() => {
   overflow-x: auto;
   overflow-y: hidden;
 
-  padding: 8px 16px;
-  margin-bottom: 24px;
-
+  padding: 8px 16px 0 16px;
+  justify-content: safe center;
   scrollbar-width: thin;
   scrollbar-color: rgba(var(--accent-dark-rgb)/0.4) transparent;
 }
@@ -66,11 +63,4 @@ onMounted(() => {
   transition: all 0.3s ease;
 }
 
-.rating-list__content {
-  display: flex;
-  justify-content: center;
-
-  width: max-content;
-  min-width: 100%;
-}
 </style>

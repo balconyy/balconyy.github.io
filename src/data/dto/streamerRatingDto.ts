@@ -3,6 +3,8 @@ export interface StreamerRatingDto {
     displayName: string
     followers: number
     avatar: string
-    kpLink: string
+    kpProfile: string
     rating: number
+    twitchLink?: string | null,
+    otherLink?: string | null,
 }

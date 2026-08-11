@@ -26,8 +26,13 @@ defineEmits(['selectMovie'])
 .relations-list {
   display: flex;
   gap: 16px;
-  justify-content: center;
-  padding: 4px 16px;
+  padding: 8px 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  justify-content: safe center;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--accent-dark-rgb)/0.4) transparent;
 }
 .relations-title {
   position: relative;
