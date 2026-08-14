@@ -18,10 +18,15 @@ export function useStreamerInfo() {
         }
     }
 
+    const emptyRating = () => {
+        ratings.value = []
+    }
+
 
     return {
         ratings,
         isLoading,
         getStreamersRating,
+        emptyRating
     }
 }

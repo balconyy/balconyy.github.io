@@ -9,6 +9,7 @@ export function useTiming() {
     const timings = ref<Timing[]>([])
 
     const getTimings = async (kpId: number) => {
+        timings.value = []
         isLoading.value = true
         error.value = null
         try {

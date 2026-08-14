@@ -29,108 +29,124 @@ export function usePlayerSources(playerState) {
     })
 
     watch(
-        playerState,
+        () => playerState.value,
         (state) => {
-            if(!state) return
+            console.log('PLAYER STATE:', state)
+
+            if (!state) return
 
             if (state.isLoading) {
+                playersInternal.value = []
+                selectedPlayerInternal.value = null
+
                 errorMessage.value = ''
                 errorCode.value = null
                 playersEmptyMessage.value = ''
+
                 return
             }
 
             if (state.isError) {
-                errorMessage.value = state.error?.message || 'Ошибка загрузки'
+                playersInternal.value = []
+                selectedPlayerInternal.value = null
+                playersEmptyMessage.value = ''
+
+                errorMessage.value =
+                    state.error?.message || 'Ошибка загрузки'
+
                 return
             }
 
-            const players = state.data
+            const players = state.data ?? []
+
             applyPlayersData(players)
-            if (!players || players.length === 0) {
+
+            if (players.length === 0) {
                 playersEmptyMessage.value = NO_PLAYERS_MESSAGE
+            } else {
+                playersEmptyMessage.value = ''
             }
         },
         {immediate: true}
     )
 
-const setSelectedPlayer = (player) => {
-    selectedPlayerInternal.value = player
-}
-
-const getDefaultPlayer = () => {
-    return playersInternal.value[0]
-}
-
-const applyPlayersData = (players) => {
-    playersInternal.value = players
-
-    if (playersInternal.value.length === 0) {
-        setSelectedPlayer(null)
-        return false
-    } else {
-        setSelectedPlayer(getDefaultPlayer())
-        return true
+    const setSelectedPlayer = (player) => {
+        selectedPlayerInternal.value = player
     }
-}
 
-const openPlayerModal = () => {
-    showPlayerModal.value = true
-}
+    const getDefaultPlayer = () => {
+        return playersInternal.value[0]
+    }
 
-const closePlayerModal = () => {
-    showPlayerModal.value = false
-}
+    const applyPlayersData = (players) => {
+        playersInternal.value = players
 
-const openSourceModal = async () => {
-    showSourceModal.value = true
-    sourceLoading.value = false
-}
-
-const closeSourceModal = () => {
-    showSourceModal.value = false
-}
-
-const applySourceCandidate = async (candidate) => {
-    if (!candidate?.name) return
-
-    sourceLoading.value = true
-    sourceError.value = ''
-
-    try {
-        const players = {}
-        const hasPlayers = applyPlayersData(players)
-        if (!hasPlayers) {
-            sourceError.value = NO_PLAYERS_MESSAGE
-            return
+        if (playersInternal.value.length === 0) {
+            setSelectedPlayer(null)
+            return false
+        } else {
+            setSelectedPlayer(getDefaultPlayer())
+            return true
         }
-        playersEmptyMessage.value = ''
-        closeSourceModal()
-    } catch (error) {
-        sourceError.value = 'Не удалось применить выбранный источник'
-    } finally {
+    }
+
+    const openPlayerModal = () => {
+        showPlayerModal.value = true
+    }
+
+    const closePlayerModal = () => {
+        showPlayerModal.value = false
+    }
+
+    const openSourceModal = async () => {
+        showSourceModal.value = true
         sourceLoading.value = false
     }
-}
 
-return {
-    playersInternal,
-    selectedPlayerInternal,
-    showPlayerModal,
-    showSourceModal,
-    sourceCandidates,
-    sourceLoading,
-    sourceError,
-    errorMessage,
-    errorCode,
-    playersEmptyMessage,
-    showSourceButton,
-    selectedPlayerLabel,
-    openPlayerModal,
-    closePlayerModal,
-    openSourceModal,
-    closeSourceModal,
-    applySourceCandidate,
-}
+    const closeSourceModal = () => {
+        showSourceModal.value = false
+    }
+
+    const applySourceCandidate = async (candidate) => {
+        if (!candidate?.name) return
+
+        sourceLoading.value = true
+        sourceError.value = ''
+
+        try {
+            const players = {}
+            const hasPlayers = applyPlayersData(players)
+            if (!hasPlayers) {
+                sourceError.value = NO_PLAYERS_MESSAGE
+                return
+            }
+            playersEmptyMessage.value = ''
+            closeSourceModal()
+        } catch (error) {
+            sourceError.value = 'Не удалось применить выбранный источник'
+        } finally {
+            sourceLoading.value = false
+        }
+    }
+
+    return {
+        playersInternal,
+        selectedPlayerInternal,
+        showPlayerModal,
+        showSourceModal,
+        sourceCandidates,
+        sourceLoading,
+        sourceError,
+        errorMessage,
+        errorCode,
+        playersEmptyMessage,
+        showSourceButton,
+        selectedPlayerLabel,
+        openPlayerModal,
+        closePlayerModal,
+        openSourceModal,
+        closeSourceModal,
+        applySourceCandidate,
+    }
 }
 

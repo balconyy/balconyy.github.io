@@ -1,21 +1,12 @@
 <script setup lang="ts">
 
-import {useStreamerInfo} from "@/features/streamer/composables/useStreamerInfo";
 import StreamerRating from "@/features/streamer/components/StreamerRating.vue";
-import {onMounted} from "vue";
-
-const {
-  ratings,
-  getStreamersRating,
-} = useStreamerInfo()
+import {StreamerRatingDto} from "@/data/dto/streamerRatingDto";
 
 const props = defineProps<{
-  kpId: number;
+  ratings: StreamerRatingDto[];
 }>()
 
-onMounted(() => {
-  getStreamersRating(props.kpId)
-})
 </script>
 
 <template>

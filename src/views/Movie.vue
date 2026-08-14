@@ -2,7 +2,7 @@
 import PlayerComponent from "@/features/player/components/PlayerComponent.vue";
 import MovieInfo from "@/features/player/components/info/MovieInfo.vue";
 import Background from "@/components/Background.vue";
-import {watch, watchEffect} from "vue";
+import {ref, watch, watchEffect} from "vue";
 import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
 import {useMovieStore} from "@/store/movie.ts";
 import {useAnalytics} from "@/composables/useAnalytics.ts";
@@ -15,12 +15,14 @@ import WinIcon from "@/components/WinIcon.vue";
 import homeIcon from "@/assets/icons/home-icon.png";
 import StreamerRatingList from "@/features/streamer/components/StreamerRatingList.vue";
 
-const {kpId} = defineProps({
+const props = defineProps({
   kpId: {
     type: Number,
     required: true
   }
 })
+
+const kpId = ref(props.kpId);
 
 const {
   movie,
@@ -28,25 +30,21 @@ const {
   links,
   relations,
   reviewsResponse,
+  ratings,
   isLoading,
   getMovieInfo,
 } = useMovieInfo()
 
-const movieStore = useMovieStore()
-const analytics = useAnalytics()
 
 const router = useRouter()
 const onMovieClick = (movie) => {
-  router.push({
-    name: 'movie',
-    params: {kpId: movie.kpId},
-  })
+  kpId.value = movie.kpId;
 }
 
 
 watchEffect(async () => {
   if (kpId) {
-    await getMovieInfo(kpId)
+    await getMovieInfo(kpId.value)
   }
 })
 
@@ -57,12 +55,7 @@ function toMainScreen() {
 }
 
 watch(movie, (newVal) => {
-  movieStore.addToHistory(newVal)
-  analytics.track("movie_loaded", {
-    movie: newVal.titleMain,
-    year: newVal.year,
-  })
-  document.title = `${movie.value.titleMain} — Balcony`
+  document.title = `${newVal?.titleMain ?? 'Загрузка'} — Balcony`
 })
 
 </script>
@@ -74,7 +67,7 @@ watch(movie, (newVal) => {
   <MovieInfoSkeleton v-if="isLoading"/>
   <MovieInfo v-else-if="movie" :movie="movie" :links="links"/>
   <PlayerComponent :playerState="playerState"/>
-  <StreamerRatingList :kpId="kpId"/>
+  <StreamerRatingList :ratings="ratings"/>
   <RelationsList v-if="relations && relations.length"
                  :movies="relations"
                  @selectMovie="onMovieClick"/>
