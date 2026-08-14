@@ -4,16 +4,14 @@ import MovieInfo from "@/features/player/components/info/MovieInfo.vue";
 import Background from "@/components/Background.vue";
 import {ref, watch, watchEffect} from "vue";
 import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
-import {useMovieStore} from "@/store/movie.ts";
-import {useAnalytics} from "@/composables/useAnalytics.ts";
 import RelationsList from "@/features/player/components/info/RelationsList.vue";
 import {useRouter} from "vue-router";
 import ReviewsList from "@/features/player/components/info/review/ReviewsList.vue";
-import SidePanel from "@/components/SidePanel.vue";
 import MovieInfoSkeleton from "@/features/player/components/info/MovieInfoSkeleton.vue";
 import WinIcon from "@/components/WinIcon.vue";
 import homeIcon from "@/assets/icons/home-icon.png";
 import StreamerRatingList from "@/features/streamer/components/StreamerRatingList.vue";
+import SidePanel from "@/components/window/SidePanel.vue";
 
 const props = defineProps({
   kpId: {

@@ -59,16 +59,20 @@ onUpdated(() => {
 
 <style scoped>
 .chat-log {
-  background: #1e1f22;
+  width: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   font-family: 'Consolas', 'Courier New', monospace;
-  width: 300px;
-  height: 200px;
   font-size: 14px;
   padding: 8px 4px;
   color: #dcddde;
   overflow-y: auto;
   border: 2px solid;
   border-color: #2a2a2a #4a4a4a #4a4a4a #2a2a2a;
+  background: #1e1f22;
+  scrollbar-width: thin;
+  scrollbar-color: #2b2d31 #1e1f22;
 }
 
 .chat-line {
@@ -92,7 +96,7 @@ onUpdated(() => {
   color: #dcddde;
 }
 
-/* Webkit (Chrome, Edge, Safari) */
+
 .chat-log::-webkit-scrollbar {
   width: 10px;
 }
@@ -111,9 +115,4 @@ onUpdated(() => {
   background-color: #35373c;
 }
 
-/* Firefox */
-.chat-log {
-  scrollbar-width: thin;
-  scrollbar-color: #2b2d31 #1e1f22;
-}
 </style>

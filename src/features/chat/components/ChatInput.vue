@@ -40,6 +40,7 @@ function sendMessage() {
 
 <style scoped>
 .chat-input {
+  width: 100%;
   display: flex;
   gap: 8px;
   padding: 6px 0;

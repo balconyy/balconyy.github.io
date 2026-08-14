@@ -3,24 +3,27 @@ import BaseWindow from "@/components/window/BaseWindow.vue";
 import chatIcon from "@/assets/icons/chat-icon.png";
 import ChatList from "@/features/chat/components/ChatList.vue";
 import ChatInput from "@/features/chat/components/ChatInput.vue";
-import { storeToRefs } from "pinia";
-import { computed, onMounted } from "vue";
+import {storeToRefs} from "pinia";
+import {computed, onMounted} from "vue";
 import WindowLoading from "@/components/window/WindowLoading.vue";
 import ChatAttention from "@/features/chat/components/ChatAttention.vue";
-import { useUserAuth } from "@/features/auth/composables/useUserAuth";
+import {useUserAuth} from "@/features/auth/composables/useUserAuth";
 import {connectChatSocket} from "@/services/chatSocket";
 import {useChatStore} from "@/store/chat";
+import ResizableContainer from "@/components/window/ResizableContainer.vue";
 
 defineProps<{
-  isOpen: boolean,
+  currentHeight: number,
+  currentWidth: number,
+  isOpen: boolean
 }>()
-const emit = defineEmits(['toggleWindow']);
+
+const emit = defineEmits(['resize', 'toggleWindow'])
 
 const chatStore = useChatStore();
-// storeToRefs сохраняет реактивность при деструктуризации state/getters
-const { chat, online, isLoading } = storeToRefs(chatStore);
-// actions можно деструктурировать напрямую, они не теряют контекст
-const { getChatLogs, sendMessage } = chatStore;
+
+const {chat, online, isLoading} = storeToRefs(chatStore);
+const {getChatLogs, sendMessage} = chatStore;
 
 const userAuth = useUserAuth();
 const isNotAuth = computed(() => userAuth.user.value == null);
@@ -37,13 +40,19 @@ onMounted(() => {
       headerColorHex="#211731"
       :headerIcon="chatIcon"
       :isOpen="isOpen"
+      :currentHeight="currentHeight"
+      :currentWidth="currentWidth"
       @toggleWindow="$emit('toggleWindow')">
-    <div class="chat-container">
+    <ResizableContainer
+        class="chat-container"
+        :currentWidth="currentWidth"
+        @resize="emit('resize', $event)"
+    >
       <WindowLoading v-if="isLoading"/>
       <ChatList v-else :messages="chat" :isOpen="isOpen"/>
       <ChatAttention v-if="isLoading || isNotAuth" :isLoading="isLoading" :isNotAuth="isNotAuth"/>
       <ChatInput v-else @sendMessage="sendMessage" :online="online"/>
-    </div>
+    </ResizableContainer>
   </BaseWindow>
 </template>
 

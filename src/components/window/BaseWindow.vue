@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import WindowHeader from './WindowHeader.vue'
-
 
 const props = defineProps({
   isOpen: {
@@ -18,6 +18,12 @@ const props = defineProps({
   headerColorHex: {
     type: String,
     required: false
+  },
+  currentHeight: {
+    type: Number,
+  },
+  currentWidth: {
+    type: Number,
   }
 })
 
@@ -25,10 +31,23 @@ defineEmits([
   'toggleWindow'
 ])
 
+const windowStyle = computed(() => {
+  if (!props.isOpen) {
+    return {}
+  }
+
+  return {
+    height: `${props.currentHeight}px`,
+    width: `${props.currentWidth}px`
+  }
+})
 </script>
 
 <template>
-  <div class="window-main">
+  <div
+      class="window-main"
+      :style="windowStyle"
+  >
     <WindowHeader
         :title="title"
         :headerIcon="headerIcon"
@@ -36,27 +55,27 @@ defineEmits([
         :headerColorHex="headerColorHex"
         @toggleWindow="$emit('toggleWindow')"
     />
-
-    <div v-show="isOpen" class="window-content">
+    <div v-if="isOpen" class="window-content">
       <slot/>
     </div>
-
   </div>
 </template>
-
 <style scoped>
 .window-main {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   align-items: stretch;
   border: 3px solid;
   border-color: #6a6a6a #4a4a4a #4a4a4a #6a6a6a;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
-
 
 .window-content {
+  flex: 1;
+  min-height: 0;
   border-top: 2px solid #3a3a3a;
   background: #1e1e1e;
+  display: flex;
 }
-
 </style>

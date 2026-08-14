@@ -1,82 +1,54 @@
-<script setup>
-import {ref, onBeforeUnmount} from 'vue'
-
-const {currentHeight, minHeight} = defineProps({
-  currentHeight: {
-    type: Number,
-    required: true
-  },
-  minHeight: {
-    type: Number,
-    required: true
-  }
-})
-
-const emit = defineEmits(['stopResizing'])
-
-const height = ref(currentHeight)
-
-
+<script setup lang="ts">
+defineProps<{
+  currentWidth: number
+}>()
+const emit = defineEmits<{
+  resize: [{ dx: number; dy: number }]
+}>()
+let startX = 0
 let startY = 0
-let startH = 0
-
-function startResize(e) {
+function startResize(e: MouseEvent) {
   e.preventDefault()
-
+  startX = e.clientX
   startY = e.clientY
-  startH = height.value
-
-  window.addEventListener('mousemove', resize)
-  window.addEventListener('mouseup', stop)
+  window.addEventListener('mousemove', onMove)
+  window.addEventListener('mouseup', onUp)
 }
-
-function resize(e) {
+function onMove(e: MouseEvent) {
+  const dx = e.clientX - startX
   const dy = e.clientY - startY
-  height.value = Math.max(minHeight, startH + dy)
+  startX = e.clientX
+  startY = e.clientY
+  emit('resize', {dx, dy})
 }
-
-function stop() {
-  window.removeEventListener('mousemove', resize)
-  window.removeEventListener('mouseup', stop)
-  emit('stopResizing', height.value)
+function onUp() {
+  window.removeEventListener('mousemove', onMove)
+  window.removeEventListener('mouseup', onUp)
 }
-
-onBeforeUnmount(stop)
 </script>
-
 <template>
-  <div class="wrapper">
-    <div class="box" :style="{ height: height + 'px' }">
-      <slot/>
-      <div class="resize-handle" @mousedown="startResize"/>
-    </div>
+  <div class="box" :style="{ width: currentWidth + 'px' }">
+    <slot/>
+    <div class="resize-handle" @mousedown="startResize"/>
   </div>
 </template>
-
-
 <style scoped>
-.wrapper {
-  display: flex;
-}
-
 .box {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
 }
-
 .resize-handle {
   position: absolute;
   left: 0;
   bottom: 0;
-
-  width: 20px;
-  height: 20px;
-
-
-  cursor: pointer;
-  background-size: auto;
+  width: 24px;
+  height: 24px;
+  cursor: grab;
   background: linear-gradient(
       45deg,
       transparent 0% 8%,
@@ -94,5 +66,4 @@ onBeforeUnmount(stop)
       transparent 52% 100%
   );
 }
-
 </style>

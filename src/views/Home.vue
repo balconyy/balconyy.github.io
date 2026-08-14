@@ -15,7 +15,7 @@ import {useRouter} from "vue-router";
 import {useConfigResults} from "@/features/admin/composables/config/useConfigResults";
 import {useRecentlyWatch} from "@/features/resently/composables/useRecentlyWatch";
 import {MovieKp} from "@/models/movieKp";
-import SidePanel from "@/components/SidePanel.vue";
+import SidePanel from "@/components/window/SidePanel.vue";
 import GeekPc from "@/components/banners/GeekPc.vue";
 
 
