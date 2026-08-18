@@ -101,6 +101,7 @@ const jokeUrl = "https://images.thevoicemag.ru/upload/img_cache/e08/e08bc0fdb313
 }
 
 .auth {
+  pointer-events: auto;
   z-index: 11;
 }
 </style>
