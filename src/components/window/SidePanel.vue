@@ -92,7 +92,6 @@ const jokeUrl = "https://images.thevoicemag.ru/upload/img_cache/e08/e08bc0fdb313
 
 .side-panel > * {
   position: relative;
-  pointer-events: auto;
 }
 
 .windows-column-wrapper {

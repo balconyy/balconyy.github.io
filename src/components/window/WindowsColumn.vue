@@ -102,7 +102,12 @@ function onBottomResize({dx, dy}: { dx: number; dy: number }) {
   flex-direction: column;
   align-items: flex-end;
   overflow: hidden;
-  height: 100%;
+  pointer-events: none;
+  background-color: transparent;
   gap: 8px;
+}
+
+.windows-column > * {
+  pointer-events: auto; /* чтобы дочерние элементы оставались кликабельными */
 }
 </style>
