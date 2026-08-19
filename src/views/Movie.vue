@@ -60,6 +60,7 @@ watch(movie, (newVal) => {
 
 <template>
   <Background/>
+
   <WinIcon class="home-icon" :icon="homeIcon" label="Главная" @open="toMainScreen"/>
   <SidePanel/>
   <MovieInfoSkeleton v-if="isLoading"/>

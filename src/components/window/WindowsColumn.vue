@@ -15,7 +15,7 @@ const props = withDefaults(
     }>(), {
       minHeightTop: 100,
       minHeightBottom: 100,
-      minWidthTop: 200,
+      minWidthTop: 100,
       minWidthBottom: 200,
       maxWidthTop: 800,
       maxWidthBottom: 800,

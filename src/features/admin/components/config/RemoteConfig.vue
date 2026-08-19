@@ -105,15 +105,7 @@ function applyConfig() {
         <input v-model.number="form.dailyJoke.height" type="number" class="input-config"/>
       </div>
 
-      <div class="row">
-        <span>Ширина изображения:</span>
-        <input v-model.number="form.dailyJoke.weight" type="number" class="input-config"/>
-      </div>
-
       <div class="description">
-        Настройка блока "Прикол Дня". Нужно выставить базовую ширину и длину картинки, чтобы она полностью входила для
-        пользователя. Для квадратного фото нормально 200 на 200. Пляшем от этих размеров и прибавляем в сторону той
-        стороны которая больше.
       </div>
     </BaseConfigCard>
   </div>

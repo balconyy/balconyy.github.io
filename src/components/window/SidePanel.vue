@@ -1,11 +1,11 @@
 <script setup>
 
-import DailyJoke from "@/features/joke/components/DailyJoke.vue";
 import {onMounted} from "vue";
 import AuthWindow from "@/features/auth/components/AuthWindow.vue";
 import ChatWindow from "@/features/chat/components/ChatWindow.vue";
 import {useWindows} from "@/composables/useWindows.ts";
 import WindowsColumn from "@/components/window/WindowsColumn.vue";
+import JellyBlobWindow from "@/features/blob/components/JellyBlobWindow.vue";
 
 
 const {
@@ -39,12 +39,12 @@ const jokeUrl = "https://images.thevoicemag.ru/upload/img_cache/e08/e08bc0fdb313
                    :isJokeOpen="isJokeOpen"
                    :windowsSetting="windowsSetting"
                    :minHeightTop="150" :minHeightBottom="150"
-                   :minWidthTop="250" :minWidthBottom="250"
+                   :minWidthTop="150" :minWidthBottom="250"
                    :initialWidthTop="320" :initialWidthBottom="320"
                    @windowChange="saveWindowsSetting"
     >
       <template #top="{ height, width, onResize }">
-        <DailyJoke
+        <JellyBlobWindow
             :url="jokeUrl"
             :currentHeight="height"
             :currentWidth="width"
