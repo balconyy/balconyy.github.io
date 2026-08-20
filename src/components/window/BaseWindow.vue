@@ -75,7 +75,7 @@ const windowStyle = computed(() => {
   flex: 1;
   min-height: 0;
   border-top: 2px solid #3a3a3a;
-  background: #1e1e1e;
+  background: #2b2b2b;
   display: flex;
 }
 </style>

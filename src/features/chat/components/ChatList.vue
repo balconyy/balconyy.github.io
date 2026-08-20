@@ -70,9 +70,9 @@ onUpdated(() => {
   overflow-y: auto;
   border: 2px solid;
   border-color: #2a2a2a #4a4a4a #4a4a4a #2a2a2a;
-  background: #1e1f22;
+  background: #1f1f1f;
   scrollbar-width: thin;
-  scrollbar-color: #2b2d31 #1e1f22;
+  scrollbar-color: #2b2d31 #1f1f1f;
 }
 
 .chat-line {
@@ -102,13 +102,13 @@ onUpdated(() => {
 }
 
 .chat-log::-webkit-scrollbar-track {
-  background: #1e1f22;
+  background: #1f1f1f;
 }
 
 .chat-log::-webkit-scrollbar-thumb {
   background-color: #2b2d31;
   border-radius: 8px;
-  border: 2px solid #1e1f22;
+  border: 2px solid #1f1f1f;
 }
 
 .chat-log::-webkit-scrollbar-thumb:hover {

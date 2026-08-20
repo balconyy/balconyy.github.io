@@ -26,7 +26,7 @@ const {chat, online, isLoading} = storeToRefs(chatStore);
 const {getChatLogs, sendMessage} = chatStore;
 
 const userAuth = useUserAuth();
-const isNotAuth = computed(() => userAuth.user.value == null);
+const isAuth = computed(() => userAuth.user.value != null);
 
 onMounted(() => {
   getChatLogs();
@@ -50,7 +50,7 @@ onMounted(() => {
     >
       <WindowLoading v-if="isLoading"/>
       <ChatList v-else :messages="chat" :isOpen="isOpen"/>
-      <ChatAttention v-if="isLoading || isNotAuth" :isLoading="isLoading" :isNotAuth="isNotAuth"/>
+      <ChatAttention v-if="isLoading || !isAuth" :isLoading="isLoading" :isNotAuth="!isAuth"/>
       <ChatInput v-else @sendMessage="sendMessage" :online="online"/>
     </ResizableContainer>
   </BaseWindow>

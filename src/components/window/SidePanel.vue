@@ -39,7 +39,7 @@ const jokeUrl = "https://images.thevoicemag.ru/upload/img_cache/e08/e08bc0fdb313
                    :isJokeOpen="isJokeOpen"
                    :windowsSetting="windowsSetting"
                    :minHeightTop="150" :minHeightBottom="150"
-                   :minWidthTop="150" :minWidthBottom="250"
+                   :minWidthTop="250" :minWidthBottom="250"
                    :initialWidthTop="320" :initialWidthBottom="320"
                    @windowChange="saveWindowsSetting"
     >

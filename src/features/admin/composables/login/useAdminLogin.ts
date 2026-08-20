@@ -27,7 +27,6 @@ export function useAdminLogin() {
             state.value = 'success'
         } catch (e) {
             state.value = 'error'
-            error.value = e
         }
 
     }

@@ -1,7 +1,7 @@
 import {computed, ref} from 'vue'
-import {movieApi} from "../../../data/api/movie";
-import {SearchMapper} from "../../../data/mapper/searchMapper";
-import {useMovieStore} from "../../../store/movie";
+import {movieApi} from "@/data/api/movie";
+import {SearchMapper} from "@/data/mapper/searchMapper";
+import {useMovieStore} from "@/store/movie";
 
 let controller: AbortController | null = null;
 
@@ -38,7 +38,7 @@ export function useSearch() {
                 error.value = new Error(`По запросу "${query}" ничего не найдено`)
             }
 
-        } catch (e) {
+        } catch (e: any) {
             if (e.name === 'CanceledError') {
                 return;
             }

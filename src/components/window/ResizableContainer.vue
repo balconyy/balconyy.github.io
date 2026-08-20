@@ -36,11 +36,7 @@ function onUp() {
 .box {
   position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  min-height: 0;
-  width: 100%;
+  flex-direction: column;
 }
 .resize-handle {
   position: absolute;

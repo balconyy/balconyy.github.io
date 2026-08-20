@@ -10,8 +10,8 @@ export type WindowsSetting = {
 export const useWindowsStore = defineStore('windows', {
     state: () => ({
         isAuthOpen: true,
-        isJokeOpen: true,
-        isChatOpen: true,
+        isJokeOpen: false,
+        isChatOpen: false,
         windowsSetting: {
             widthTop: 320,
             heightTop: 200,
