@@ -271,10 +271,9 @@ export function useJellyBlob(canvasEl, props, emit) {
     watch(
         () => score.value,
         (newScore) => {
-            scoreStore.setScore(newScore)
 
             if (!props.isAuth || isSaving) return
-
+            scoreStore.setScore(newScore)
             if (newScore >= checkpoint.value) {
                 isSaving = true
                 saveScore(newScore).finally(() => {

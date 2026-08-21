@@ -12,9 +12,7 @@ export function useLeaderboard() {
 
             const response = await blobApi.getLeaderboard()
             leaderboard.value = response.data
-            console.log(response.data)
         } catch (e) {
-            console.log(e)
         } finally {
             isLoading.value = false;
         }
