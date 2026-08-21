@@ -17,7 +17,10 @@ defineProps<{
 const emit = defineEmits(['resize', 'toggleWindow'])
 
 const userAuth = useUserAuth();
-const isAuth = computed(() => userAuth.user.value != null);
+const isAuth = computed(() => {
+  if (userAuth.isLoading.value) return null
+  return userAuth.user.value != null
+})
 
 type TabName = 'Главная' | 'Лидеры' | 'Кастомизация'
 

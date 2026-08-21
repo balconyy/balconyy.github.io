@@ -64,6 +64,12 @@ export function useJellyBlob(canvasEl, props, emit) {
 
     }
 
+    const endLoading = () => {
+
+        isLoading.value = false;
+
+    }
+
     const saveScore = async (newScore) => {
         try {
             const response = await blobApi.saveScore(Math.round(newScore))
@@ -301,6 +307,7 @@ export function useJellyBlob(canvasEl, props, emit) {
         isLoading,
         score,
         getScore,
+        endLoading,
         saveScore,
         onPointerDown,
         onPointerMove,

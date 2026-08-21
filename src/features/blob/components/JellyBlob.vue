@@ -1,10 +1,10 @@
 <script setup>
-import {computed, onMounted, ref, watch} from 'vue'
+import {computed, ref, watch} from 'vue'
 import {useJellyBlob} from "@/features/blob/composables/useJellyBlob.js";
 import WindowLoading from "@/components/window/WindowLoading.vue";
 
 const props = defineProps({
-  isAuth: {type: Boolean, required: true},
+  isAuth: {type: Boolean},
 
   areaWidth: {type: Number, default: 100},
   areaHeight: {type: Number, default: 100},
@@ -44,6 +44,7 @@ const {
   isLoading,
   score,
   getScore,
+  endLoading,
   saveScore,
   onPointerDown,
   onPointerMove,
@@ -56,8 +57,11 @@ const scoreRound = computed(() => score.value.toFixed(1))
 watch(
     () => props.isAuth,
     (newVal) => {
+      console.log(newVal)
       if (newVal) {
         getScore()
+      } else if (newVal !== null) {
+        endLoading()
       }
     },
     {immediate: true}
