@@ -59,14 +59,12 @@ async function handleTabChange(newTab: TabName) {
     >
       <WindowTabs :modelValue="currentTab" @update:modelValue="handleTabChange"/>
       <WindowLoading v-if="isSwitching"/>
-      <div class="jelly-blob-wrapper" v-else-if="currentTab === 'Главная'">
-        <JellyBlob
+        <JellyBlob v-else-if="currentTab === 'Главная'"
             ref="jellyBlobRef"
             :areaWidth="currentWidth - 30"
             :areaHeight="currentHeight - 80"
             :isAuth="isAuth"
         />
-      </div>
       <Leaderboard v-else-if="currentTab === 'Лидеры'"/>
     </ResizableContainer>
   </BaseWindow>
@@ -78,13 +76,5 @@ async function handleTabChange(newTab: TabName) {
   padding: 0 10px 10px 10px;
 
 
-}
-
-.jelly-blob-wrapper {
-  background-color: #1f1f1f;
-  padding: 0 2px 2px 2px;
-  border-left: 2px solid #2a2a2a;
-  border-right: 2px solid #4a4a4a;
-  border-bottom: 2px solid #4a4a4a;
 }
 </style>

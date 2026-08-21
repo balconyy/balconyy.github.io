@@ -1,6 +1,7 @@
 <script setup>
-import {computed, ref, watch} from 'vue'
+import {computed, onMounted, ref, watch} from 'vue'
 import {useJellyBlob} from "@/features/blob/composables/useJellyBlob.js";
+import WindowLoading from "@/components/window/WindowLoading.vue";
 
 const props = defineProps({
   isAuth: {type: Boolean, required: true},
@@ -61,6 +62,8 @@ watch(
     },
     {immediate: true}
 )
+
+
 function saveScoreBefore() {
   return saveScore(score.value)
 }
@@ -71,22 +74,33 @@ defineExpose({reset, score, saveScoreBefore})
 </script>
 
 <template>
-  <div class="jelly-blob">
-    <canvas
-        ref="canvasEl"
-        @pointerdown="onPointerDown"
-        @pointermove="onPointerMove"
-        @pointerup="onPointerUp"
-        @pointerleave="onPointerUp"
-        @pointercancel="onPointerUp"
-    />
-    <div v-if="isAuth && !isLoading" class="jelly-score">Очки: {{ scoreRound }}</div>
+  <WindowLoading v-if="isLoading"/>
+  <div v-show="!isLoading" class="jelly-blob-wrapper">
+    <div class="jelly-blob">
+      <canvas
+          ref="canvasEl"
+          @pointerdown="onPointerDown"
+          @pointermove="onPointerMove"
+          @pointerup="onPointerUp"
+          @pointerleave="onPointerUp"
+          @pointercancel="onPointerUp"
+      />
+      <div v-if="isAuth" class="jelly-score">Очки: {{ scoreRound }}</div>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .jelly-blob {
   display: flex;
+}
+
+.jelly-blob-wrapper {
+  background-color: #1f1f1f;
+  padding: 0 2px 2px 2px;
+  border-left: 2px solid #2a2a2a;
+  border-right: 2px solid #4a4a4a;
+  border-bottom: 2px solid #4a4a4a;
 }
 
 .jelly-score {

@@ -42,7 +42,7 @@ export function useJellyBlob(canvasEl, props, emit) {
     const isVisible = shallowRef(document.visibilityState === 'visible')
     const score = shallowRef(engine.score)
 
-    const isLoading = ref(false)
+    const isLoading = ref(true)
 
     const checkpoint = ref(0)
     let isSaving = false
