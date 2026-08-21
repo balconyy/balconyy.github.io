@@ -13,7 +13,7 @@ const props = defineProps({
     default: () => [
       'Главная',
       'Лидеры',
-      //'Кастомизация'
+      'Кастомизация'
     ]
   }
 })
@@ -47,7 +47,7 @@ function selectTab(tab) {
 .window-tabs {
   display: flex;
   gap: 0;
-  padding-left: 4px;
+  padding-left: 3px;
 
   background: #3a3a3a;
 
@@ -68,7 +68,7 @@ function selectTab(tab) {
   background: #3a3a3a;
   color: #d6d6d6;
   border: 1px solid;
-  border-color: #555 #151515 #151515 #555;
+  border-color: #555 #151515 transparent #555;
 
   font-family: inherit;
   font-size: 13px;
@@ -83,9 +83,6 @@ function selectTab(tab) {
   z-index: 1;
 }
 
-/* =========================================
-   ACTIVE TAB
-   ========================================= */
 
 .window-tab--active {
   z-index: 10;

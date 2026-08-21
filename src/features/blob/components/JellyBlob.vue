@@ -43,6 +43,7 @@ const {
   isLoading,
   score,
   getScore,
+  saveScore,
   onPointerDown,
   onPointerMove,
   onPointerUp,
@@ -60,9 +61,13 @@ watch(
     },
     {immediate: true}
 )
+function saveScoreBefore() {
+  return saveScore(score.value)
+}
 
 
-defineExpose({reset, score})
+defineExpose({reset, score, saveScoreBefore})
+
 </script>
 
 <template>
@@ -75,7 +80,7 @@ defineExpose({reset, score})
         @pointerleave="onPointerUp"
         @pointercancel="onPointerUp"
     />
-    <div v-if="isAuth" class="jelly-score">Очки: {{ scoreRound }}</div>
+    <div v-if="isAuth && !isLoading" class="jelly-score">Очки: {{ scoreRound }}</div>
   </div>
 </template>
 
@@ -102,10 +107,5 @@ defineExpose({reset, score})
 
 canvas {
   touch-action: none;
-  cursor: grab;
-}
-
-canvas:active {
-  cursor: grabbing;
 }
 </style>

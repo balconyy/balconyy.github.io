@@ -51,9 +51,7 @@ export function useJellyBlob(canvasEl, props, emit) {
         try {
             isLoading.value = true;
             scoreStore.hydrate()
-            console.log(scoreStore.score)
             const response = await blobApi.syncBlobInfo(scoreStore.score)
-            console.log(response.data)
             checkpoint.value = response.data.checkpoint
 
             engine.setScore(response.data.score)
@@ -77,7 +75,6 @@ export function useJellyBlob(canvasEl, props, emit) {
 
     }
 
-
     function fitCanvasToDPR() {
         const canvas = canvasEl.value
         if (!canvas) return
@@ -98,18 +95,17 @@ export function useJellyBlob(canvasEl, props, emit) {
 
     function draw() {
         if (!ctx) return
-
         const {areaWidth: width, areaHeight: height, restRadius, colorStops} = props
         const points = engine.points
         const n = points.length
         if (!n) return
 
         ctx.clearRect(0, 0, width, height)
-        ctx.beginPath()
 
+        // строим path контура фигуры (общий и для fill, и для clip)
+        ctx.beginPath()
         const firstMid = midpoint(points[n - 1], points[0])
         ctx.moveTo(firstMid.x, firstMid.y)
-
         for (let i = 0; i < n; i++) {
             const current = points[i]
             const next = points[(i + 1) % n]
@@ -126,6 +122,7 @@ export function useJellyBlob(canvasEl, props, emit) {
         }
         cx /= n
         cy /= n
+
 
         const gradient = ctx.createRadialGradient(cx - 30, cy - 40, 10, cx, cy, restRadius * 1.6)
         for (const [offset, color] of colorStops) gradient.addColorStop(offset, color)
@@ -185,11 +182,14 @@ export function useJellyBlob(canvasEl, props, emit) {
 
     function onPointerMove(e) {
         const pos = canvasPos(e)
-        engine.moveGrab(pos.x, pos.y)
 
-        // moveGrab awards points for held-drag movement; sync right away
-        // so the displayed score doesn't lag behind pointer input. (Flight
-        // scoring from a throw is synced separately, in loop().)
+        if (engine.pointerActive) {
+            engine.moveGrab(pos.x, pos.y)
+            canvasEl.value.style.cursor = 'grabbing'
+        } else {
+            canvasEl.value.style.cursor = engine.containsPoint(pos.x, pos.y) ? 'grab' : 'default'
+        }
+
         if (engine.score !== score.value) {
             score.value = engine.score
             emit('score', engine.score, engine.lastGain)
@@ -302,6 +302,7 @@ export function useJellyBlob(canvasEl, props, emit) {
         isLoading,
         score,
         getScore,
+        saveScore,
         onPointerDown,
         onPointerMove,
         onPointerUp,

@@ -358,4 +358,17 @@ export class JellyBlobEngine {
         this.pointerActive = false
         this.lastGain = 0
     }
+
+    containsPoint(x, y) {
+        let cx = 0, cy = 0
+        for (const p of this.points) {
+            cx += p.x;
+            cy += p.y
+        }
+        cx /= this.points.length
+        cy /= this.points.length
+        const dx = x - cx, dy = y - cy
+        return (dx * dx + dy * dy) <= (this.config.restRadius ** 2)
+    }
+
 }

@@ -46,19 +46,19 @@ export const useWindowsStore = defineStore('windows', {
 
         hydrateWindows() {
             const cachedAuth = localStorage.getItem('auth_window')
-            this.isAuthOpen = cachedAuth !== 'false'
+            this.isAuthOpen = cachedAuth === null || cachedAuth === 'true'
 
             const cachedChat = localStorage.getItem('chat_window')
-            this.isChatOpen = cachedChat !== 'false'
+            this.isChatOpen = cachedChat === 'true'
 
             const cachedJoke = localStorage.getItem('joke_window')
-            this.isJokeOpen = cachedJoke !== 'false'
+            this.isJokeOpen = cachedJoke === 'true'
 
             const cachedSetting = localStorage.getItem('window_setting')
             if (cachedSetting) {
                 try {
                     this.windowsSetting = JSON.parse(cachedSetting)
-                }catch (e) {
+                } catch (e) {
                     console.log(e)
                 }
             }
