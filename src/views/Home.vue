@@ -17,6 +17,7 @@ import {useRecentlyWatch} from "@/features/resently/composables/useRecentlyWatch
 import {MovieKp} from "@/models/movieKp";
 import SidePanel from "@/components/window/SidePanel.vue";
 import GeekPc from "@/components/banners/GeekPc.vue";
+import GeekTelegram from "@/components/banners/GeekTelegram.vue";
 
 
 useHead({
@@ -83,7 +84,7 @@ onMounted(() => {
         />
       </div>
       <div class="center">
-        <GeekPc/>
+        <GeekTelegram/>
       </div>
       <div class="right">
         <AboutBlock/>
