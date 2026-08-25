@@ -9,8 +9,8 @@ const props = defineProps({
   areaWidth: {type: Number, default: 100},
   areaHeight: {type: Number, default: 100},
 
-  pointCount: {type: Number, default: 10},
-  restRadius: {type: Number, default: 70},
+  contourDots: {type: Number, default: 10},
+  radius: {type: Number, default: 70},
 
   gravity: {type: Number, default: 900},
   shapeStiffness: {type: Number, default: 0.135},
@@ -29,10 +29,14 @@ const props = defineProps({
   colorStops: {
     type: Array,
     default: () => [
-      [0, '#d9f3a3'],
-      [0.45, '#8fcf4b'],
-      [1, '#3f8f2a'],
-    ],
+      [0, '#ffd6e0'],
+      [0.167, '#ffb3c6'],
+      [0.333, '#f7869c'],
+      [0.5, '#eb5577'],
+      [0.667, '#d1225c'],
+      [0.833, '#b8144f'],
+      [1, '#9c0e42'],
+    ]
   },
 })
 
@@ -57,7 +61,6 @@ const scoreRound = computed(() => score.value.toFixed(1))
 watch(
     () => props.isAuth,
     (newVal) => {
-      console.log(newVal)
       if (newVal) {
         getScore()
       } else if (newVal !== null) {

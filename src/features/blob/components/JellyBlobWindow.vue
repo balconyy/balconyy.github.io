@@ -8,6 +8,8 @@ import WindowTabs from "@/components/window/WindowTabs.vue";
 import {useUserAuth} from "@/features/auth/composables/useUserAuth";
 import Leaderboard from "@/features/blob/components/Leaderboard.vue";
 import WindowLoading from "@/components/window/WindowLoading.vue";
+import Customization from "@/features/blob/components/Customization.vue";
+import CustomizationAttention from "@/features/blob/components/CustomizationAttention.vue";
 
 defineProps<{
   currentHeight: number,
@@ -61,14 +63,16 @@ async function handleTabChange(newTab: TabName) {
         @resize="emit('resize', $event)"
     >
       <WindowTabs :modelValue="currentTab" @update:modelValue="handleTabChange"/>
-      <WindowLoading v-if="isSwitching"/>
-        <JellyBlob v-else-if="currentTab === 'Главная'"
-            ref="jellyBlobRef"
-            :areaWidth="currentWidth - 30"
-            :areaHeight="currentHeight - 80"
-            :isAuth="isAuth"
-        />
+      <WindowLoading v-if="isSwitching && isAuth === null"/>
+      <JellyBlob v-else-if="currentTab === 'Главная'"
+                 ref="jellyBlobRef"
+                 :areaWidth="currentWidth - 30"
+                 :areaHeight="currentHeight - 80"
+                 :isAuth="isAuth"
+      />
       <Leaderboard v-else-if="currentTab === 'Лидеры'"/>
+      <Customization v-else-if="currentTab === 'Кастомизация' && isAuth"/>
+      <CustomizationAttention v-else-if="currentTab === 'Кастомизация'"/>
     </ResizableContainer>
   </BaseWindow>
 </template>
@@ -77,7 +81,6 @@ async function handleTabChange(newTab: TabName) {
 .jelly-container {
   background-color: #3a3a3a;
   padding: 0 10px 10px 10px;
-
 
 }
 </style>

@@ -1,13 +1,15 @@
 import {baseClient} from "@/data/http";
 import {BlobLeaderDto} from "@/data/dto/blobLeaderDto";
 import {BlobCheckpointDto} from "@/data/dto/blobCheckpointDto";
+import {BlobSyncDto} from "@/data/dto/blobSyncDto";
+import {BlobCustomizationDto} from "@/data/dto/blobCustomizationDto";
 
 
 export const blobApi = {
     syncBlobInfo(score: number) {
         const request: UpdateScoreRequest = {score};
 
-        return baseClient.patch<BlobCheckpointDto, UpdateScoreRequest>('/blob/sync', request, {
+        return baseClient.patch<BlobSyncDto, UpdateScoreRequest>('/blob/sync', request, {
             withCredentials: true,
         });
     },
@@ -27,9 +29,29 @@ export const blobApi = {
             withCredentials: true,
         });
     },
+    getSkinsList() {
+        return baseClient.get<BlobCustomizationDto[]>('/blob/customization', {
+            withCredentials: true,
+        });
+    },
+
+    selectSkin(skinId: string) {
+        const request: UpdateSkinRequest = {skinId};
+
+        return baseClient.patch<BlobCheckpointDto, UpdateSkinRequest>(
+            '/blob/skin',
+            request,
+            {withCredentials: true},
+        );
+    },
+
 };
 
 export interface UpdateScoreRequest {
     score: number;
+}
+
+export interface UpdateSkinRequest {
+    skinId: string;
 }
 

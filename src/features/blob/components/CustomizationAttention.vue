@@ -1,14 +1,9 @@
 <script setup lang="ts">
-defineProps<{
-  isLoading: boolean,
-  isNotAuth: boolean,
-}>()
 
 </script>
 <template>
   <div class="customization-attention">
-    <span v-if="isLoading" class="disabled-text">Загрузка...</span>
-    <span v-else-if="isNotAuth" class="disabled-text">Авторизуйтесь, чтобы писать в чат</span>
+    <span class="disabled-text">Авторизуйтесь, для кастомизации</span>
   </div>
 </template>
 

@@ -29,13 +29,14 @@
 export const DEFAULT_CONFIG = {
     areaWidth: 100,
     areaHeight: 100,
-    pointCount: 12,
-    restRadius: 70,
+    contourDots: 12,
+    radius: 70,
     gravity: 900,
     shapeStiffness: 0.15,
     edgeStiffness: 0.8,
     wallBounce: 0.7,
     mouseStiffness: 0.9,
+
     damping: 0.988,
     substeps: 4,
     wallMargin: 2,
@@ -43,14 +44,17 @@ export const DEFAULT_CONFIG = {
     rotationScoreRate: 0.006,
     dragScoreRate: 0.00005,
 
-    // Flight ("throw") scoring — active only after release(), while the
-    // released point is still moving fast. Rates are higher than the
-    // held-drag rates above, since letting a spinning blob fly is the
-    // reward-maximizing move.
-    throwMinSpeed: 60,             // px/s — below this, flight scoring stops
-    throwRotationScoreRate: 0.02,  // per radian swept around centroid while flying
-    throwDragScoreRate: 0.00025,   // per px of travel while flying
-    throwMaxDuration: 1.5,         // s — hard cap on a single flight's scoring window
+    throwMinSpeed: 60,
+    throwRotationScoreRate: 0.02,
+    throwDragScoreRate: 0.00025,
+    throwMaxDuration: 1.5,
+
+    jellyTexture: {
+        type: 'gradient',
+        colorStops: [
+            {stop: 0, color: '#ffffff'}
+        ],
+    },
 }
 
 export class JellyBlobEngine {
@@ -78,21 +82,21 @@ export class JellyBlobEngine {
 
     /** (Re)builds the ring of points around the current rest shape. Does not touch score. */
     build() {
-        const {pointCount, restRadius, areaWidth, areaHeight} = this.config
-        const n = Math.max(4, Math.round(pointCount))
+        const {contourDots, radius, areaWidth, areaHeight} = this.config
+        const n = Math.max(4, Math.round(contourDots))
         const cx = areaWidth / 2
         const cy = areaHeight / 2
 
         this.points = []
         for (let i = 0; i < n; i++) {
             const angle = (i / n) * Math.PI * 2
-            const ox = Math.cos(angle) * restRadius
-            const oy = Math.sin(angle) * restRadius
+            const ox = Math.cos(angle) * radius
+            const oy = Math.sin(angle) * radius
             this.points.push({x: cx + ox, y: cy + oy, vx: 0, vy: 0, ox, oy, grabbed: false})
         }
 
         const angleStep = (Math.PI * 2) / n
-        this.restEdgeLen = 2 * restRadius * Math.sin(angleStep / 2)
+        this.restEdgeLen = 2 * radius * Math.sin(angleStep / 2)
 
         this.grabbedIndex = -1
         this.pointerActive = false
@@ -368,7 +372,8 @@ export class JellyBlobEngine {
         cx /= this.points.length
         cy /= this.points.length
         const dx = x - cx, dy = y - cy
-        return (dx * dx + dy * dy) <= (this.config.restRadius ** 2)
+        return (dx * dx + dy * dy) <= (this.config.radius ** 2)
     }
+
 
 }

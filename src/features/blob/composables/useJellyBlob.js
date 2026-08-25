@@ -3,37 +3,14 @@ import {JellyBlobEngine} from "@/engine/jellyBlobEngine.js";
 import {blobApi} from "@/data/api/blob.ts";
 import {useBlobScoreStore} from "@/store/score.ts";
 
-/**
- * Wires a JellyBlobEngine instance to a <canvas> element: HiDPI-aware
- * sizing, the requestAnimationFrame loop, pointer-drag handling, score
- * tracking (including throw/"flight" scoring that keeps accruing after
- * release, driven by the engine's physics step), and pausing the loop
- * while the tab is hidden.
- *
- * @param {import('vue').Ref<HTMLCanvasElement | null>} canvasEl
- * @param {object} props - reactive props from the host component
- * @param {(event: string, ...args: any[]) => void} emit
- */
+
 export function useJellyBlob(canvasEl, props, emit) {
 
     const scoreStore = useBlobScoreStore()
 
     const engine = new JellyBlobEngine({
         areaWidth: props.areaWidth,
-        areaHeight: props.areaHeight,
-        pointCount: props.pointCount,
-        restRadius: props.restRadius,
-        gravity: props.gravity,
-        shapeStiffness: props.shapeStiffness,
-        edgeStiffness: props.edgeStiffness,
-        wallBounce: props.wallBounce,
-        mouseStiffness: props.mouseStiffness,
-        rotationScoreRate: props.rotationScoreRate,
-        dragScoreRate: props.dragScoreRate,
-        throwMinSpeed: props.throwMinSpeed,
-        throwRotationScoreRate: props.throwRotationScoreRate,
-        throwDragScoreRate: props.throwDragScoreRate,
-        throwMaxDuration: props.throwMaxDuration,
+        areaHeight: props.areaHeight
     })
 
     let ctx = null
@@ -54,6 +31,7 @@ export function useJellyBlob(canvasEl, props, emit) {
             const response = await blobApi.syncBlobInfo(scoreStore.score)
             checkpoint.value = response.data.checkpoint
 
+            applyCharacteristic(response.data.characteristic)
             engine.setScore(response.data.score)
             score.value = engine.score
         } catch (e) {
@@ -65,9 +43,7 @@ export function useJellyBlob(canvasEl, props, emit) {
     }
 
     const endLoading = () => {
-
         isLoading.value = false;
-
     }
 
     const saveScore = async (newScore) => {
@@ -79,6 +55,28 @@ export function useJellyBlob(canvasEl, props, emit) {
 
         }
 
+    }
+
+    function applyCharacteristic(characteristic) {
+        const {contourDots, radius, jellyTexture, jellyShape, backgroundImage, ...physics} = characteristic
+        engine.updateConfig(physics)
+
+        const needsRebuild =
+            contourDots !== engine.config.contourDots ||
+            radius !== engine.config.radius
+
+        engine.updateConfig({jellyTexture, jellyShape, backgroundImage})
+
+        if (needsRebuild) {
+            engine.updateConfig({contourDots, radius})
+            engine.build()
+        }
+    }
+
+    function applyGradient(ctx, texture, cx, cy, radius) {
+        const gradient = ctx.createRadialGradient(cx - 30, cy - 40, 10, cx, cy, radius * 1.6)
+        for (const {stop, color} of texture.colorStops) gradient.addColorStop(stop, color)
+        return gradient
     }
 
     function fitCanvasToDPR() {
@@ -101,14 +99,14 @@ export function useJellyBlob(canvasEl, props, emit) {
 
     function draw() {
         if (!ctx) return
-        const {areaWidth: width, areaHeight: height, restRadius, colorStops} = props
+        const {areaWidth, radius} = props
+        const {jellyTexture} = engine.config
         const points = engine.points
         const n = points.length
         if (!n) return
 
-        ctx.clearRect(0, 0, width, height)
+        ctx.clearRect(0, 0, areaWidth, props.areaHeight)
 
-        // строим path контура фигуры (общий и для fill, и для clip)
         ctx.beginPath()
         const firstMid = midpoint(points[n - 1], points[0])
         ctx.moveTo(firstMid.x, firstMid.y)
@@ -129,14 +127,19 @@ export function useJellyBlob(canvasEl, props, emit) {
         cx /= n
         cy /= n
 
+        let fillStyle
+        switch (jellyTexture?.type) {
+            case 'gradient':
+                fillStyle = applyGradient(ctx, jellyTexture, cx, cy, radius)
+                break
+            default:
+                fillStyle = '#8888ff'
+        }
 
-        const gradient = ctx.createRadialGradient(cx - 30, cy - 40, 10, cx, cy, restRadius * 1.6)
-        for (const [offset, color] of colorStops) gradient.addColorStop(offset, color)
-
-        ctx.fillStyle = gradient
+        ctx.fillStyle = fillStyle
         ctx.fill()
         ctx.lineWidth = 1
-        ctx.strokeStyle = 'rgba(255,255,255,0.5)'
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)'
         ctx.stroke()
     }
 
@@ -144,16 +147,12 @@ export function useJellyBlob(canvasEl, props, emit) {
         if (!lastT) lastT = t
         let dt = (t - lastT) / 1000
         lastT = t
-        dt = Math.min(dt, 1 / 30) // guard against tab-switch time jumps
+        dt = Math.min(dt, 1 / 30)
 
         if (isVisible.value) {
             engine.step(dt)
             draw()
 
-            // A thrown point keeps earning score on its own inside step()
-            // (see JellyBlobEngine._scoreFlight), independent of pointer
-            // events, so this is where flight-scoring gains surface — not
-            // just onPointerMove.
             if (engine.score !== score.value) {
                 score.value = engine.score
                 emit('score', engine.score, engine.lastGain)
@@ -225,13 +224,6 @@ export function useJellyBlob(canvasEl, props, emit) {
     }
 
 
-    function reset() {
-        engine.build()
-        lastT = 0
-        draw()
-    }
-
-
     // Resize: update engine bounds + canvas pixel size.
     watch(
         () => [props.areaWidth, props.areaHeight],
@@ -243,9 +235,9 @@ export function useJellyBlob(canvasEl, props, emit) {
 
     // Structural changes require rebuilding the point ring.
     watch(
-        () => [props.pointCount, props.restRadius],
-        ([pointCount, restRadius]) => {
-            engine.updateConfig({pointCount, restRadius})
+        () => [props.contourDots, props.radius],
+        ([contourDots, radius]) => {
+            engine.updateConfig({contourDots, radius})
             reset()
         },
     )
@@ -291,7 +283,6 @@ export function useJellyBlob(canvasEl, props, emit) {
 
     onMounted(() => {
         fitCanvasToDPR()
-        draw()
         raf = requestAnimationFrame(loop)
         document.addEventListener('visibilitychange', onVisibilityChange)
     })
@@ -312,6 +303,5 @@ export function useJellyBlob(canvasEl, props, emit) {
         onPointerDown,
         onPointerMove,
         onPointerUp,
-        reset,
     }
 }

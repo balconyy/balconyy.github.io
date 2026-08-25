@@ -2,7 +2,7 @@
 
 import {useLeaderboard} from "@/features/blob/composables/useLeaderboard";
 import {onMounted} from "vue";
-import JellyBlobUser from "@/features/blob/components/JellyBlobUser.vue";
+import LeaderboardUser from "@/features/blob/components/LeaderboardUser.vue";
 
 const {
   leaderboard,
@@ -18,7 +18,7 @@ onMounted(() => {
 
 <template>
   <div class= "leaderboard">
-    <JellyBlobUser class="leader-row"
+    <LeaderboardUser class="leader-row"
         v-for="row in leaderboard"
         :row="row"
     />
