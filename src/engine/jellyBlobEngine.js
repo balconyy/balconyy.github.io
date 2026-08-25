@@ -29,30 +29,30 @@
 export const DEFAULT_CONFIG = {
     areaWidth: 100,
     areaHeight: 100,
-    contourDots: 12,
+    contourDots: 10,
     radius: 70,
     gravity: 900,
-    shapeStiffness: 0.15,
-    edgeStiffness: 0.8,
+    shapeStiffness: 0.135,
+    edgeStiffness: 0.7,
     wallBounce: 0.7,
-    mouseStiffness: 0.9,
+    mouseStiffness: 0.95,
 
     damping: 0.988,
     substeps: 4,
     wallMargin: 2,
 
-    rotationScoreRate: 0.006,
-    dragScoreRate: 0.00005,
-
+    rotationScoreRate: 0.0005,
+    dragScoreRate: 0.0005,
     throwMinSpeed: 60,
-    throwRotationScoreRate: 0.02,
-    throwDragScoreRate: 0.00025,
-    throwMaxDuration: 1.5,
-
+    throwRotationScoreRate: 0.001,
+    throwDragScoreRate: 0.0002,
+    throwMaxDuration: 1,
     jellyTexture: {
         type: 'gradient',
         colorStops: [
-            {stop: 0, color: '#ffffff'}
+            {stop: 0, color: '#d9f3a3'},
+            {stop: 0.45, color: '#8fcf4b'},
+            {stop: 1, color: '#3f8f2a'},
         ],
     },
 }

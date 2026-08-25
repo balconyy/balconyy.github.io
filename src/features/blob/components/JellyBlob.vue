@@ -24,20 +24,6 @@ const props = defineProps({
   throwRotationScoreRate: {type: Number, default: 0.001},
   throwMaxDuration: {type: Number, default: 1},
 
-  throwMinSpeed: {type: Number, default: 30},
-
-  colorStops: {
-    type: Array,
-    default: () => [
-      [0, '#ffd6e0'],
-      [0.167, '#ffb3c6'],
-      [0.333, '#f7869c'],
-      [0.5, '#eb5577'],
-      [0.667, '#d1225c'],
-      [0.833, '#b8144f'],
-      [1, '#9c0e42'],
-    ]
-  },
 })
 
 const emit = defineEmits(['grab', 'release', 'throw', 'score'])
