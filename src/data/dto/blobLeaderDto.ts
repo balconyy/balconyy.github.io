@@ -4,4 +4,5 @@ export interface BlobLeaderDto {
     avatar: string;
     place: number;
     score: number;
+    skin: String;
 }

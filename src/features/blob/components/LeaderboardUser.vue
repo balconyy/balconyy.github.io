@@ -4,7 +4,6 @@ import {BlobLeaderDto} from "@/data/dto/blobLeaderDto";
 defineProps<{
   row: BlobLeaderDto
 }>()
-defineEmits(['logout']);
 </script>
 
 <template>
@@ -22,6 +21,10 @@ defineEmits(['logout']);
         {{ row.displayName }}
       </span>
     </div>
+    <img
+        class="badge"
+        :src="row.skin"
+        alt=""/>
 
     <div class="score">
       {{ row.score }}
@@ -34,6 +37,7 @@ defineEmits(['logout']);
   display: flex;
   align-items: center;
 }
+
 .place {
   display: flex;
   align-items: center;
@@ -51,6 +55,7 @@ defineEmits(['logout']);
   font-weight: 700;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
+
 .user-info {
   display: flex;
   align-items: center;
@@ -59,6 +64,7 @@ defineEmits(['logout']);
   min-width: 0;
   padding: 8px 12px 8px 12px;
 }
+
 .avatar {
   flex: 0 0 36px;
   width: 36px;
@@ -69,6 +75,15 @@ defineEmits(['logout']);
   border-color: #7a7a7a #3a3a3a #3a3a3a #7a7a7a;
   background: #1a1a1a;
 }
+
+.badge {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .name {
   flex: 1 1 auto;
   min-width: 0;
@@ -79,6 +94,7 @@ defineEmits(['logout']);
   text-overflow: ellipsis;
   color: white;
 }
+
 .score {
   display: flex;
   align-items: center;
