@@ -9,20 +9,7 @@ const props = defineProps({
   areaWidth: {type: Number, default: 100},
   areaHeight: {type: Number, default: 100},
 
-  contourDots: {type: Number, default: 10},
   radius: {type: Number, default: 70},
-
-  gravity: {type: Number, default: 900},
-  shapeStiffness: {type: Number, default: 0.135},
-  edgeStiffness: {type: Number, default: 0.7},
-  wallBounce: {type: Number, default: 0.7},
-  mouseStiffness: {type: Number, default: 0.95},
-
-  rotationScoreRate: {type: Number, default: 0.0005},
-  dragScoreRate: {type: Number, default: 0.0005},
-  throwDragScoreRate: {type: Number, default: 0.0002},
-  throwRotationScoreRate: {type: Number, default: 0.001},
-  throwMaxDuration: {type: Number, default: 1},
 
 })
 

@@ -42,10 +42,10 @@ export const DEFAULT_CONFIG = {
     wallMargin: 2,
 
     rotationScoreRate: 0.0005,
-    dragScoreRate: 0.0005,
+    dragScoreRate: 0.0003,
     throwMinSpeed: 60,
-    throwRotationScoreRate: 0.001,
-    throwDragScoreRate: 0.0002,
+    throwRotationScoreRate: 0.0025,
+    throwDragScoreRate: 0.0005,
     throwMaxDuration: 1,
     jellyTexture: {
         type: 'gradient',

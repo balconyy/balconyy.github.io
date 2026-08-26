@@ -20,35 +20,30 @@ function rarityClass(rarity: JellyRarity): string {
 </script>
 
 <template>
-  <div class="card-wrapper">
-    <div class="customization-info">
-      <div class="customization-image-wrapper">
-        <img class="customization-image" :src="item.image" :alt="item.name"/>
-      </div>
+  <div class="customization-info">
+    <div class="customization-image-wrapper">
+      <img class="customization-image" :src="item.image" :alt="item.name"/>
+    </div>
 
-      <div class="customization-texts">
-        <div class="customization-details">
-          <div class="customization-name">{{ item.name }}</div>
+    <div class="customization-texts">
+      <div class="customization-details">
+        <div class="customization-name">{{ item.name }}</div>
 
-          <div class="customization-rarity" :class="rarityClass(item.rarity)">
-            {{ rarityLabels[item.rarity] }}
-          </div>
-
-          <div class="customization-quote">«{{ item.quote }}»</div>
-          <div class="customization-unlock">
-            {{ item.unlockMethod }}
-          </div>
+        <div class="customization-rarity" :class="rarityClass(item.rarity)">
+          {{ rarityLabels[item.rarity] }}
         </div>
 
+        <div class="customization-quote">«{{ item.quote }}»</div>
+        <div class="customization-unlock">
+          {{ item.unlockMethod }}
+        </div>
       </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
-.card-wrapper {
-  padding: 0 8px;
-}
 
 .customization-info {
   width: 100%;
@@ -66,7 +61,7 @@ function rarityClass(rarity: JellyRarity): string {
   object-fit: contain;
 }
 
-.customization-image{
+.customization-image {
   width: 100%;
   margin: auto;
   aspect-ratio: 1/1;

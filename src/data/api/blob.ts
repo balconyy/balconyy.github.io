@@ -45,6 +45,14 @@ export const blobApi = {
         );
     },
 
+    applyPromo(promo: string) {
+        return baseClient.post<Boolean>(
+            '/blob/promo',
+            {promo: promo},
+            {withCredentials: true},
+        );
+    },
+
 };
 
 export interface UpdateScoreRequest {
@@ -54,4 +62,5 @@ export interface UpdateScoreRequest {
 export interface UpdateSkinRequest {
     skinId: string;
 }
+
 

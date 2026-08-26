@@ -74,7 +74,7 @@ export function useJellyBlob(canvasEl, props, emit) {
     }
 
     function applyGradient(ctx, texture, cx, cy, radius) {
-        const gradient = ctx.createRadialGradient(cx - 30, cy - 40, 10, cx, cy, radius * 1.6)
+        const gradient = ctx.createRadialGradient(cx - 30, cy - 40, 10, cx, cy, radius)
         for (const {stop, color} of texture.colorStops) gradient.addColorStop(stop, color)
         return gradient
     }
@@ -101,6 +101,7 @@ export function useJellyBlob(canvasEl, props, emit) {
         if (!ctx) return
         const {areaWidth, radius} = props
         const {jellyTexture} = engine.config
+
         const points = engine.points
         const n = points.length
         if (!n) return
@@ -130,7 +131,7 @@ export function useJellyBlob(canvasEl, props, emit) {
         let fillStyle
         switch (jellyTexture?.type) {
             case 'gradient':
-                fillStyle = applyGradient(ctx, jellyTexture, cx, cy, radius)
+                fillStyle = applyGradient(ctx, jellyTexture, cx, cy, radius * 1.2)
                 break
             default:
                 fillStyle = '#8888ff'
