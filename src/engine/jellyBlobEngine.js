@@ -41,6 +41,8 @@ export const DEFAULT_CONFIG = {
     substeps: 4,
     wallMargin: 2,
 
+    referenceFps: 75,
+
     rotationScoreRate: 0.0005,
     dragScoreRate: 0.0003,
     throwMinSpeed: 60,
@@ -73,6 +75,9 @@ export class JellyBlobEngine {
         // with enough speed, consumed/cleared by _scoreFlight() each substep.
         this.flight = null
 
+        // Leftover real time not yet consumed by a physics substep. See step().
+        this._accumulator = 0
+
         this.build()
     }
 
@@ -101,6 +106,7 @@ export class JellyBlobEngine {
         this.grabbedIndex = -1
         this.pointerActive = false
         this.flight = null
+        this._accumulator = 0
     }
 
     setScore(score) {
@@ -274,16 +280,26 @@ export class JellyBlobEngine {
         this._scoreFlight(dt)
     }
 
-    /** Advances the simulation by `dt` seconds, split into substeps for stability. */
     step(dt) {
-        const sub = Math.max(1, Math.round(this.config.substeps))
-        const sdt = dt / sub
-        for (let i = 0; i < sub; i++) this._substep(sdt)
+        const substeps = Math.max(1, Math.round(this.config.substeps))
+        const fixedDt = 1 / (this.config.referenceFps * substeps)
+
+        this._accumulator += dt
+
+        const maxTicksPerCall = substeps * 8 // generous headroom for slow frames
+        let ticks = 0
+        while (this._accumulator >= fixedDt && ticks < maxTicksPerCall) {
+            this._substep(fixedDt)
+            this._accumulator -= fixedDt
+            ticks++
+        }
+
+        // Drop any remainder we couldn't catch up on rather than let it
+        // build up and cause a burst of steps on the next call.
+        if (ticks === maxTicksPerCall) this._accumulator = 0
     }
 
-    // ---------------------------------------------------------------------
-    // Pointer interaction
-    // ---------------------------------------------------------------------
+
 
     /** Grabs the nearest point to (x, y) if it's within maxDistance. Returns its index, or -1. */
     grabNearest(x, y, maxDistance = 46) {
