@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="user-content">
+  <div class="leader-content">
     <div class="place">
       {{ row.place }}
     </div>
@@ -33,9 +33,10 @@ defineProps<{
 </template>
 
 <style scoped>
-.user-content {
+.leader-content {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
 }
 
 .place {
@@ -99,12 +100,12 @@ defineProps<{
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 50px;
-  width: 50px;
+  flex: 0 0 60px;
+  min-width: 60px;
   margin: 8px 0;
-  padding: 0 4px;
   border-radius: 2px;
   color: white;
+  overflow: hidden;
   font-size: 14px;
   font-weight: 700;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
