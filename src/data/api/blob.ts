@@ -3,6 +3,7 @@ import {BlobLeaderDto} from "@/data/dto/blobLeaderDto";
 import {BlobCheckpointDto} from "@/data/dto/blobCheckpointDto";
 import {BlobSyncDto} from "@/data/dto/blobSyncDto";
 import {BlobCustomizationDto} from "@/data/dto/blobCustomizationDto";
+import {BlobCaseResultDto} from "@/data/dto/blobCaseInfoDto";
 
 
 export const blobApi = {
@@ -29,6 +30,7 @@ export const blobApi = {
             withCredentials: true,
         });
     },
+
     getSkinsList() {
         return baseClient.get<BlobCustomizationDto[]>('/blob/customization', {
             withCredentials: true,
@@ -49,6 +51,21 @@ export const blobApi = {
         return baseClient.post<Boolean>(
             '/blob/promo',
             {promo: promo},
+            {withCredentials: true},
+        );
+    },
+
+    openCase() {
+        return baseClient.post<BlobCaseResultDto>(
+            '/blob/case/open',
+            {},
+            {withCredentials: true},
+        );
+    },
+
+    getBalance() {
+        return baseClient.get<{ balance: number }>(
+            '/blob/balance',
             {withCredentials: true},
         );
     },

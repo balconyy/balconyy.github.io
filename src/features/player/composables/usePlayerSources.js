@@ -31,7 +31,6 @@ export function usePlayerSources(playerState) {
     watch(
         () => playerState.value,
         (state) => {
-            console.log('PLAYER STATE:', state)
 
             if (!state) return
 

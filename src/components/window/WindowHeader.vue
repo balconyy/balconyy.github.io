@@ -17,7 +17,11 @@ const props = defineProps({
   headerColorHex: {
     type: String,
     default: "#211731"
-  }
+  },
+  buttonEnabled: {
+    type: Boolean,
+    default: true
+  },
 })
 
 const emit = defineEmits([
@@ -40,14 +44,12 @@ const emit = defineEmits([
     </span>
 
 
-    <button class="close-button" @click="emit('toggleWindow')">
-
+    <button v-if="buttonEnabled" class="close-button" @click="emit('toggleWindow')">
       <Minus v-if="isOpen" class="window-icon"/>
-
       <img v-else-if="headerIcon"
-          class="window-icon"
-          :src="headerIcon"
-          alt=""/>
+           class="window-icon"
+           :src="headerIcon"
+           alt=""/>
 
     </button>
 

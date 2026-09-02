@@ -67,10 +67,10 @@ onUpdated(() => {
   font-size: 14px;
   padding: 8px 4px;
   color: #dcddde;
-  overflow-y: auto;
   border: 2px solid;
   border-color: #2a2a2a #4a4a4a #4a4a4a #2a2a2a;
   background: #1f1f1f;
+  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #2b2d31 #1f1f1f;
 }

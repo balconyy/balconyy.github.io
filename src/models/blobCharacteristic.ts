@@ -8,12 +8,14 @@ export interface BlobCharacteristic {
     jellyShape: JellyShape;
     contourDots: number;
     radius: number;
-    backgroundImage: string | null;
 }
 
 
 enum JellyShape {
     CIRCLE,
+    PEAR,
+    TRIANGLE,
+    SQUARE
 }
 
 

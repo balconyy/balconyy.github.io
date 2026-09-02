@@ -9,8 +9,6 @@ const props = defineProps({
   areaWidth: {type: Number, default: 100},
   areaHeight: {type: Number, default: 100},
 
-  radius: {type: Number, default: 70},
-
 })
 
 const emit = defineEmits(['grab', 'release', 'throw', 'score'])
@@ -18,24 +16,30 @@ const emit = defineEmits(['grab', 'release', 'throw', 'score'])
 const canvasEl = ref(null)
 
 const {
-  isLoading,
-  score,
-  getScore,
-  endLoading,
-  saveScore,
-  onPointerDown,
-  onPointerMove,
-  onPointerUp,
-  reset,
+  isLoading, score, backgroundSrc, getJellyInfo, endLoading, saveScore, onPointerDown, onPointerMove, onPointerUp,
 } = useJellyBlob(canvasEl, props, emit)
 
 const scoreRound = computed(() => score.value.toFixed(1))
+
+const wrapperStyle = computed(() => {
+  if (backgroundSrc.value && backgroundSrc.value !== '') {
+    return {
+      backgroundImage: `linear-gradient(rgba(31, 31, 31, 0.4), rgba(31, 31, 31, 0.4)), url(${backgroundSrc.value})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundColor: '#1f1f1f',
+    }
+  }
+  return {
+    backgroundColor: '#1f1f1f',
+  }
+})
 
 watch(
     () => props.isAuth,
     (newVal) => {
       if (newVal) {
-        getScore()
+        getJellyInfo()
       } else if (newVal !== null) {
         endLoading()
       }
@@ -49,13 +53,13 @@ function saveScoreBefore() {
 }
 
 
-defineExpose({reset, score, saveScoreBefore})
+defineExpose({score, saveScoreBefore})
 
 </script>
 
 <template>
   <WindowLoading v-if="isLoading"/>
-  <div v-show="!isLoading" class="jelly-blob-wrapper">
+  <div v-show="!isLoading" class="jelly-blob-wrapper" :style="wrapperStyle">
     <div class="jelly-blob">
       <canvas
           ref="canvasEl"

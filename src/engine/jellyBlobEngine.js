@@ -7,6 +7,17 @@
  * total collapse. No Vue/DOM dependency here — this can be unit tested
  * or reused (e.g. in a Web Worker) on its own.
  *
+ * Rest shape: `config.jellyShape` picks which outline the ring is built
+ * from (see JELLY_SHAPES / SHAPE_OUTLINES below) — 'circle' (default),
+ * 'square', 'triangle' or 'pear'. Each preset is already oriented the
+ * way it should rest under gravity (flat base down, etc). Note that
+ * _shapeMatch() always measures the ring's *current* best-fit rotation
+ * and matches toward a copy of the rest shape rotated by that same
+ * amount — it never pulls toward a fixed "upright" angle. So once
+ * gravity/collisions tip an asymmetric shape like the pear onto its
+ * side, the shape-match constraint holds it there; it has no notion of
+ * "upright" to spring back to.
+ *
  * Scoring: points are only awarded while a grabbed point is being
  * *moved* (see moveGrab). A plain click/tap (grab + release with no
  * movement in between) earns nothing. Moving the grabbed point in an
@@ -37,6 +48,8 @@ export const DEFAULT_CONFIG = {
     wallBounce: 0.7,
     mouseStiffness: 0.95,
 
+    jellyShape: "circle",
+
     damping: 0.988,
     substeps: 4,
     wallMargin: 2,
@@ -59,11 +72,98 @@ export const DEFAULT_CONFIG = {
     },
 }
 
+function polygonOutline(cornerAngles) {
+    const sides = cornerAngles.length
+
+    const areaAtUnitRadius = (sides / 2) * Math.sin((2 * Math.PI) / sides)
+    const scale = Math.sqrt(Math.PI / areaAtUnitRadius)
+
+    const corners = cornerAngles.map(deg => {
+        const a = (deg * Math.PI) / 180
+        return {x: Math.cos(a) * scale, y: Math.sin(a) * scale}
+    })
+
+    return t => {
+        const scaled = (((t % 1) + 1) % 1) * sides
+        const i = Math.floor(scaled) % sides
+        const frac = scaled - Math.floor(scaled)
+        const a = corners[i]
+        const b = corners[(i + 1) % sides]
+        return {x: a.x + (b.x - a.x) * frac, y: a.y + (b.y - a.y) * frac}
+    }
+}
+
+const SHAPE_OUTLINES = {
+    circle(t) {
+        const a = t * Math.PI * 2
+        return {x: Math.cos(a), y: Math.sin(a)}
+    },
+
+    // Corners at 45/135/225/315° give an axis-aligned square: flat
+    // horizontal top and bottom edges, flat vertical sides.
+    square: polygonOutline([45, 135, 225, 315]),
+
+    // Apex straight up; the two base corners share the same y, so the
+    // base is flat and horizontal (parallel to the floor), centered
+    // under the apex.
+    triangle: polygonOutline([-90, 30, 150]),
+
+    // Polar silhouette (radius as a function of angle): a bigger lobe at
+    // the bottom, a smaller lobe at the top, and a pinched waist on the
+    // sides — reads as a pear, or a numeral "8" stood on end.
+    pear(t) {
+        const theta = t * Math.PI * 2
+        const phi = theta + Math.PI / 2 // phi = 0 -> straight up
+        const topBottomAsymmetry = 0.4 // bigger => bottom lobe bulges more relative to top
+        const waistPinch = 0.5 // bigger => tighter waist between the two lobes
+        const r = 1 - topBottomAsymmetry * Math.cos(phi) + waistPinch * Math.cos(2 * phi)
+        return {x: r * Math.cos(theta), y: r * Math.sin(theta)}
+    },
+}
+
+/** Valid values for config.jellyShape, e.g. to populate a preset picker in the UI. */
+export const JELLY_SHAPES = Object.freeze(Object.keys(SHAPE_OUTLINES))
+
+/**
+ * Walks `outline` at equal arc-length intervals (instead of equal steps
+ * of its own parameter t) and returns `n` points. Sampling by raw t
+ * would bunch points up wherever the outline moves slowly in t — badly
+ * so for the square/triangle presets, whose straight edges are far from
+ * constant-speed. The distance-constraint solver wants points evenly
+ * spread around the actual perimeter, so this oversamples densely,
+ * builds a cumulative-length table, and interpolates against that.
+ */
+function resamplePerimeter(outline, n, oversample = 600) {
+    const dense = []
+    for (let i = 0; i <= oversample; i++) dense.push(outline(i / oversample))
+
+    const cumulative = [0]
+    for (let i = 1; i < dense.length; i++) {
+        const dx = dense[i].x - dense[i - 1].x
+        const dy = dense[i].y - dense[i - 1].y
+        cumulative.push(cumulative[i - 1] + Math.hypot(dx, dy))
+    }
+    const total = cumulative[cumulative.length - 1]
+
+    const points = []
+    let j = 0
+    for (let i = 0; i < n; i++) {
+        const targetLen = (total * i) / n
+        while (j < cumulative.length - 2 && cumulative[j + 1] < targetLen) j++
+        const segLen = cumulative[j + 1] - cumulative[j]
+        const frac = segLen > 0 ? (targetLen - cumulative[j]) / segLen : 0
+        const a = dense[j]
+        const b = dense[j + 1]
+        points.push({x: a.x + (b.x - a.x) * frac, y: a.y + (b.y - a.y) * frac})
+    }
+    return points
+}
+
 export class JellyBlobEngine {
     constructor(config = {}) {
         this.config = {...DEFAULT_CONFIG, ...config}
         this.points = []
-        this.restEdgeLen = 0
+        this.restEdgeLengths = []
         this.grabbedIndex = -1
         this.pointerTarget = {x: 0, y: 0}
         this.pointerActive = false
@@ -87,21 +187,44 @@ export class JellyBlobEngine {
 
     /** (Re)builds the ring of points around the current rest shape. Does not touch score. */
     build() {
-        const {contourDots, radius, areaWidth, areaHeight} = this.config
+        const {contourDots, radius, areaWidth, areaHeight, jellyShape} = this.config
         const n = Math.max(4, Math.round(contourDots))
         const cx = areaWidth / 2
         const cy = areaHeight / 2
 
-        this.points = []
-        for (let i = 0; i < n; i++) {
-            const angle = (i / n) * Math.PI * 2
-            const ox = Math.cos(angle) * radius
-            const oy = Math.sin(angle) * radius
-            this.points.push({x: cx + ox, y: cy + oy, vx: 0, vy: 0, ox, oy, grabbed: false})
-        }
+        const outline = SHAPE_OUTLINES[jellyShape] || SHAPE_OUTLINES.circle
+        const unit = resamplePerimeter(outline, n)
 
-        const angleStep = (Math.PI * 2) / n
-        this.restEdgeLen = 2 * radius * Math.sin(angleStep / 2)
+        // Recenter on the sampled points' own centroid (not just the
+        // continuous curve's ideal centroid) so the rest shape is exactly
+        // zero-mean. _shapeMatch()/getRotationAngle() both assume that —
+        // for a lopsided preset like the pear, skipping this would leave
+        // the matched target's average position slightly off from the
+        // physics-computed centroid, and the blob would fight itself
+        // every substep instead of settling.
+        let meanX = 0
+        let meanY = 0
+        for (const p of unit) {
+            meanX += p.x
+            meanY += p.y
+        }
+        meanX /= unit.length
+        meanY /= unit.length
+
+        this.points = unit.map(({x, y}) => {
+            const ox = (x - meanX) * radius
+            const oy = (y - meanY) * radius
+            return {x: cx + ox, y: cy + oy, vx: 0, vy: 0, ox, oy, grabbed: false}
+        })
+
+        // Per-edge rest lengths, taken directly from the rest positions —
+        // a regular polygon (the old circle-only code) has one shared
+        // edge length, but the square/triangle/pear outlines don't, so
+        // each edge needs its own.
+        this.restEdgeLengths = this.points.map((p, i) => {
+            const next = this.points[(i + 1) % this.points.length]
+            return Math.hypot(next.ox - p.ox, next.oy - p.oy)
+        })
 
         this.grabbedIndex = -1
         this.pointerActive = false
@@ -147,10 +270,15 @@ export class JellyBlobEngine {
         }
     }
 
-    /** Pulls points back toward a rotated copy of their rest shape. */
-    _shapeMatch() {
+    /**
+     * Current best-fit rotation (radians) of the point ring relative to its
+     * rest shape — the same angle _shapeMatch pulls points toward. Exposed
+     * publicly so a renderer can spin a texture (e.g. an image) in sync
+     * with the blob's own rotation.
+     */
+    getRotationAngle() {
         const {points} = this
-        if (!points.length) return
+        if (!points.length) return 0
 
         const {x: cx, y: cy} = this.centroid()
 
@@ -163,7 +291,16 @@ export class JellyBlobEngine {
             B += py * p.ox - px * p.oy
         }
 
-        const angle = Math.atan2(B, A)
+        return Math.atan2(B, A)
+    }
+
+    /** Pulls points back toward a rotated copy of their rest shape. */
+    _shapeMatch() {
+        const {points} = this
+        if (!points.length) return
+
+        const {x: cx, y: cy} = this.centroid()
+        const angle = this.getRotationAngle()
         const c = Math.cos(angle)
         const s = Math.sin(angle)
         const stiffness = this.config.shapeStiffness
@@ -272,7 +409,7 @@ export class JellyBlobEngine {
         this._solvePointer(dt)
 
         for (let i = 0; i < this.points.length; i++) {
-            this._solveEdge(this.points[i], this.points[(i + 1) % this.points.length], this.restEdgeLen, edgeStiffness)
+            this._solveEdge(this.points[i], this.points[(i + 1) % this.points.length], this.restEdgeLengths[i], edgeStiffness)
         }
 
         this._shapeMatch()
@@ -298,7 +435,6 @@ export class JellyBlobEngine {
         // build up and cause a burst of steps on the next call.
         if (ticks === maxTicksPerCall) this._accumulator = 0
     }
-
 
 
     /** Grabs the nearest point to (x, y) if it's within maxDistance. Returns its index, or -1. */
@@ -379,16 +515,28 @@ export class JellyBlobEngine {
         this.lastGain = 0
     }
 
+    /**
+     * Point-in-polygon test against the ring's *current* (live) points,
+     * via standard ray casting. Using the actual point ring instead of a
+     * circle-of-radius approximation matters once the rest shape isn't a
+     * circle — a circle approximation would report false hits outside a
+     * square's/triangle's straight edges, and false misses/hits around
+     * an asymmetric pear.
+     */
     containsPoint(x, y) {
-        let cx = 0, cy = 0
-        for (const p of this.points) {
-            cx += p.x;
-            cy += p.y
+        const {points} = this
+        const n = points.length
+        if (n < 3) return false
+
+        let inside = false
+        for (let i = 0, j = n - 1; i < n; j = i++) {
+            const pi = points[i]
+            const pj = points[j]
+            const crosses = (pi.y > y) !== (pj.y > y) &&
+                x < ((pj.x - pi.x) * (y - pi.y)) / (pj.y - pi.y) + pi.x
+            if (crosses) inside = !inside
         }
-        cx /= this.points.length
-        cy /= this.points.length
-        const dx = x - cx, dy = y - cy
-        return (dx * dx + dy * dy) <= (this.config.radius ** 2)
+        return inside
     }
 
 

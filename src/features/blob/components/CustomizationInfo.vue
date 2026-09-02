@@ -7,11 +7,11 @@ const props = defineProps<{
 }>()
 
 const rarityLabels: Record<JellyRarity, string> = {
-  [JellyRarity.COMMON]: 'Обычная',
-  [JellyRarity.UNCOMMON]: 'Необычная',
-  [JellyRarity.RARE]: 'Редкая',
-  [JellyRarity.EPIC]: 'Эпическая',
-  [JellyRarity.LEGENDARY]: 'Легендарная',
+  [JellyRarity.COMMON]: 'Обычный',
+  [JellyRarity.UNCOMMON]: 'Необычный',
+  [JellyRarity.RARE]: 'Редкий',
+  [JellyRarity.EPIC]: 'Эпический',
+  [JellyRarity.LEGENDARY]: 'Легендарный',
 }
 
 function rarityClass(rarity: JellyRarity): string {

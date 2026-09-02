@@ -36,7 +36,7 @@ onMounted(() => {
 
 <template>
   <BaseWindow
-      title="Чат"
+      title="Чач"
       headerColorHex="#211731"
       :headerIcon="chatIcon"
       :isOpen="isOpen"

@@ -24,7 +24,11 @@ const props = defineProps({
   },
   currentWidth: {
     type: Number,
-  }
+  },
+  buttonEnabled: {
+    type: Boolean,
+    default: true
+  },
 })
 
 defineEmits([
@@ -53,6 +57,7 @@ const windowStyle = computed(() => {
         :headerIcon="headerIcon"
         :isOpen="isOpen"
         :headerColorHex="headerColorHex"
+        :buttonEnabled="buttonEnabled"
         @toggleWindow="$emit('toggleWindow')"
     />
     <div v-if="isOpen" class="window-content">

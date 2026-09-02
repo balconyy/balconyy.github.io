@@ -115,9 +115,9 @@ function handleMouseLeave() {
   color: var(--ui-color);
 }
 
-
 .customization-el--locked .customization-el__overlay {
   position: relative;
+  filter: drop-shadow(0px 0px 1px rgba(0,0,0,0.9));
   z-index: 1;
 }
 </style>
