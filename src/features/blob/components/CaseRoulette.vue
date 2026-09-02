@@ -3,8 +3,6 @@ import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
 import {BlobCaseInfoDto} from "@/data/dto/blobCaseInfoDto";
 import rouletteIcon from "@/assets/icons/roulette-icon.png";
 import BaseWindow from "@/components/window/BaseWindow.vue";
-import caseClickSoundSrc from "@/assets/sound/case-click.mp3";
-import caseEndSoundSrc from "@/assets/sound/case-end.ogg";
 import WindowLoading from "@/components/window/WindowLoading.vue";
 
 const props = defineProps<{
@@ -113,34 +111,6 @@ const trackOffset = ref(0)
 const phase = ref<'spinning' | 'result'>('spinning')
 const hasLanded = ref(false)
 
-// --- Звуки ---
-
-const caseClickAudio = new Audio(caseClickSoundSrc)
-caseClickAudio.preload = 'auto'
-caseClickAudio.volume = 0.4
-
-const caseEndAudio = new Audio(caseEndSoundSrc)
-caseEndAudio.preload = 'auto'
-caseEndAudio.volume = 0.4
-
-function playClickSound() {
-  // клонируем узел, чтобы быстрые повторные щелчки не обрывали друг друга
-  const node = caseClickAudio.cloneNode(true) as HTMLAudioElement
-  node.volume = caseClickAudio.volume
-  node.play().catch(() => {})
-}
-
-let endSoundPlayed = false
-
-function playEndSound() {
-  if (endSoundPlayed) return
-  endSoundPlayed = true
-  caseEndAudio.currentTime = 0
-  caseEndAudio.play().catch(() => {})
-}
-
-// --- Тиканье ленты: следим за реальным transform во время CSS-анимации
-// и проигрываем щелчок каждый раз, когда под указателем оказывается новая карточка ---
 
 let tickRafId: number | undefined
 let lastTickIndex: number | null = null
@@ -166,7 +136,6 @@ function trackTickLoop() {
       lastTickIndex = idx
     } else if (idx !== lastTickIndex) {
       lastTickIndex = idx
-      playClickSound()
     }
   }
 
@@ -213,7 +182,6 @@ function onTrackTransitionEnd(event: TransitionEvent) {
   hasLanded.value = true
   stopTickLoop()
   window.setTimeout(() => {
-    playEndSound()
     phase.value = 'result'
   }, 650)
 }
@@ -226,7 +194,6 @@ onMounted(() => {
     if (phase.value === 'spinning') {
       hasLanded.value = true
       stopTickLoop()
-      playEndSound()
       phase.value = 'result'
     }
   }, 8500)
