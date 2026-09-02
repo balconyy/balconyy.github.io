@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
+import {computed, nextTick, onBeforeUnmount, onMounted, ref} from 'vue'
 import {BlobCaseInfoDto} from "@/data/dto/blobCaseInfoDto";
 import rouletteIcon from "@/assets/icons/roulette-icon.png";
 import BaseWindow from "@/components/window/BaseWindow.vue";
+import caseClickSoundSrc from "@/assets/sound/case-click.mp3";
+import caseEndSoundSrc from "@/assets/sound/case-end.ogg";
 import WindowLoading from "@/components/window/WindowLoading.vue";
 
 const props = defineProps<{
@@ -108,9 +110,95 @@ const targetGlobalIndex = computed(
 const viewportRef = ref<HTMLElement | null>(null)
 const trackRef = ref<HTMLElement | null>(null)
 const trackOffset = ref(0)
-const phase = ref<'spinning' | 'result'>('spinning')
+const phase = ref<'loading' | 'spinning' | 'result'>('loading')
 const hasLanded = ref(false)
+let isUnmounted = false
 
+// --- Звуки ---
+
+const caseClickAudio = new Audio(caseClickSoundSrc)
+caseClickAudio.preload = 'auto'
+caseClickAudio.volume = 0.4
+
+const caseEndAudio = new Audio(caseEndSoundSrc)
+caseEndAudio.preload = 'auto'
+caseEndAudio.volume = 0.4
+
+function playClickSound() {
+  // клонируем узел, чтобы быстрые повторные щелчки не обрывали друг друга
+  const node = caseClickAudio.cloneNode(true) as HTMLAudioElement
+  node.volume = caseClickAudio.volume
+  node.play().catch(() => {})
+}
+
+let endSoundPlayed = false
+
+function playEndSound() {
+  if (endSoundPlayed) return
+  endSoundPlayed = true
+  caseEndAudio.currentTime = 0
+  caseEndAudio.play().catch(() => {})
+}
+
+// --- Ждём загрузки звуков и картинок, прежде чем показывать анимацию ---
+
+function waitForAudio(audio: HTMLAudioElement, timeoutMs = 4000): Promise<void> {
+  return new Promise((resolve) => {
+    // readyState >= 3 (HAVE_FUTURE_DATA) — можно проигрывать без пауз на буферизацию
+    if (audio.readyState >= 3) {
+      resolve()
+      return
+    }
+    let done = false
+    const finish = () => {
+      if (done) return
+      done = true
+      audio.removeEventListener('canplaythrough', onReady)
+      audio.removeEventListener('error', onError)
+      window.clearTimeout(timer)
+      resolve()
+    }
+    const onReady = () => finish()
+    // если звук не загрузился — не блокируем анимацию из-за него навсегда
+    const onError = () => finish()
+    audio.addEventListener('canplaythrough', onReady, { once: true })
+    audio.addEventListener('error', onError, { once: true })
+    const timer = window.setTimeout(finish, timeoutMs)
+    audio.load()
+  })
+}
+
+function waitForImage(src: string, timeoutMs = 4000): Promise<void> {
+  return new Promise((resolve) => {
+    const img = new Image()
+    let done = false
+    const finish = () => {
+      if (done) return
+      done = true
+      window.clearTimeout(timer)
+      resolve()
+    }
+    img.onload = finish
+    img.onerror = finish // битая картинка не должна вешать рулетку навсегда
+    img.src = src
+    const timer = window.setTimeout(finish, timeoutMs)
+  })
+}
+
+function waitForAssets(): Promise<void[]> {
+  const imageSrcs = new Set<string>()
+  shuffledSkins.value.forEach((skin) => imageSrcs.add(skin.image))
+  imageSrcs.add(props.winner.image)
+
+  return Promise.all([
+    waitForAudio(caseClickAudio),
+    waitForAudio(caseEndAudio),
+    ...Array.from(imageSrcs).map((src) => waitForImage(src)),
+  ])
+}
+
+// --- Тиканье ленты: следим за реальным transform во время CSS-анимации
+// и проигрываем щелчок каждый раз, когда под указателем оказывается новая карточка ---
 
 let tickRafId: number | undefined
 let lastTickIndex: number | null = null
@@ -136,6 +224,7 @@ function trackTickLoop() {
       lastTickIndex = idx
     } else if (idx !== lastTickIndex) {
       lastTickIndex = idx
+      playClickSound()
     }
   }
 
@@ -182,24 +271,34 @@ function onTrackTransitionEnd(event: TransitionEvent) {
   hasLanded.value = true
   stopTickLoop()
   window.setTimeout(() => {
+    playEndSound()
     phase.value = 'result'
   }, 650)
 }
 
 let fallbackTimer: number | undefined
 
-onMounted(() => {
+onMounted(async () => {
+  await waitForAssets()
+  if (isUnmounted) return // окно могли закрыть, пока грузились ассеты
+
+  phase.value = 'spinning'
+  await nextTick() // дождаться, пока Vue отрендерит viewport (v-if="phase === 'spinning'")
+  if (isUnmounted) return
+
   startSpin()
   fallbackTimer = window.setTimeout(() => {
     if (phase.value === 'spinning') {
       hasLanded.value = true
       stopTickLoop()
+      playEndSound()
       phase.value = 'result'
     }
   }, 8500)
 })
 
 onBeforeUnmount(() => {
+  isUnmounted = true
   if (fallbackTimer) window.clearTimeout(fallbackTimer)
   stopTickLoop()
 })
@@ -225,7 +324,12 @@ function handleClaim() {
           :buttonEnabled="false"
           @toggleWindow="$emit('toggleWindow')">
         <div class="roulette-panel">
-          <div v-if="phase === 'spinning'" ref="viewportRef" class="reel-viewport">
+          <div v-if="phase === 'loading'" class="reel-loading">
+            <WindowLoading/>
+            <span class="reel-loading-text">Загрузка...</span>
+          </div>
+
+          <div v-else-if="phase === 'spinning'" ref="viewportRef" class="reel-viewport">
             <div class="reel-pointer-line"></div>
             <div class="reel-caret reel-caret--top"></div>
             <div class="reel-caret reel-caret--bottom"></div>
@@ -333,6 +437,25 @@ function handleClaim() {
   color: #f2f2f2;
 }
 
+
+.reel-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 580px;
+  height: 150px;
+  background: #161616;
+  border: 1px solid #3a3c42;
+}
+
+.reel-loading-text {
+  font-size: 12px;
+  color: #9a9b9e;
+  letter-spacing: 0.04em;
+}
 
 .reel-viewport {
   position: relative;
