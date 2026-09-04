@@ -128,7 +128,8 @@ function playClickSound() {
   // клонируем узел, чтобы быстрые повторные щелчки не обрывали друг друга
   const node = caseClickAudio.cloneNode(true) as HTMLAudioElement
   node.volume = caseClickAudio.volume
-  node.play().catch(() => {})
+  node.play().catch(() => {
+  })
 }
 
 let endSoundPlayed = false
@@ -137,7 +138,8 @@ function playEndSound() {
   if (endSoundPlayed) return
   endSoundPlayed = true
   caseEndAudio.currentTime = 0
-  caseEndAudio.play().catch(() => {})
+  caseEndAudio.play().catch(() => {
+  })
 }
 
 // --- Ждём загрузки звуков и картинок, прежде чем показывать анимацию ---
@@ -161,8 +163,8 @@ function waitForAudio(audio: HTMLAudioElement, timeoutMs = 4000): Promise<void> 
     const onReady = () => finish()
     // если звук не загрузился — не блокируем анимацию из-за него навсегда
     const onError = () => finish()
-    audio.addEventListener('canplaythrough', onReady, { once: true })
-    audio.addEventListener('error', onError, { once: true })
+    audio.addEventListener('canplaythrough', onReady, {once: true})
+    audio.addEventListener('error', onError, {once: true})
     const timer = window.setTimeout(finish, timeoutMs)
     audio.load()
   })
@@ -321,8 +323,7 @@ function handleClaim() {
           headerColorHex="#0B4D3B"
           :headerIcon="rouletteIcon"
           :isOpen="true"
-          :buttonEnabled="false"
-          @toggleWindow="$emit('toggleWindow')">
+          :buttonEnabled="false">
         <div class="roulette-panel">
           <div v-if="phase === 'loading'" class="reel-loading">
             <WindowLoading/>
@@ -365,7 +366,8 @@ function handleClaim() {
               <p v-if="winner.quote" class="winner-quote">«{{ winner.quote }}»</p>
 
               <div class="winner-actions">
-                <button v-if="!isEquipLoading" class="case-button" type="button" @click="handleEquip">Экипировать</button>
+                <button v-if="!isEquipLoading" class="case-button" type="button" @click="handleEquip">Экипировать
+                </button>
                 <WindowLoading v-else/>
                 <button class="case-button" type="button" @click="handleClaim">Принять</button>
               </div>
@@ -418,23 +420,6 @@ function handleClaim() {
   border-right: 2px solid #4a4a4a;
   border-bottom: 2px solid #4a4a4a;
   box-shadow: 0 14px 44px rgba(0, 0, 0, 0.6);
-}
-
-.close-button {
-  position: absolute;
-  top: 6px;
-  right: 10px;
-  background: none;
-  border: none;
-  color: #9a9b9e;
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 4px;
-}
-
-.close-button:hover {
-  color: #f2f2f2;
 }
 
 

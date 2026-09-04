@@ -2,7 +2,6 @@
 
 import SearchMain from "@/features/search/components/SearchMain.vue";
 import LogoMain from "@/components/logo/LogoMain.vue";
-import DonationLine from "@/components/banners/DonationLine.vue";
 import AboutBlock from "@/components/banners/AboutBlock.vue";
 import Background from "@/components/Background.vue";
 import AdminAlert from "@/components/AdminAlert.vue";
@@ -16,8 +15,11 @@ import {useConfigResults} from "@/features/admin/composables/config/useConfigRes
 import {useRecentlyWatch} from "@/features/resently/composables/useRecentlyWatch";
 import {MovieKp} from "@/models/movieKp";
 import SidePanel from "@/components/window/SidePanel.vue";
-import GeekPc from "@/components/banners/GeekPc.vue";
 import GeekTelegram from "@/components/banners/GeekTelegram.vue";
+import homeIcon from "@/assets/icons/home-icon.png";
+import NavIcon from "@/components/navigation/NavIcon.vue";
+import SupportWindow from "@/components/window/SupportWindow.vue";
+import NavBar from "@/components/navigation/NavBar.vue";
 
 
 useHead({
@@ -32,7 +34,6 @@ useHead({
 
 const {
   isConfigLoaded,
-  donation,
   adminAlert
 } = useConfigResults();
 
@@ -49,6 +50,12 @@ const onMovieClick = (movie: MovieKp) => {
   })
 }
 
+function toCinemaScreen() {
+  router.push({
+    name: 'cinema',
+  })
+}
+
 
 onMounted(() => {
   getRecentlyWatch()
@@ -57,6 +64,7 @@ onMounted(() => {
 
 <template>
   <Background/>
+  <NavBar :showHome="false"/>
   <header>
     <LogoMain/>
     <AdminAlert v-if="isConfigLoaded && adminAlert?.message"
@@ -77,11 +85,7 @@ onMounted(() => {
   <footer>
     <div class="page-wrapper">
       <div class="left">
-        <DonationLine v-if="isConfigLoaded && donation"
-                      :donationText="donation.donationText"
-                      :currentValue="donation.moneyNow"
-                      :goalValue="donation.moneyTotal"
-        />
+        <SupportWindow/>
       </div>
       <div class="center">
         <GeekTelegram/>
@@ -121,5 +125,11 @@ onMounted(() => {
 
 footer {
   padding-bottom: 110px;
+}
+
+.home-icon {
+  z-index: 10;
+  position: fixed;
+  margin: 16px 0 0 16px;
 }
 </style>

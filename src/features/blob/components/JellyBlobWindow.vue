@@ -10,7 +10,7 @@ import Leaderboard from "@/features/blob/components/Leaderboard.vue";
 import WindowLoading from "@/components/window/WindowLoading.vue";
 import Customization from "@/features/blob/components/Customization.vue";
 import CustomizationAttention from "@/features/blob/components/CustomizationAttention.vue";
-import Case from "@/features/blob/components/Case.vue";
+import JellyCase from "@/features/blob/components/JellyCase.vue";
 
 defineProps<{
   currentHeight: number,
@@ -72,7 +72,7 @@ async function handleTabChange(newTab: TabName) {
                  :isAuth="isAuth"
       />
       <Leaderboard v-else-if="currentTab === 'Лидеры'"/>
-      <Case v-else-if="currentTab === 'Кейс'"/>
+      <JellyCase v-else-if="currentTab === 'Кейс'"/>
       <Customization v-else-if="currentTab === 'Скины' && isAuth"/>
       <CustomizationAttention v-else-if="currentTab === 'Скины'"/>
     </ResizableContainer>

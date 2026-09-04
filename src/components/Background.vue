@@ -28,7 +28,7 @@
 }
 
 .square-pattern {
-  z-index: 1;
+  z-index: -1;
   position: fixed;
   inset: 0;
   min-height: 100%;

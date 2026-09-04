@@ -5,6 +5,7 @@ import {useCaseOpener} from "@/features/blob/composables/useCaseOpener";
 import {onMounted} from "vue";
 import CaseRoulette from "@/features/blob/components/CaseRoulette.vue";
 import WindowLoading from "@/components/window/WindowLoading.vue";
+import SupportButton from "@/components/window/SupportButton.vue";
 
 const CASE_PRICE = 49;
 
@@ -78,14 +79,7 @@ function handleClose() {
       </ul>
     </div>
 
-    <a
-        class="support-button"
-        href="https://www.donationalerts.com/r/birdy_mafia"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-      Поддержать
-    </a>
+    <SupportButton/>
 
     <CaseRoulette
         v-if="winner && isRouletteOpen"
@@ -94,7 +88,7 @@ function handleClose() {
         @equip="handleEquip"
         @claim="handleClose"
         @close="handleClose"
-    />
+        isEquipLoading/>
 
   </div>
 </template>
@@ -310,38 +304,4 @@ function handleClose() {
   color: #aaaaaa;
 }
 
-.support-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-top: 4px;
-  padding: 8px 22px;
-
-  background: #f5a962;
-  color: #2a1a08;
-
-  font-family: 'Consolas', 'Courier New', monospace;
-  font-size: 15px;
-  font-weight: 700;
-
-  text-decoration: none;
-
-  border: 2px solid;
-  border-color: #ffd7a8 #a86a2e #a86a2e #ffd7a8;
-  cursor: pointer;
-  user-select: none;
-
-  transition: background .08s;
-}
-
-.support-button:hover {
-  background: #f7b676;
-}
-
-.support-button:active {
-  background: #e79a4e;
-  border-color: #a86a2e #ffd7a8 #ffd7a8 #a86a2e;
-  transform: translate(1px, 1px);
-}
 </style>
