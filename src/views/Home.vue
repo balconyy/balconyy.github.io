@@ -16,10 +16,7 @@ import {useRecentlyWatch} from "@/features/resently/composables/useRecentlyWatch
 import {MovieKp} from "@/models/movieKp";
 import SidePanel from "@/components/window/SidePanel.vue";
 import GeekTelegram from "@/components/banners/GeekTelegram.vue";
-import homeIcon from "@/assets/icons/home-icon.png";
-import NavIcon from "@/components/navigation/NavIcon.vue";
 import SupportWindow from "@/components/window/SupportWindow.vue";
-import NavBar from "@/components/navigation/NavBar.vue";
 
 
 useHead({
@@ -50,12 +47,6 @@ const onMovieClick = (movie: MovieKp) => {
   })
 }
 
-function toCinemaScreen() {
-  router.push({
-    name: 'cinema',
-  })
-}
-
 
 onMounted(() => {
   getRecentlyWatch()
@@ -64,7 +55,6 @@ onMounted(() => {
 
 <template>
   <Background/>
-  <NavBar :showHome="false"/>
   <header>
     <LogoMain/>
     <AdminAlert v-if="isConfigLoaded && adminAlert?.message"
