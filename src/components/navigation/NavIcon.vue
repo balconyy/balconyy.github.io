@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import redirectIcon from "@/assets/icons/redirect-icon.png"
-
-import {ref} from 'vue'
+import {RouterLink} from 'vue-router'
 
 const props = defineProps({
   label: {
@@ -15,22 +14,18 @@ const props = defineProps({
   isShortcut: {
     type: Boolean,
     default: true
+  },
+  path: {
+    type: [String, Object],
+    required: true
   }
 })
-
-const emit = defineEmits(['open'])
-
-
-function openIcon() {
-  emit('open')
-}
 </script>
 
 <template>
-  <div
+  <RouterLink
+      :to="path"
       class="win-icon"
-      tabindex="0"
-      @click="openIcon"
   >
     <div class="icon-image-wrapper">
       <img :src="icon" :alt="label" class="icon-image" draggable="false"/>
@@ -39,7 +34,7 @@ function openIcon() {
     <div class="icon-label">
       <span>{{ label }}</span>
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 
@@ -53,6 +48,8 @@ function openIcon() {
   cursor: default;
   user-select: none;
   font-family: 'MS Sans Serif', 'Tahoma', sans-serif;
+  text-decoration: none;
+  color: inherit;
 }
 
 .icon-image-wrapper {

@@ -5,8 +5,6 @@ import MovieCard from "@/components/MovieCard.vue";
 import {useHistory} from "@/features/search/composables/useHistory.ts";
 import {computed, nextTick, onBeforeUnmount, onMounted, ref, watch} from "vue";
 
-const emit = defineEmits(['selectMovie']);
-
 const {
   history,
   errorMessage,
@@ -83,7 +81,6 @@ onBeforeUnmount(() => {
           :key="movie.id"
           :movie="movie"
           :showDeleteButton="true"
-          @selectMovie="emit('selectMovie', $event)"
           @deleteMovie="removeMovieFromHistory"
       />
     </ul>

@@ -6,7 +6,6 @@ const {recentlyLists} = defineProps<{
   recentlyLists: RecentlyLists;
 }>();
 
-defineEmits(['selectMovie'])
 </script>
 
 <template>
@@ -17,7 +16,6 @@ defineEmits(['selectMovie'])
       <MovieShortCard
           v-for="movie in recentlyLists.movies"
           :movie="movie"
-          @selectMovie="$emit('selectMovie', $event)"
       />
     </ul>
   </div>
@@ -27,7 +25,6 @@ defineEmits(['selectMovie'])
       <MovieShortCard
           v-for="movie in recentlyLists.serials"
           :movie="movie"
-          @selectMovie="$emit('selectMovie', $event)"
       />
     </ul>
   </div>

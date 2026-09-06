@@ -30,7 +30,7 @@ function search(query: string) {
   createSearchTab(query)
   activateTabById(SEARCH_TAB_ID)
 }
-defineEmits(['selectMovie'])
+
 onMounted(() => {
   initSearch()
   initTabs()
@@ -53,11 +53,9 @@ onMounted(() => {
                 :movies="movieList"
                 :loading="isLoading"
                 :error-message="error?.message"
-                @selectMovie="$emit('selectMovie', $event)"
     />
 
     <HistoryList v-else-if="activeTabId === HISTORY_TAB_ID"
-                 @selectMovie="$emit('selectMovie', $event)"
     />
 
 

@@ -1,5 +1,6 @@
 <script setup>
 import emptyPoster from '@/assets/media/empty-poster.jpg'
+import {RouterLink} from "vue-router";
 
 let {movie} = defineProps({
   movie: Object,
@@ -19,16 +20,18 @@ function onImgError(e) {
 
 <template>
   <div class="movie-card" @click="$emit('selectMovie', movie)" :title="movie.titleMain">
-    <div class="old-school-effect"/>
-    <img
-        class="poster"
-        :src="movie.posterUrl"
-        @error="onImgError"
-        alt="poster"
-    >
+    <RouterLink :to="{ path: `/movie/${movie?.kpId}` }">
+      <div class="old-school-effect"/>
+      <img
+          class="poster"
+          :src="movie.posterUrl"
+          @error="onImgError"
+          alt="poster"
+      >
 
-    <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}
-      {{ movie?.year ? " (" + movie?.year + ")" : '' }}</h3>
+      <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}
+        <span class="card-year">{{ movie?.year ? " (" + movie?.year + ")" : '' }}</span></h3>
+    </RouterLink>
   </div>
 </template>
 
@@ -79,6 +82,10 @@ function onImgError(e) {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+.card-year{
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .old-school-effect {

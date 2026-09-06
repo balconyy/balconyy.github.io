@@ -40,14 +40,6 @@ const {
   getRecentlyWatch
 } = useRecentlyWatch()
 
-const router = useRouter()
-const onMovieClick = (movie: MovieKp) => {
-  router.push({
-    name: 'movie',
-    params: {kpId: movie.kpId},
-  })
-}
-
 
 onMounted(() => {
   getRecentlyWatch()
@@ -67,11 +59,11 @@ onMounted(() => {
   <main>
     <SidePanel/>
 
-    <SearchMain @selectMovie="onMovieClick"/>
+    <SearchMain/>
 
     <RecentlyWatchList v-if="recentlyWatched && recentlyWatched.movies.length + recentlyWatched.serials.length > 0"
                        :recentlyLists="recentlyWatched"
-                       @selectMovie="onMovieClick"/>
+                      />
   </main>
 
   <footer>

@@ -10,7 +10,6 @@ const {movies, loading, errorMessage} = defineProps<{
   loading: Boolean,
   errorMessage?: string,
 }>();
-defineEmits(['selectMovie'])
 </script>
 
 <template>
@@ -25,7 +24,6 @@ defineEmits(['selectMovie'])
     <MovieCard
         v-for="movie in movies"
         :movie="movie"
-        @selectMovie="$emit('selectMovie', $event)"
     />
   </ul>
 </template>

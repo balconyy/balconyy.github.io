@@ -1,8 +1,9 @@
 <script setup>
 import emptyPoster from '@/assets/media/empty-poster.jpg'
 import {X} from '@lucide/vue';
+import {RouterLink} from 'vue-router';
 
-let {movie, showDeleteButton} = defineProps({
+let {movie, showDeleteButton, to} = defineProps({
   movie: Object,
   showDeleteButton: {
     type: Boolean,
@@ -10,7 +11,7 @@ let {movie, showDeleteButton} = defineProps({
   }
 })
 
-defineEmits(['selectMovie', 'deleteMovie'])
+defineEmits(['deleteMovie'])
 
 function onImgError(e) {
   if (e.target.src !== emptyPoster) {
@@ -23,33 +24,44 @@ function onImgError(e) {
 
 
 <template>
-  <div class="movie-card" @click="$emit('selectMovie', movie)">
+  <div class="movie-card-wrapper">
+    <RouterLink :to="`/movie/${movie?.kpId}`" class="movie-card">
+      <div class="old-school-effect"/>
+      <div class="poster-wrapper">
+        <img
+            class="poster"
+            :src="movie.posterUrl"
+            @error="onImgError"
+            alt="poster"
+        >
+      </div>
+
+      <div class="movie-info">
+        <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}</h3>
+        <p class="title-second">{{ movie.titleMain != null ? movie.titleSecond : "" }}</p>
+        <div class="info-container">
+          <span class="info">{{ movie.type + " | " + (movie.year !== 'null' ? movie.year : "???") }}</span>
+        </div>
+      </div>
+    </RouterLink>
+
     <button v-if="showDeleteButton"
-            class="delete-button" @click.stop="$emit('deleteMovie', movie)">
+            class="delete-button" @click="$emit('deleteMovie', movie)">
       <X color="#f1f"/>
     </button>
-    <div class="old-school-effect"/>
-    <div class="poster-wrapper">
-      <img
-          class="poster"
-          :src="movie.posterUrl"
-          @error="onImgError"
-          alt="poster"
-      >
-    </div>
-
-    <div class="movie-info">
-      <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}</h3>
-      <p class="title-second">{{ movie.titleMain != null ? movie.titleSecond : "" }}</p>
-      <div class="info-container">
-        <span class="info">{{ movie.type + " | " + (movie.year !== 'null' ? movie.year : "???") }}</span>
-      </div>
-    </div>
   </div>
 </template>
 
 <style scoped>
+.movie-card-wrapper {
+  position: relative;
+}
+
 .movie-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -63,7 +75,7 @@ function onImgError(e) {
   background: radial-gradient(rgba(var(--white-rgb)/0.1) 40%, rgba(var(--accent-black-rgb)) 100%);
 }
 
-.movie-card:hover {
+.movie-card-wrapper:hover .movie-card {
   transform: scale(1.05);
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
@@ -164,7 +176,7 @@ function onImgError(e) {
   background 0.2s ease;
 }
 
-.movie-card:hover .delete-button {
+.movie-card-wrapper:hover .delete-button {
   opacity: 1;
   transform: scale(1);
 }
