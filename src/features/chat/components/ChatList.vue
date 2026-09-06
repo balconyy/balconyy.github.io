@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {nextTick, onMounted, onUpdated, provide, ref, watch} from "vue";
+import {nextTick, onBeforeUnmount, onMounted, onUpdated, provide, ref, watch} from "vue";
 import {Message} from "@/models/message";
 import {MessagePart, parseMessageParts} from "@/utils/message";
 import LazyChatImage from "@/features/chat/components/LazyChatImage.vue";
@@ -13,6 +13,12 @@ const props = defineProps<{
 
 
 const chatLog = ref<HTMLElement | null>(null);
+// Отдельный враппер для самих строк чата. Он нужен только для того,
+// чтобы у нас был элемент, чей размер реально меняется при добавлении
+// сообщений и — что здесь важно — при догрузке картинок. У самого
+// .chat-log (overflow-y: auto) собственный размер не меняется никогда,
+// поэтому ResizeObserver на нём самом не сработает.
+const chatLogInner = ref<HTMLElement | null>(null);
 
 // Отдаём вниз по дереву ссылку на сам скролл-контейнер чата, чтобы
 // IntersectionObserver в LazyChatImage считал видимость относительно
@@ -26,9 +32,28 @@ function scrollToBottom() {
   }
 }
 
+let resizeObserver: ResizeObserver | null = null;
+
 onMounted(() => {
   scrollToBottom();
+
+  // Картинки в сообщениях подгружаются лениво и асинхронно (см.
+  // LazyChatImage): плейсхолдер сначала маленький, а когда картинка
+  // реально скачается, блок с ней вырастает — уже ПОСЛЕ того, как
+  // отработали onMounted/onUpdated. Без этого наблюдателя скролл
+  // оставался на старой (меньшей) высоте контента и «автоскролл
+  // в самый низ» ломался именно на сообщениях с картинками.
+  if (chatLogInner.value) {
+    resizeObserver = new ResizeObserver(() => {
+      scrollToBottom();
+    });
+    resizeObserver.observe(chatLogInner.value);
+  }
 })
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect();
+});
 
 watch(() => props.isOpen, async () => {
   await nextTick();
@@ -87,27 +112,29 @@ function getMessageKey(message: Message, index: number): string | number {
 
 <template>
   <div class="chat-log" ref="chatLog">
-    <div
-        v-for="(message, index) in messages"
-        :key="getMessageKey(message, index)"
-        class="chat-line"
-    >
-      <span class="timestamp">{{
-          new Date(message.createdAt).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          })
-        }}</span> <span
-        class="username"
-        :style="{ color: message.nameColor }"
-    >{{ message.displayName }}:</span> <span class="text">{{ getMessageText(message) }}</span>
+    <div class="chat-log-inner" ref="chatLogInner">
+      <div
+          v-for="(message, index) in messages"
+          :key="getMessageKey(message, index)"
+          class="chat-line"
+      >
+        <span class="timestamp">{{
+            new Date(message.createdAt).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })
+          }}</span> <span
+          class="username"
+          :style="{ color: message.nameColor }"
+      >{{ message.displayName }}:</span> <span class="text">{{ getMessageText(message) }}</span>
 
-      <div v-if="getMessageImages(message).length" class="chat-line-images">
-        <LazyChatImage
-            v-for="(url, imageIndex) in getMessageImages(message)"
-            :key="imageIndex"
-            :src="url"
-        />
+        <div v-if="getMessageImages(message).length" class="chat-line-images">
+          <LazyChatImage
+              v-for="(url, imageIndex) in getMessageImages(message)"
+              :key="imageIndex"
+              :src="url"
+          />
+        </div>
       </div>
     </div>
   </div>

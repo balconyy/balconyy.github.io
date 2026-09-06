@@ -44,8 +44,6 @@ function togglePlay() {
     play()
     emit('sync')
   }
-
-  isPlaying.value = !isPlaying.value
 }
 
 const volumeLevel = ref(1)
@@ -93,14 +91,12 @@ function selectQuality(index: number) {
 }
 
 
-// src статичен только на инициализацию — реагируем на его изменение извне
 watch(
     () => props.src,
     (newSrc) => {
       iframeSrc.value = newSrc
       currentQualityLabel.value = null
       pendingQualityIndex.value = null
-      isPlaying.value = true
     }
 )
 
@@ -108,7 +104,6 @@ watch(
     () => props.currentTime,
     (newTime) => {
       play()
-      isPlaying.value = true
       seekTo(newTime)
     }
 )
@@ -134,8 +129,15 @@ onMounted(() => {
 
   on("inited", () => {
     play()
-    isPlaying.value = true
+    setVolume(100)
     seekTo(props.currentTime)
+  })
+
+  on("play", (e) => {
+    isPlaying.value = true
+  })
+  on("pause", (e) => {
+    isPlaying.value = false
   })
 })
 
