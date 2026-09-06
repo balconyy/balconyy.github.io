@@ -9,11 +9,8 @@ import AdminAlert from "@/components/AdminAlert.vue";
 import {onMounted} from "vue";
 import {useHead} from "@vueuse/head";
 import RecentlyWatchList from "@/features/resently/components/RecentlyWatchList.vue";
-
-import {useRouter} from "vue-router";
 import {useConfigResults} from "@/features/admin/composables/config/useConfigResults";
 import {useRecentlyWatch} from "@/features/resently/composables/useRecentlyWatch";
-import {MovieKp} from "@/models/movieKp";
 import SidePanel from "@/components/window/SidePanel.vue";
 import GeekTelegram from "@/components/banners/GeekTelegram.vue";
 import SupportWindow from "@/components/window/SupportWindow.vue";
@@ -111,9 +108,4 @@ footer {
   padding-bottom: 110px;
 }
 
-.home-icon {
-  z-index: 10;
-  position: fixed;
-  margin: 16px 0 0 16px;
-}
 </style>

@@ -104,7 +104,7 @@ onBeforeUnmount(() => {
   font-weight: 600;
   letter-spacing: -0.01em;
   padding: 12px 20px;
-  margin: 12px auto 10px auto;
+  margin: 24px auto 10px auto;
   border: none;
   border-radius: 10px;
   cursor: pointer;
