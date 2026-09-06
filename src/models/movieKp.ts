@@ -3,6 +3,6 @@ export interface MovieKp {
     titleMain: string;
     titleSecond?: string;
     posterUrl?: string;
-    year?: string;
+    year?: number;
     type?: string;
 }

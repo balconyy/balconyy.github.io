@@ -423,7 +423,7 @@ export class JellyBlobEngine {
 
         this._accumulator += dt
 
-        const maxTicksPerCall = substeps * 8 // generous headroom for slow frames
+        const maxTicksPerCall = substeps * 8
         let ticks = 0
         while (this._accumulator >= fixedDt && ticks < maxTicksPerCall) {
             this._substep(fixedDt)

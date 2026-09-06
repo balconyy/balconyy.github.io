@@ -62,9 +62,7 @@ export function useJellyBlob(canvasEl, props, emit) {
     }
 
     function applyCharacteristic(characteristic) {
-        const { jellyShape, ...physics } = characteristic
-
-        console.log(characteristic)
+        const {jellyShape, ...physics} = characteristic
 
         engine.updateConfig(physics)
         engine.updateConfig({

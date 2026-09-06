@@ -5,6 +5,7 @@ import Movie from "@/views/Movie.vue";
 import Admin from "@/views/Admin.vue";
 import AdminLogin from "@/views/AdminLogin.vue";
 import {adminAuthApi} from "@/data/api/adminAuth.ts";
+import Cinema from "@/views/Cinema.vue";
 
 const index = [
     {
@@ -27,6 +28,11 @@ const index = [
             kpId: Number(route.params.kpId)
         })
 
+    },
+    {
+        path: "/cinema",
+        name: "cinema",
+        component: Cinema,
     },
     {
         path: "/admin/login",

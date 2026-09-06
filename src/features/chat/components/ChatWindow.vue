@@ -8,29 +8,36 @@ import {computed, onMounted} from "vue";
 import WindowLoading from "@/components/window/WindowLoading.vue";
 import ChatAttention from "@/features/chat/components/ChatAttention.vue";
 import {useUserAuth} from "@/features/auth/composables/useUserAuth";
-import {connectChatSocket} from "@/services/chatSocket";
 import {useChatStore} from "@/store/chat";
 import ResizableContainer from "@/components/window/ResizableContainer.vue";
 
-defineProps<{
-  currentHeight: number,
-  currentWidth: number,
-  isOpen: boolean
-}>()
+const props = withDefaults(
+    defineProps<{
+      currentHeight?: number
+      currentWidth?: number
+      isOpen?: boolean
+      scope?: 'global' | 'cinema'
+    }>(),
+    {
+      isOpen: true,
+      scope: 'global',
+    }
+)
 
 const emit = defineEmits(['resize', 'toggleWindow'])
 
 const chatStore = useChatStore();
 
-const {chat, online, isLoading} = storeToRefs(chatStore);
+const {chat, online, cinemaOnline, isLoading} = storeToRefs(chatStore);
 const {getChatLogs, sendMessage} = chatStore;
+
+const displayedOnline = computed(() => props.scope === 'cinema' ? cinemaOnline.value : online.value);
 
 const userAuth = useUserAuth();
 const isAuth = computed(() => userAuth.user.value != null);
 
 onMounted(() => {
   getChatLogs();
-  connectChatSocket();
 })
 </script>
 
@@ -51,7 +58,7 @@ onMounted(() => {
       <WindowLoading v-if="isLoading"/>
       <ChatList v-else :messages="chat" :isOpen="isOpen"/>
       <ChatAttention v-if="isLoading || !isAuth" :isLoading="isLoading" :isNotAuth="!isAuth"/>
-      <ChatInput v-else @sendMessage="sendMessage" :online="online"/>
+      <ChatInput v-else @sendMessage="sendMessage" :online="displayedOnline"/>
     </ResizableContainer>
   </BaseWindow>
 </template>

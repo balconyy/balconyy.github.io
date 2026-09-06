@@ -1,7 +1,7 @@
 export interface MovieInfo {
     titleMain: string;
     titleSecond?: string;
-    year: string;
+    year: number | null;
     type: string;
     kpId: number;
     posterUrl: string;

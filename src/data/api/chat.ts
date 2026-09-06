@@ -1,4 +1,5 @@
 import {baseClient} from "@/data/http";
+import {Message} from "@/models/message";
 
 export const chatApi = {
     getMessages() {

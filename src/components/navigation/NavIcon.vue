@@ -20,11 +20,6 @@ const props = defineProps({
 
 const emit = defineEmits(['open'])
 
-const isSelected = ref(false)
-
-function selectIcon() {
-  isSelected.value = true
-}
 
 function openIcon() {
   emit('open')
@@ -90,6 +85,7 @@ function openIcon() {
   padding: 1px 2px;
   word-break: break-word;
   max-width: 100%;
+  text-shadow: 1px 1px 2px #000000;
 }
 
 .win-icon:hover {

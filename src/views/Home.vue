@@ -17,6 +17,7 @@ import {MovieKp} from "@/models/movieKp";
 import SidePanel from "@/components/window/SidePanel.vue";
 import GeekTelegram from "@/components/banners/GeekTelegram.vue";
 import SupportWindow from "@/components/window/SupportWindow.vue";
+import NavBar from "@/components/navigation/NavBar.vue";
 
 
 useHead({
@@ -55,6 +56,7 @@ onMounted(() => {
 
 <template>
   <Background/>
+  <NavBar :showHome="false"/>
   <header>
     <LogoMain/>
     <AdminAlert v-if="isConfigLoaded && adminAlert?.message"

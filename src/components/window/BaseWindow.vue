@@ -71,7 +71,7 @@ const windowStyle = computed(() => {
   flex-direction: column;
   align-items: stretch;
   border: 3px solid;
-  border-color: #6a6a6a #4a4a4a #4a4a4a #6a6a6a;
+  border-color: #3a3a3a #4a4a4a #4a4a4a #3a3a3a;
   box-sizing: border-box;
   flex-shrink: 0;
 }

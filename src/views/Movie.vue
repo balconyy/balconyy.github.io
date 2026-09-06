@@ -8,10 +8,11 @@ import RelationsList from "@/features/player/components/info/RelationsList.vue";
 import {useRouter} from "vue-router";
 import ReviewsList from "@/features/player/components/info/review/ReviewsList.vue";
 import MovieInfoSkeleton from "@/features/player/components/info/MovieInfoSkeleton.vue";
-import WinIcon from "@/components/WinIcon.vue";
+import NavIcon from "@/components/navigation/NavIcon.vue";
 import homeIcon from "@/assets/icons/home-icon.png";
 import StreamerRatingList from "@/features/streamer/components/StreamerRatingList.vue";
 import SidePanel from "@/components/window/SidePanel.vue";
+import NavBar from "@/components/navigation/NavBar.vue";
 
 const props = defineProps({
   kpId: {
@@ -34,7 +35,6 @@ const {
 } = useMovieInfo()
 
 
-const router = useRouter()
 const onMovieClick = (movie) => {
   kpId.value = movie.kpId;
 }
@@ -46,22 +46,16 @@ watchEffect(async () => {
   }
 })
 
-function toMainScreen() {
-  router.push({
-    name: 'home',
-  })
-}
-
 watch(movie, (newVal) => {
   document.title = `${newVal?.titleMain ?? 'Загрузка'} — Balcony`
 })
+
 
 </script>
 
 <template>
   <Background/>
-
-  <WinIcon class="home-icon" :icon="homeIcon" label="Главная" @open="toMainScreen"/>
+  <NavBar/>
   <SidePanel/>
   <MovieInfoSkeleton v-if="isLoading"/>
   <MovieInfo v-else-if="movie" :movie="movie" :links="links"/>

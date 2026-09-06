@@ -1,11 +1,13 @@
 <script setup>
 
-import {onMounted} from "vue";
+import {onMounted, onUnmounted} from "vue";
 import AuthWindow from "@/features/auth/components/AuthWindow.vue";
 import ChatWindow from "@/features/chat/components/ChatWindow.vue";
 import {useWindows} from "@/composables/useWindows.ts";
 import WindowsColumn from "@/components/window/WindowsColumn.vue";
 import JellyBlobWindow from "@/features/blob/components/JellyBlobWindow.vue";
+import {connectChatSocket, disconnectChatSocket} from "@/services/webSocket.ts";
+import {useChatStore} from "@/store/chat.ts";
 
 
 const {
@@ -23,10 +25,14 @@ const {
 
 onMounted(() => {
   initWindows()
+  useChatStore().init()
+  connectChatSocket()
 })
 
+onUnmounted(() => {
+  disconnectChatSocket()
+})
 
-const jokeUrl = "https://images.thevoicemag.ru/upload/img_cache/e08/e08bc0fdb313f9098b5bfb1e23eabebc_cropped_600x739.jpeg"
 </script>
 
 <template>
@@ -45,7 +51,6 @@ const jokeUrl = "https://images.thevoicemag.ru/upload/img_cache/e08/e08bc0fdb313
     >
       <template #top="{ height, width, onResize }">
         <JellyBlobWindow
-            :url="jokeUrl"
             :currentHeight="height"
             :currentWidth="width"
             :isOpen="isJokeOpen"
