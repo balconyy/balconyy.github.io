@@ -30,7 +30,7 @@ function onImgError(e) {
       >
 
       <h3 class="title-main">{{ movie.titleMain != null ? movie.titleMain : movie.titleSecond }}
-        <span class="card-year">{{ movie?.year ? " (" + movie?.year + ")" : '' }}</span></h3>
+        {{ movie?.year ? " (" + movie?.year + ")" : '' }}</h3>
     </RouterLink>
   </div>
 </template>
@@ -78,14 +78,13 @@ function onImgError(e) {
   color: var(--white);
   letter-spacing: -0.5px;
   text-transform: uppercase;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-.card-year{
-  font-weight: 700;
-  white-space: nowrap;
 }
 
 .old-school-effect {

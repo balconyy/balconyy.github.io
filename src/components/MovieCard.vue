@@ -152,9 +152,9 @@ function onImgError(e) {
 
 .delete-button {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 20;
+  top: 0;
+  right: 0;
+  z-index: 3;
 
   width: 32px;
   height: 32px;

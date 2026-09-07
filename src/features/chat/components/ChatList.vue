@@ -5,7 +5,6 @@ import {Message} from "@/models/message";
 import {MessagePart, parseMessageParts} from "@/utils/message";
 import LazyChatImage from "@/features/chat/components/LazyChatImage.vue";
 
-
 const props = defineProps<{
   messages: Message[],
   isOpen: boolean,
@@ -13,39 +12,40 @@ const props = defineProps<{
 
 
 const chatLog = ref<HTMLElement | null>(null);
-// Отдельный враппер для самих строк чата. Он нужен только для того,
-// чтобы у нас был элемент, чей размер реально меняется при добавлении
-// сообщений и — что здесь важно — при догрузке картинок. У самого
-// .chat-log (overflow-y: auto) собственный размер не меняется никогда,
-// поэтому ResizeObserver на нём самом не сработает.
 const chatLogInner = ref<HTMLElement | null>(null);
 
-// Отдаём вниз по дереву ссылку на сам скролл-контейнер чата, чтобы
-// IntersectionObserver в LazyChatImage считал видимость относительно
-// него, а не всей страницы (иначе будут грузиться картинки, скрытые
-// под другими окнами/вкладками, если чат не top-level во вьюпорте).
 provide('chatScrollRoot', chatLog);
+const BOTTOM_THRESHOLD_PX = 48;
+
+const isPinnedToBottom = ref(true);
 
 function scrollToBottom() {
   if (chatLog.value) {
-    chatLog.value.scrollTop = chatLog.value.scrollHeight * 20;
+    chatLog.value.scrollTop = chatLog.value.scrollHeight;
   }
+}
+
+function scrollToBottomIfPinned() {
+  if (isPinnedToBottom.value) {
+    scrollToBottom();
+  }
+}
+
+function onScroll() {
+  if (!chatLog.value) return;
+  const {scrollTop, scrollHeight, clientHeight} = chatLog.value;
+  isPinnedToBottom.value = scrollHeight - scrollTop - clientHeight <= BOTTOM_THRESHOLD_PX;
 }
 
 let resizeObserver: ResizeObserver | null = null;
 
 onMounted(() => {
   scrollToBottom();
+  isPinnedToBottom.value = true;
 
-  // Картинки в сообщениях подгружаются лениво и асинхронно (см.
-  // LazyChatImage): плейсхолдер сначала маленький, а когда картинка
-  // реально скачается, блок с ней вырастает — уже ПОСЛЕ того, как
-  // отработали onMounted/onUpdated. Без этого наблюдателя скролл
-  // оставался на старой (меньшей) высоте контента и «автоскролл
-  // в самый низ» ломался именно на сообщениях с картинками.
   if (chatLogInner.value) {
     resizeObserver = new ResizeObserver(() => {
-      scrollToBottom();
+      scrollToBottomIfPinned();
     });
     resizeObserver.observe(chatLogInner.value);
   }
@@ -55,24 +55,30 @@ onBeforeUnmount(() => {
   resizeObserver?.disconnect();
 });
 
-watch(() => props.isOpen, async () => {
+watch(() => props.isOpen, async (isOpen) => {
+  if (!isOpen) return;
   await nextTick();
+
+  isPinnedToBottom.value = true;
   scrollToBottom();
 });
+
+watch(() => props.messages, async (newMessages) => {
+  if (!newMessages) return;
+  await nextTick();
+
+  isPinnedToBottom.value = true;
+  scrollToBottom();
+}, {deep: true});
 
 
 onUpdated(() => {
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          scrollToBottom();
-        });
+        scrollToBottomIfPinned();
       });
     }
 )
 
-// Кэшируем разбор текста на части (текст/картинка) по ссылке на сам
-// объект сообщения, чтобы regex не гонялся заново по всем 500 строкам
-// при каждом ре-рендере списка (например, когда прилетает новое сообщение).
 const partsCache = new WeakMap<Message, MessagePart[]>();
 
 function getMessageParts(message: Message): MessagePart[] {
@@ -84,7 +90,6 @@ function getMessageParts(message: Message): MessagePart[] {
   return parts;
 }
 
-// Текст без картинок — идёт сразу за ником, на той же строке.
 function getMessageText(message: Message): string {
   return getMessageParts(message)
       .filter((part): part is Extract<MessagePart, { type: 'text' }> => part.type === 'text')
@@ -92,18 +97,13 @@ function getMessageText(message: Message): string {
       .join('');
 }
 
-// Картинки из сообщения — рендерятся отдельным блоком под ником,
-// а не инлайново среди текста.
+
 function getMessageImages(message: Message): string[] {
   return getMessageParts(message)
       .filter((part): part is Extract<MessagePart, { type: 'image' }> => part.type === 'image')
       .map(part => part.value);
 }
 
-// Ключ для v-for. Если в вашей модели Message уже есть стабильный id с
-// сервера — замените на него напрямую (:key="message.id"). Без стабильного
-// ключа Vue может пересоздавать уже отрисованные строки при обновлении
-// списка, и уже загруженные картинки будут лишний раз перезапрашиваться.
 function getMessageKey(message: Message, index: number): string | number {
   const withId = message as unknown as { id?: string | number };
   return withId.id ?? `${message.createdAt}-${index}`;
@@ -111,7 +111,7 @@ function getMessageKey(message: Message, index: number): string | number {
 </script>
 
 <template>
-  <div class="chat-log" ref="chatLog">
+  <div class="chat-log" ref="chatLog" @scroll="onScroll">
     <div class="chat-log-inner" ref="chatLogInner">
       <div
           v-for="(message, index) in messages"

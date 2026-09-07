@@ -91,7 +91,7 @@ onBeforeUnmount(() => {
         class="show-all-button"
         @click="showAll"
     >
-      Показать все
+      Показать всю
     </button>
   </template>
 </template>

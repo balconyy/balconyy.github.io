@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {inject, onBeforeUnmount, onMounted, ref, type Ref} from 'vue';
-import {useImageLoadQueue} from "@/features/chat/composables/UseImageLoadQueue";
+import {useImageLoadQueue} from "@/features/chat/composables/useImageLoadQueue";
 
 
 const props = defineProps<{
@@ -12,8 +12,6 @@ const actualSrc = ref<string | null>(null);
 const isLoaded = ref(false);
 const hasError = ref(false);
 
-// chatScrollRoot прокидывается родителем (ChatList) через provide —
-// это сам скролл-контейнер .chat-log, а не window/viewport.
 const scrollRootRef = inject<Ref<HTMLElement | null>>('chatScrollRoot', ref(null));
 const {enqueue, release} = useImageLoadQueue();
 
