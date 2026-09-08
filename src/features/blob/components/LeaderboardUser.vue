@@ -22,7 +22,7 @@ defineProps<{
       </span>
     </div>
     <img
-        class="badge"
+        class="leader-badge"
         :src="row.skin"
         alt=""/>
 
@@ -77,7 +77,7 @@ defineProps<{
   background: #1a1a1a;
 }
 
-.badge {
+.leader-badge {
   flex: 0 0 24px;
   width: 24px;
   height: 24px;

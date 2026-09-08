@@ -3,9 +3,10 @@ import MovieSearch from "./MovieSearch.vue";
 import SearchList from "./SearchList.vue";
 import FeatureTabs from "@/features/search/components/FeatureTabs.vue";
 import {useSearch} from "@/features/search/composables/useSearch";
-import {HISTORY_TAB_ID, SEARCH_TAB_ID, useTabs} from "@/features/search/composables/useTabs";
+import {HISTORY_TAB_ID, POPULAR_TAB_ID, SEARCH_TAB_ID, useTabs} from "@/features/search/composables/useTabs";
 import HistoryList from "@/features/search/components/HistoryList.vue";
 import {onMounted} from "vue";
+import PopularList from "@/features/search/components/PopularList.vue";
 
 const {
   movieList,
@@ -45,9 +46,9 @@ onMounted(() => {
   <div class="search-main">
     <MovieSearch @search="search"/>
 
-    <FeatureTabs  :tabs="tabs"
-                  :active-tab-id="activeTabId"
-                  @clickTab="activateTabById"/>
+    <FeatureTabs :tabs="tabs"
+                 :active-tab-id="activeTabId"
+                 @clickTab="activateTabById"/>
 
     <SearchList v-if="activeTabId === SEARCH_TAB_ID"
                 :movies="movieList"
@@ -55,8 +56,9 @@ onMounted(() => {
                 :error-message="error?.message"
     />
 
-    <HistoryList v-else-if="activeTabId === HISTORY_TAB_ID"
-    />
+    <HistoryList v-else-if="activeTabId === HISTORY_TAB_ID"/>
+
+    <PopularList v-else-if="activeTabId === POPULAR_TAB_ID"/>
 
 
   </div>

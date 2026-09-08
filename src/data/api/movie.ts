@@ -1,7 +1,8 @@
 import {baseClient} from "../http";
 import {SearchListDTO} from "../dto/searchDTO";
 import {MovieDto} from "../dto/movieDTO";
-import { RecentlyLists} from "../dto/movieAddonDTO";
+import {RecentlyLists} from "../dto/movieAddonDTO";
+import {MovieKp} from "@/models/movieKp";
 
 export const movieApi = {
     search(query: string, controller: AbortController) {
@@ -15,15 +16,20 @@ export const movieApi = {
     },
     getRelations(kpId: number) {
         return baseClient.get("/movie/relations", {
-            params: { kpId }
+            params: {kpId}
         });
     },
     getReviews(lbSlug: string) {
         return baseClient.get("/movie/reviews", {
-            params: { lbSlug }
+            params: {lbSlug}
         });
     },
     getRecentlyWatched() {
         return baseClient.get<RecentlyLists>(`/movie/recently-watched`);
+    },
+    getPopularMovies(page: number) {
+        return baseClient.get<MovieKp[]>("/movie/popular", {
+            params: {page}
+        });
     }
 };

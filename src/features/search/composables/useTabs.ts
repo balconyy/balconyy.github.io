@@ -1,14 +1,14 @@
 import {computed, ref} from "vue";
-import {capitalizeText} from '@/utils/strings'
-import {useTabsStore} from "../../../store/tabs";
+import {useTabsStore} from "@/store/tabs";
 
 export const SEARCH_TAB_ID = 0
 export const HISTORY_TAB_ID = 1
+export const POPULAR_TAB_ID = 2
 
 export function useTabs() {
     const store = useTabsStore()
 
-    const tabs = ref([{id: HISTORY_TAB_ID, label: 'История'}])
+    const tabs = ref([{id: HISTORY_TAB_ID, label: 'История'}, {id: POPULAR_TAB_ID, label: 'Популярное'}])
     const activeTabId = computed(() => store.tabId)
 
     const createSearchTab = (query: string) => {
@@ -23,6 +23,10 @@ export function useTabs() {
 
     const initTabs = () => {
         store.hydrateTabId()
+    }
+
+    function capitalizeText(text: string) {
+        return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
     }
 
 

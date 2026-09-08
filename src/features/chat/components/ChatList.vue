@@ -123,10 +123,15 @@ function getMessageKey(message: Message, index: number): string | number {
               hour: '2-digit',
               minute: '2-digit',
             })
-          }}</span> <span
-          class="username"
-          :style="{ color: message.nameColor }"
-      >{{ message.displayName }}:</span> <span class="text">{{ getMessageText(message) }}</span>
+          }}</span>
+        <img v-if="message.blobImage"
+             class="message-badge"
+             :src="message.blobImage"
+             alt=""/>
+        <span
+            class="username"
+            :style="{ color: message.nameColor }"
+        >{{ message.displayName }}:</span> <span class="text">{{ getMessageText(message) }}</span>
 
         <div v-if="getMessageImages(message).length" class="chat-line-images">
           <LazyChatImage
@@ -158,8 +163,16 @@ function getMessageKey(message: Message, index: number): string | number {
   scrollbar-color: #2b2d31 #1f1f1f;
 }
 
+.message-badge {
+  width: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
 .chat-line {
   padding: 2px 0;
+  line-height: 20px;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   word-break: break-word;
@@ -168,10 +181,12 @@ function getMessageKey(message: Message, index: number): string | number {
 
 .timestamp {
   color: #72767d;
+  margin-right:6px;
 }
 
 .username {
   font-weight: bold;
+  margin-left:6px;
 }
 
 .text {
