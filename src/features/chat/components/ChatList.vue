@@ -118,16 +118,16 @@ function getMessageKey(message: Message, index: number): string | number {
           :key="getMessageKey(message, index)"
           class="chat-line"
       >
-        <span class="timestamp">{{
-            new Date(message.createdAt).toLocaleTimeString([], {
+        <span class="timestamp">{{new Date(message.createdAt).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
             })
-          }}</span>
-        <img v-if="message.blobImage"
-             class="message-badge"
-             :src="message.blobImage"
-             alt=""/>
+          }}</span>{{ ''}}
+
+        <div v-if="message.blobImage" class="message-badge">
+          <img :src="message.blobImage" alt=""/>
+        </div>
+
         <span
             class="username"
             :style="{ color: message.nameColor }"
@@ -165,9 +165,18 @@ function getMessageKey(message: Message, index: number): string | number {
 
 .message-badge {
   width: 18px;
+  height: 18px;
   border-radius: 50%;
-  object-fit: cover;
+  overflow: hidden;
+  display: inline-block;
   vertical-align: middle;
+}
+
+.message-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.05);
 }
 
 .chat-line {
@@ -181,12 +190,11 @@ function getMessageKey(message: Message, index: number): string | number {
 
 .timestamp {
   color: #72767d;
-  margin-right:6px;
 }
 
 .username {
   font-weight: bold;
-  margin-left:6px;
+  margin-left: 5px;
 }
 
 .text {

@@ -61,7 +61,6 @@ function onImgError(e) {
   display: block;
   text-decoration: none;
   color: inherit;
-
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -73,6 +72,9 @@ function onImgError(e) {
   padding: 8px;
   height: 400px;
   background: radial-gradient(rgba(var(--white-rgb)/0.1) 40%, rgba(var(--accent-black-rgb)) 100%);
+  word-break: keep-all;
+  overflow-wrap: normal;
+  white-space: normal;
 }
 
 .movie-card-wrapper:hover .movie-card {
