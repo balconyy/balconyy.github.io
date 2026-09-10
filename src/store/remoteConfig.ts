@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia'
-import {configApi} from "@/data/api/config";
+import {panelApi} from "@/data/api/panel";
 import {Config} from "@/models/config";
 
 export const useRemoteConfigStore = defineStore('remoteConfig', {
@@ -11,7 +11,7 @@ export const useRemoteConfigStore = defineStore('remoteConfig', {
     actions: {
         async getConfig() {
             try {
-                const res = await configApi.getConfig();
+                const res = await panelApi.getConfig();
                 this.remoteConfig = res.data;
             } catch (e) {
                 this.remoteConfig = null;
@@ -23,7 +23,7 @@ export const useRemoteConfigStore = defineStore('remoteConfig', {
         },
         async setConfig(config: Config) {
             try {
-                await configApi.setConfig(config)
+                await panelApi.setConfig(config)
                 this.remoteConfig = config
             } catch (e) {
                 console.error('Failed to send remote config', e)

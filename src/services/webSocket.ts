@@ -12,19 +12,15 @@ interface Channel {
     socket: WebSocket | null
     reconnectTimer: number | null
     reconnectAttempt: number
-    connectionId: number      // "поколение" соединения — защита от гонок при пересоздании
+    connectionId: number
     closedIntentionally: boolean
 }
 
-// Один room = один физический сокет. Каналы независимы и могут жить параллельно —
-// можно одновременно быть подключённым и к дефолтному чату, и к 'cinema'.
+
 const channels = new Map<string, Channel>()
 
-// Подписки на конкретные типы данных (message/count/cinema_sync/...).
 const eventListeners = new Map<WebSocketEvent['type'], Set<EventListener>>()
 
-// Подписки на смену статуса конкретного канала (открылся/закрылся).
-// Этот файл намеренно ничего не знает про чат/кино — подписываются они сами.
 const connectionListeners = new Map<string, Set<ConnectionListener>>()
 
 function channelKey(room?: string): string {
@@ -65,13 +61,6 @@ function dispatch(data: WebSocketEvent) {
     eventListeners.get(data.type)?.forEach(fn => (fn as EventListener)(data as any))
 }
 
-/**
- * Подписка на данные конкретного типа события. Возвращает функцию отписки —
- * вызывайте её в onUnmounted.
- *
- *   const unsubscribe = onWsEvent('cinema_sync', (event) => applySync(event))
- *   onUnmounted(unsubscribe)
- */
 export function onWsEvent<T extends WebSocketEvent['type']>(
     type: T,
     handler: (event: Extract<WebSocketEvent, { type: T }>) => void
@@ -81,14 +70,6 @@ export function onWsEvent<T extends WebSocketEvent['type']>(
     return () => eventListeners.get(type)?.delete(handler as EventListener)
 }
 
-/**
- * Подписка на открытие/закрытие конкретного канала (room).
- * Например, useCinema сам решает, что при открытии 'cinema' нужно дёрнуть fetchSync —
- * этому файлу для этого не нужно ничего знать про кино.
- *
- *   onWsConnectionChange('cinema', (connected) => { if (connected) fetchSync() })
- *   onWsConnectionChange(undefined, (connected) => setConnected(connected)) // дефолтный канал
- */
 export function onWsConnectionChange(room: string | undefined, handler: ConnectionListener): () => void {
     const key = channelKey(room)
     if (!connectionListeners.has(key)) connectionListeners.set(key, new Set())
@@ -149,7 +130,7 @@ export function disconnectChatSocket(room?: string) {
     if (!channel) return
 
     channel.closedIntentionally = true
-    channel.connectionId++ // всё, что придёт от старого сокета после этого — игнорируется
+    channel.connectionId++
 
     if (channel.reconnectTimer) {
         clearTimeout(channel.reconnectTimer)

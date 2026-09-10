@@ -44,6 +44,7 @@ function clear() {
 }
 
 onWsEvent('cinema_sync', (event) => applySync(event))
+onWsEvent('cinema_stop', (event) => clear())
 
 onWsConnectionChange('cinema', (connected) => {
     if (connected) fetchSync()
@@ -55,7 +56,6 @@ export function useCinema() {
         iframe,
         currentTimeSec,
         isLoading,
-        applySync,
         fetchSync,
         clear,
     }

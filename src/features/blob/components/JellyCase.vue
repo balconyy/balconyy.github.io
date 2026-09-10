@@ -83,12 +83,13 @@ function handleClose() {
 
     <CaseRoulette
         v-if="winner && isRouletteOpen"
+        :isEquipLoading="isEquipLoading"
         :available-skins="availableSkins"
         :winner="winner"
         @equip="handleEquip"
         @claim="handleClose"
         @close="handleClose"
-        isEquipLoading/>
+    />
 
   </div>
 </template>

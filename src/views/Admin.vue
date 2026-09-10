@@ -1,14 +1,14 @@
 <script setup>
 
 import NavigationBar from "@/features/admin/components/NavigationBar.vue";
-import RemoteConfig from "@/features/admin/components/config/RemoteConfig.vue";
+import Panel from "@/features/admin/components/Panel.vue";
 </script>
 
 <template>
   <div class="layout">
     <NavigationBar class="navbar"/>
     <div class="content">
-      <RemoteConfig/>
+      <Panel/>
     </div>
   </div>
 </template>
