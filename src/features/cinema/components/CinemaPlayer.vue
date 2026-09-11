@@ -232,7 +232,7 @@ onBeforeUnmount(() => {
   height: 100%;
   border: none;
   display: block;
-  //pointer-events: none;
+  pointer-events: none;
 }
 
 .cinema-controls {
