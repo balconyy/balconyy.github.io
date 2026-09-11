@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch} from "vue";
 import {QUALITY_LEVELS, useCinemaPlayer} from "@/features/cinema/composables/useCinemaPlayer";
 import CinemaControls from "@/features/cinema/components/CinemaControls.vue";
 import NavBar from "@/components/navigation/NavBar.vue";
@@ -13,10 +13,11 @@ const emit = defineEmits<{ sync: [] }>()
 
 const frameRef = ref<HTMLElement | null>(null)
 const iframeRef = ref<HTMLIFrameElement | null>(null)
-const iframeSrc = ref(props.src)
+const iframeSrc = ref<string | undefined>(undefined)
+
 const playerOrigin = computed(() => {
   try {
-    return new URL(iframeSrc.value).origin
+    return new URL(iframeSrc.value ?? '').origin
   } catch {
     return undefined
   }
@@ -32,6 +33,7 @@ const {
   setVolume,
   setQuality,
   seekTo,
+  reset,
 } = useCinemaPlayer(iframeRef, playerOrigin)
 
 const hovering = ref(false)
@@ -94,6 +96,13 @@ function selectQuality(index: number) {
 watch(
     () => props.src,
     (newSrc) => {
+      // Новое видео — сбрасываем состояние СТАРОГО плеера (ready/quality/
+      // duration/currentTime) ДО того, как поменяем src, чтобы UI не
+      // показывал обрывки предыдущего ролика, пока новый iframe не
+      // проинициализируется и не пришлёт свои настоящие события.
+      // Громкость сознательно не сбрасывается — она из предыдущего
+      // видео переносится в новое намеренно (см. on('inited') ниже).
+      reset()
       iframeSrc.value = newSrc
       currentQualityLabel.value = null
       pendingQualityIndex.value = null
@@ -103,33 +112,38 @@ watch(
 watch(
     () => props.currentTime,
     (newTime) => {
-      play()
       seekTo(newTime)
     }
 )
 
-onMounted(() => {
-  const iframe = iframeRef.value
-
-  if (!iframe) {
-    return
-  }
-
+onBeforeMount(() => {
   attach()
+  iframeSrc.value = props.src
+})
 
+onMounted(() => {
   document.addEventListener(
       "fullscreenchange",
       onFullscreenChange
   )
 
+
+  on("*", (e) => {
+    console.log(e)
+  })
+
   on("quality", (e) => {
     emit("sync")
   })
 
-
   on("inited", () => {
     play()
-    setVolume(100)
+    seekTo(props.currentTime)
+  })
+
+  on("vast_finish", () => {
+    play()
+    setVolume(state.value.volume)
     seekTo(props.currentTime)
   })
 
@@ -218,7 +232,7 @@ onBeforeUnmount(() => {
   height: 100%;
   border: none;
   display: block;
-  pointer-events: none;
+  //pointer-events: none;
 }
 
 .cinema-controls {

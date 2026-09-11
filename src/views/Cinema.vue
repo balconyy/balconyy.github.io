@@ -7,6 +7,7 @@ import CinemaSidePanel from "@/features/cinema/components/CinemaSidePanel.vue"
 import {useCinema} from "@/features/cinema/composables/useCinema";
 import {connectChatSocket, disconnectChatSocket} from "@/services/webSocket";
 import {useChatStore} from "@/store/chat";
+import MovieButton from "@/features/search/components/MovieButton.vue";
 
 useHead({
   title: 'Кинозал — Balcony',
@@ -18,7 +19,7 @@ useHead({
   ]
 })
 
-const {movie, iframe, currentTimeSec, isLoading, fetchSync, clear} = useCinema()
+const {movie, iframe, currentTimeSec, isLoading, isError, fetchSync, clear} = useCinema()
 
 onMounted(() => {
   connectChatSocket('cinema')
@@ -42,7 +43,18 @@ onUnmounted(() => {
           @sync="fetchSync"
       />
       <div v-else class="player-placeholder">
-        {{ isLoading ? 'Загрузка…' : 'Сейчас ничего не показывают' }}
+        <template v-if="isLoading">
+          Загрузка…
+        </template>
+
+        <template v-else-if="isError">
+          Ой, что-то пошло не так
+          <MovieButton text="Обновить" @click="fetchSync" />
+        </template>
+
+        <template v-else>
+          Сейчас ничего не показывают
+        </template>
       </div>
     </div>
 

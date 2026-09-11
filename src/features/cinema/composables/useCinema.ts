@@ -8,6 +8,7 @@ const movie = ref<CinemaMovie | null>(null)
 const iframe = ref<string | null>(null)
 const currentTimeSec = ref(0)
 const isLoading = ref(false)
+const isError = ref(false)
 
 function setState(payload: CinemaSyncDto) {
     movie.value = payload.movie
@@ -23,6 +24,7 @@ function applySync(payload: CinemaSyncDto) {
 async function fetchSync() {
     if (isLoading.value) return
     isLoading.value = true
+    isError.value = false
     try {
         const response = await cinemaApi.getSync()
         setState(response.data)
@@ -30,7 +32,7 @@ async function fetchSync() {
         if (e?.response?.status === 404) {
             clear()
         } else {
-            console.error('Не удалось получить /cinema/sync', e)
+            isError.value = true
         }
     } finally {
         isLoading.value = false
@@ -56,6 +58,7 @@ export function useCinema() {
         iframe,
         currentTimeSec,
         isLoading,
+        isError,
         fetchSync,
         clear,
     }

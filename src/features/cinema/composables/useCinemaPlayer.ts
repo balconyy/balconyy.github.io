@@ -23,6 +23,16 @@ export interface CinemaPlayerState {
 
 type Listener = (event: CinemaPlayerEvent) => void
 
+// Число из postMessage может прийти пустой строкой или вовсе отсутствовать.
+// Number('') === 0, поэтому раньше такие "пустышки" тихо превращались
+// в валидное, но неверное состояние (например громкость 0).
+function safeNumber(raw: unknown): number | null {
+    if (raw === undefined || raw === null || raw === '') return null
+    const n = Number(raw)
+    return Number.isNaN(n) ? null : n
+}
+
+
 export function useCinemaPlayer(
     iframeRef: Ref<HTMLIFrameElement | null>,
     playerOrigin?: MaybeRefOrGetter<string | undefined>
@@ -46,8 +56,6 @@ export function useCinemaPlayer(
     function handleMessage(e: MessageEvent) {
         const iframe = iframeRef.value
         if (!iframe || e.source !== iframe.contentWindow) return
-        // если знаем origin плеера — сверяем и входящие сообщения тоже
-        // (playerOrigin разворачиваем каждый раз, т.к. он может смениться вместе с src)
         const origin = toValue(playerOrigin)
         if (origin && e.origin !== origin) return
 
@@ -58,23 +66,27 @@ export function useCinemaPlayer(
             case 'inited':
                 state.value.ready = true
                 break
-            case 'volume':
-                if (payload.volume !== undefined) state.value.volume = Number(payload.volume)
-                break
             case 'quality':
                 if (payload.data !== undefined) state.value.quality = resolveQualityLabel(payload.data)
                 break
-            case 'duration':
-                if (payload.duration !== undefined) state.value.duration = payload.duration
+            case 'duration': {
+                const d = safeNumber(payload.duration)
+                if (d !== null) state.value.duration = d
                 break
-            case 'time':
-                if (payload.data !== undefined) state.value.currentTime = Number(payload.data)
-                if (payload.duration !== undefined) state.value.duration = payload.duration
+            }
+            case 'time': {
+                const t = safeNumber(payload.data)
+                if (t !== null) state.value.currentTime = t
+                const d = safeNumber(payload.duration)
+                if (d !== null) state.value.duration = d
                 break
+            }
             case 'seek':
-            case 'rewound':
-                if (payload.data !== undefined) state.value.currentTime = Number(payload.data)
+            case 'rewound': {
+                const t = safeNumber(payload.data)
+                if (t !== null) state.value.currentTime = t
                 break
+            }
         }
 
         listeners.get(payload.event)?.forEach((fn) => fn(payload))
@@ -114,12 +126,19 @@ export function useCinemaPlayer(
     }
 
     function setVolume(volume: number) {
-        const v = Math.min(1, Math.max(0, volume))
-        sendCommand('volume', v)
+        state.value.volume = volume
+        sendCommand('volume', volume)
     }
 
     function setQuality(index: QualityIndex | number) {
         sendCommand('quality', index)
+    }
+
+    function reset() {
+        state.value.ready = false
+        state.value.quality = null
+        state.value.duration = 0
+        state.value.currentTime = 0
     }
 
     function attach() {
@@ -140,6 +159,7 @@ export function useCinemaPlayer(
         setVolume,
         setQuality,
         seekTo,
+        reset,
         attach,
         detach,
     }
