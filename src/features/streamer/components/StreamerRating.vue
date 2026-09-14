@@ -126,7 +126,7 @@ const KINOPOISK_PROFILE_LINK = "https://www.kinopoisk.ru/user/"
   );
   pointer-events: none;
   z-index: 4;
-  border-radius: 12px;
+  border-radius: 50%;
 }
 
 

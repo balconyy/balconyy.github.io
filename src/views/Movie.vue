@@ -5,14 +5,12 @@ import Background from "@/components/Background.vue";
 import {ref, watch, watchEffect} from "vue";
 import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
 import RelationsList from "@/features/player/components/info/RelationsList.vue";
-import {useRouter} from "vue-router";
 import ReviewsList from "@/features/player/components/info/review/ReviewsList.vue";
 import MovieInfoSkeleton from "@/features/player/components/info/MovieInfoSkeleton.vue";
-import NavIcon from "@/components/navigation/NavIcon.vue";
-import homeIcon from "@/assets/icons/home-icon.png";
 import StreamerRatingList from "@/features/streamer/components/StreamerRatingList.vue";
 import SidePanel from "@/components/window/SidePanel.vue";
 import NavBar from "@/components/navigation/NavBar.vue";
+import VodPlayer from "@/features/player/components/VodPlayer.vue";
 
 const props = defineProps({
   kpId: {
@@ -59,6 +57,7 @@ watch(movie, (newVal) => {
   <SidePanel/>
   <MovieInfoSkeleton v-if="isLoading"/>
   <MovieInfo v-else-if="movie" :movie="movie" :links="links"/>
+  <VodPlayer/>
   <PlayerComponent :playerState="playerState"/>
   <StreamerRatingList :ratings="ratings"/>
   <RelationsList v-if="relations && relations.length"

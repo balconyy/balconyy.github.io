@@ -96,13 +96,7 @@ function selectQuality(index: number) {
 watch(
     () => props.src,
     (newSrc) => {
-      // Новое видео — сбрасываем состояние СТАРОГО плеера (ready/quality/
-      // duration/currentTime) ДО того, как поменяем src, чтобы UI не
-      // показывал обрывки предыдущего ролика, пока новый iframe не
-      // проинициализируется и не пришлёт свои настоящие события.
-      // Громкость сознательно не сбрасывается — она из предыдущего
-      // видео переносится в новое намеренно (см. on('inited') ниже).
-      reset()
+
       iframeSrc.value = newSrc
       currentQualityLabel.value = null
       pendingQualityIndex.value = null

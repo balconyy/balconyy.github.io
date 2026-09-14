@@ -13,6 +13,7 @@
     "@lucide/vue": "^1.16.0",
     "@vueuse/head": "^0.9.8",
     "axios": "^1.16.1",
+    "hls.js": "^1.7.2",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
     "vite-svg-loader": "^5.1.1",
@@ -31,7 +32,7 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "allowScripts": {
-    "@parcel/watcher@2.5.6": true,
-    "vue-demi@0.14.10": true
+    "vue-demi@0.14.10": true,
+    "@parcel/watcher@2.6.0": true
   }
 }

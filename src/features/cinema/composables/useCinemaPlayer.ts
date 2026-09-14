@@ -1,6 +1,8 @@
 import {ref, onBeforeUnmount, toValue, type Ref, type MaybeRefOrGetter} from 'vue'
 
 
+//Singleton
+
 export const QUALITY_LEVELS = ['240p', '360p', '480p', '720p', '1080p'] as const
 export type QualityLevel = typeof QUALITY_LEVELS[number]
 export type QualityIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
@@ -23,9 +25,6 @@ export interface CinemaPlayerState {
 
 type Listener = (event: CinemaPlayerEvent) => void
 
-// Число из postMessage может прийти пустой строкой или вовсе отсутствовать.
-// Number('') === 0, поэтому раньше такие "пустышки" тихо превращались
-// в валидное, но неверное состояние (например громкость 0).
 function safeNumber(raw: unknown): number | null {
     if (raw === undefined || raw === null || raw === '') return null
     const n = Number(raw)

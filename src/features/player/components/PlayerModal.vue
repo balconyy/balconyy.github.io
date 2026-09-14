@@ -1,61 +1,4 @@
-<template>
-  <div class="modal" @click.self="$emit('close')">
-    <div class="modal-content" @click.stop>
-      <button class="close" @click="$emit('close')">&times;</button>
-
-      <h2 v-if="!activeGroup">Выберите плеер</h2>
-      <h2 v-else>
-        <button class="back-btn" @click="collapseGroup">← Назад</button>
-        {{ activeGroup }}
-      </h2>
-
-      <ul class="players-list">
-        <template v-if="!activeGroup">
-          <li v-for="item in mixedPlayersList" :key="item.type === 'player' ? item.data.key : item.name">
-            <button
-                v-if="item.type === 'player'"
-                :class="['player-item', { active: isSelected(item.data) }]"
-                @click="selectPlayer(item.data)"
-            >
-              {{ item.data.name }}
-            </button>
-            <button
-                v-else
-                :class="['group-item', { active: isGroupSelected(item.name) }]"
-                @click="expandGroup(item.name)"
-            >
-              <span class="material-icons group-icon">folder</span>
-              {{ item.displayName }}
-              <span
-                  v-if="groupHasWarning(item.name)"
-                  class="warning-icon material-icons"
-                  title="Внимание!"
-              >warning</span
-              >
-            </button>
-          </li>
-        </template>
-        <template v-else>
-          <li v-for="player in groupPlayers(activeGroup)" :key="player.key">
-            <button
-                :class="['player-item', { active: isSelected(player) }]"
-                @click="selectPlayer(player)"
-            >
-              {{ formatPlayerLabel(player) }}
-              <span v-if="player.warning" class="warning-icon material-icons" title="Внимание!"
-              >warning</span
-              >
-            </button>
-          </li>
-        </template>
-      </ul>
-    </div>
-  </div>
-</template>
-
 <script setup>
-import {ref, computed} from 'vue'
-
 const props = defineProps({
   players: {
     type: Array,
@@ -68,60 +11,35 @@ const props = defineProps({
 })
 const emit = defineEmits(['close', 'select'])
 
-const activeGroup = ref(null)
-
-const mixedPlayersList = computed(() => {
-  const result = []
-
-  for (const player of props.players) {
-    result.push({type: 'player', data: player})
-  }
-
-  return result
-})
-
-
-const isVeoVeo = (player) => player.name.toUpperCase().includes('VEOVEO')
-const isKodik = (player) => player.name.toUpperCase().includes('KODIK')
-
-const formatPlayerLabel = (player) => {
-  return player.name
-}
-
 const selectPlayer = (player) => {
   emit('select', player)
   emit('close')
 }
 
-const isSelected = (player) => props.selectedPlayer && props.selectedPlayer.name === player.name
+const isSelected = (player) => props.selectedPlayer?.name === player.name
 
-const isGroupSelected = (group) => {
-  if (!props.selectedPlayer) return false
-  return (
-      (group === 'veoveo' && isVeoVeo(props.selectedPlayer)) ||
-      (group === 'kodik' && isKodik(props.selectedPlayer))
-  )
-}
-
-const expandGroup = (group) => {
-  activeGroup.value = group
-}
-const collapseGroup = () => {
-  activeGroup.value = null
-}
-const groupPlayers = (group) => {
-  let players = props.players.filter(
-      (player) => (group === 'veoveo' && isVeoVeo(player)) || (group === 'kodik' && isKodik(player))
-  )
-
-  if (group === 'kodik') {
-    return players.sort((a, b) => formatPlayerLabel(a).localeCompare(formatPlayerLabel(b)))
-  }
-
-  return players
-}
-const groupHasWarning = (group) => groupPlayers(group).some((player) => player.warning)
 </script>
+
+<template>
+  <div class="modal" @click.self="$emit('close')">
+    <div class="modal-content" @click.stop>
+      <button class="close" @click="$emit('close')">&times;</button>
+
+      <h2>Выберите плеер</h2>
+      <ul class="players-list">
+        <li v-for="player in players" :key="player.key ?? player.name">
+          <button
+              :class="['player-item', { active: isSelected(player) }]"
+              @click="selectPlayer(player)"
+          >
+            {{ player.name }}
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
 
 <style scoped>
 .modal {
@@ -168,15 +86,6 @@ h2 {
   align-items: center;
 }
 
-.back-btn {
-  background: transparent;
-  border: none;
-  color: #aaa;
-  font-size: 1rem;
-  margin-right: 8px;
-  cursor: pointer;
-}
-
 .players-list {
   list-style: none;
   padding: 0;
@@ -187,8 +96,7 @@ h2 {
   margin: 8px 0;
 }
 
-.player-item,
-.group-item {
+.player-item {
   width: 100%;
   text-align: left;
   padding: 10px;
@@ -203,30 +111,16 @@ h2 {
   transition: background 0.2s;
 }
 
-.player-item:hover,
-.group-item:hover {
+.player-item:hover {
   background-color: var(--accent-transparent);
   border: 1px solid var(--accent-semi-transparent);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   transform: translateY(-1px);
 }
 
-.player-item.active,
-.group-item.active {
+.player-item.active {
   background-color: var(--accent-color);
   box-shadow: 0 0 5px var(--accent-semi-transparent);
-}
-
-.warning-icon {
-  font-size: 1.2rem;
-  color: #ffcc00;
-  margin-left: 8px;
-}
-
-.group-icon {
-  font-size: 1.2rem;
-  color: #aaa;
-  margin-right: 8px;
 }
 
 @media (max-width: 768px) {
