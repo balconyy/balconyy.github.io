@@ -12,11 +12,12 @@ export const vodsApi = {
         });
     },
 
-    getBoostyPlayerLinks(nickname: string, postId: string) {
+    getBoostyPlayerLinks(nickname: string, postId: string, movieTitle: string) {
         return baseClient.get<BoostyVodDto[]>("/movie/vods/player", {
             params: {
                 nickname,
                 postId,
+                movieTitle
             },
         });
     },

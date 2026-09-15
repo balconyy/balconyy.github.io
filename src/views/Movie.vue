@@ -1,5 +1,5 @@
 <script setup>
-import PlayerComponent from "@/features/player/components/PlayerComponent.vue";
+import MainPlayer from "@/features/player/components/MainPlayer.vue";
 import MovieInfo from "@/features/player/components/info/MovieInfo.vue";
 import Background from "@/components/Background.vue";
 import {ref, watch, watchEffect} from "vue";
@@ -10,7 +10,6 @@ import MovieInfoSkeleton from "@/features/player/components/info/MovieInfoSkelet
 import StreamerRatingList from "@/features/streamer/components/StreamerRatingList.vue";
 import SidePanel from "@/components/window/SidePanel.vue";
 import NavBar from "@/components/navigation/NavBar.vue";
-import VodPlayer from "@/features/player/components/VodPlayer.vue";
 
 const props = defineProps({
   kpId: {
@@ -57,8 +56,7 @@ watch(movie, (newVal) => {
   <SidePanel/>
   <MovieInfoSkeleton v-if="isLoading"/>
   <MovieInfo v-else-if="movie" :movie="movie" :links="links"/>
-  <VodPlayer/>
-  <PlayerComponent :playerState="playerState"/>
+  <MainPlayer :playerState="playerState" :kpId="kpId" type="movie"/>
   <StreamerRatingList :ratings="ratings"/>
   <RelationsList v-if="relations && relations.length"
                  :movies="relations"

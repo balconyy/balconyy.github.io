@@ -1,22 +1,23 @@
-<script setup>
-defineProps({
-  selectedLabel: {
-    type: String,
-    required: true
-  }
-})
+<script setup lang="ts">
+interface Props {
+  selectedLabel: string
+}
 
-defineEmits(['open-player-modal'])
+defineProps<Props>()
+
+defineEmits<{
+  'open-player-modal': []
+}>()
 </script>
 
 <template>
   <div class="players-list">
-    <span>Плеер:</span>
+    <span>Источник:</span>
     <button
-      class="player-btn"
-      type="button"
-      aria-label="Выбрать плеер"
-      @click="$emit('open-player-modal')"
+        class="player-btn"
+        type="button"
+        aria-label="Выбрать источник"
+        @click="$emit('open-player-modal')"
     >
       {{ selectedLabel }}
     </button>
@@ -26,14 +27,12 @@ defineEmits(['open-player-modal'])
 
 <style scoped>
 .players-list {
-  width: 100%;
   color: white;
-  max-width: none;
   display: flex;
+  flex:1;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  margin: 10px auto 18px;
   padding: 0;
   border-radius: 0;
   background: transparent;
@@ -43,6 +42,7 @@ defineEmits(['open-player-modal'])
 
 .player-btn {
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: left;
   background: rgba(48, 48, 48, 0.92);
@@ -53,8 +53,6 @@ defineEmits(['open-player-modal'])
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  width: 100%;
-  max-width: 440px;
   text-align: left;
   font-size: 16px;
 }
@@ -75,31 +73,4 @@ defineEmits(['open-player-modal'])
   box-shadow: 0 0 5px var(--accent-color);
 }
 
-.source-btn {
-  padding: 10px 14px;
-  border: 2px solid #505050;
-  border-radius: 5px;
-  background: #2f2f2f;
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.2s ease-in-out;
-}
-
-.source-btn:hover {
-  background: var(--accent-color);
-  border-color: var(--accent-color);
-}
-
-@media (max-width: 700px) {
-  .players-list {
-    max-width: calc(100vw - 12px);
-    margin-bottom: 10px;
-  }
-
-  .player-btn {
-    max-width: none;
-  }
-}
 </style>

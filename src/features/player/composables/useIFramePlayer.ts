@@ -11,23 +11,19 @@ const DEFAULT_ERROR_MESSAGE = 'Ошибка загрузки'
 export interface UsePlayerSourcesReturn {
     players: Ref<Player[]>
     selectedPlayer: Ref<Player | null>
-    showPlayerModal: Ref<boolean>
     errorMessage: Ref<string>
     errorCode: Ref<string | number | null>
     playersEmptyMessage: Ref<string>
     selectedPlayerLabel: ComputedRef<string>
     selectPlayer: (player: Player) => void
-    openPlayerModal: () => void
-    closePlayerModal: () => void
 }
 
-export function usePlayerSources(
+export function useIFramePlayer(
     playerState: Ref<PlayerState | null | undefined>
 ): UsePlayerSourcesReturn {
 
     const players = ref<Player[]>([])
     const selectedPlayer = ref<Player | null>(null)
-    const showPlayerModal = ref(false)
     const errorMessage = ref('')
     const errorCode = ref<string | number | null>(null)
     const playersEmptyMessage = ref('')
@@ -85,33 +81,17 @@ export function usePlayerSources(
     }
 
     const selectPlayer = (player: Player): void => {
-        if (selectedPlayer.value?.name === player.name) {
-            closePlayerModal()
-            return
-        }
-
+        if (selectedPlayer.value?.name === player.name) return
         selectedPlayer.value = player
-        closePlayerModal()
-    }
-
-    const openPlayerModal = (): void => {
-        showPlayerModal.value = true
-    }
-
-    const closePlayerModal = (): void => {
-        showPlayerModal.value = false
     }
 
     return {
         players,
         selectedPlayer,
-        showPlayerModal,
         errorMessage,
         errorCode,
         playersEmptyMessage,
         selectedPlayerLabel,
         selectPlayer,
-        openPlayerModal,
-        closePlayerModal,
     }
 }

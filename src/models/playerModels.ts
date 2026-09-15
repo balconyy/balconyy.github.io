@@ -12,4 +12,14 @@ export interface PlayerState {
     data?: Player[] | null
 }
 
+export interface PlayerSelectorItem {
+    key: string
+    label: string
+}
+
+
+
+
+export type PlayerType = 'movie' | 'vod'
+
 export type AspectRatio = '16:9' | '12:5' | '4:3'

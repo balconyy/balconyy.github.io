@@ -1,22 +1,33 @@
-<script setup>
-const props = defineProps({
-  players: {
-    type: Array,
-    required: true
-  },
-  selectedPlayer: {
-    type: Object,
-    default: null
-  }
-})
-const emit = defineEmits(['close', 'select'])
+<script setup lang="ts">
+// items: PlayerSelectorItem[] — { key, label }. Форма одинакова и для
+// стрим-плееров, и для vod-роликов, PlayerModal не знает о деталях
+// конкретного типа плеера.
 
-const selectPlayer = (player) => {
-  emit('select', player)
+interface PlayerSelectorItem {
+  key: string
+  label: string
+}
+
+interface Props {
+  items: PlayerSelectorItem[]
+  selectedKey?: string | null
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  selectedKey: null
+})
+
+const emit = defineEmits<{
+  close: []
+  select: [item: PlayerSelectorItem]
+}>()
+
+const selectItem = (item: PlayerSelectorItem) => {
+  emit('select', item)
   emit('close')
 }
 
-const isSelected = (player) => props.selectedPlayer?.name === player.name
+const isSelected = (item: PlayerSelectorItem) => props.selectedKey === item.key
 
 </script>
 
@@ -25,14 +36,14 @@ const isSelected = (player) => props.selectedPlayer?.name === player.name
     <div class="modal-content" @click.stop>
       <button class="close" @click="$emit('close')">&times;</button>
 
-      <h2>Выберите плеер</h2>
+      <h2>Выберите источник</h2>
       <ul class="players-list">
-        <li v-for="player in players" :key="player.key ?? player.name">
+        <li v-for="item in items" :key="item.key">
           <button
-              :class="['player-item', { active: isSelected(player) }]"
-              @click="selectPlayer(player)"
+              :class="['player-item', { active: isSelected(item) }]"
+              @click="selectItem(item)"
           >
-            {{ player.name }}
+            {{ item.label }}
           </button>
         </li>
       </ul>
