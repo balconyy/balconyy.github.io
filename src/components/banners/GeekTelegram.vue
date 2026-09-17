@@ -4,7 +4,7 @@ import {useAnalytics} from "@/composables/useAnalytics.ts";
 
 const analytics = useAnalytics()
 function onGeekClicked(){
-  window.location.assign('tg://resolve?domain=qulyaba');
+  window.location.assign('tg://join?invite=7O31gqprn6Y2M2Ey');
   analytics.track('geeknews_clicked');
 }
 </script>
