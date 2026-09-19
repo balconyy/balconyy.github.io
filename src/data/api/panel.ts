@@ -43,5 +43,19 @@ export const panelApi = {
             value,
             {withCredentials: true}
         );
+    },
+    getQueueList() {
+        return baseClient.get(
+            `/admin/cinema/queue/all`,
+            {withCredentials: true}
+        );
+    },
+
+    addMovieToQueue(kpId: number) {
+        return baseClient.post(
+            `/admin/cinema/queue/add`,
+            kpId,
+            {withCredentials: true}
+        );
     }
 };

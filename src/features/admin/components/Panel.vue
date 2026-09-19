@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseConfigCard from "@/features/admin/components/BaseConfigCard.vue";
-import {computed, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import {useRemoteConfigStore} from "@/store/remoteConfig";
 import {Config} from "@/models/config";
 import {panelApi} from "@/data/api/panel";
@@ -20,6 +20,19 @@ const form = reactive({
 const cinemaForm = reactive({
   kpId: "",
 });
+
+interface QueueMovieDto {
+  kpId: number;
+  titleMain: string;
+  year: number;
+}
+
+const queueForm = reactive({
+  kpId: "",
+});
+
+const queueList = ref<QueueMovieDto[]>([]);
+const isQueueLoading = ref(false);
 
 const isLoading = ref(false);
 const lastError = ref("");
@@ -89,6 +102,39 @@ function enableAutoplay() {
 function disableAutoplay() {
   runAction(() => panelApi.autoplay(false));
 }
+
+async function loadQueue() {
+  isQueueLoading.value = true;
+
+  try {
+    const response = await panelApi.getQueueList();
+    queueList.value = response.data;
+    lastError.value = "";
+  } catch (error) {
+    lastError.value = extractErrorMessage(error);
+  } finally {
+    isQueueLoading.value = false;
+  }
+}
+
+function addToQueue() {
+  const kpId = Number(queueForm.kpId);
+
+  if (!queueForm.kpId || !Number.isFinite(kpId)) {
+    lastError.value = "Введите корректный kpId фильма";
+    return;
+  }
+
+  runAction(async () => {
+    await panelApi.addMovieToQueue(kpId);
+    queueForm.kpId = "";
+    await loadQueue();
+  });
+}
+
+onMounted(() => {
+  loadQueue();
+});
 
 </script>
 
@@ -166,6 +212,42 @@ function disableAutoplay() {
         Управление показом фильмов в кинотеатре
       </div>
     </BaseConfigCard>
+
+    <BaseConfigCard>
+      <h3>Очередь фильмов</h3>
+
+      <div class="row">
+        <span>KP ID фильма:</span>
+        <input v-model="queueForm.kpId" type="text" class="input-config"/>
+      </div>
+
+      <div class="cinema-buttons">
+        <button class="apply-button" :disabled="isLoading" @click="addToQueue">
+          Добавить в очередь
+        </button>
+        <button class="apply-button" :disabled="isQueueLoading" @click="loadQueue">
+          Обновить список
+        </button>
+      </div>
+
+      <div v-if="isQueueLoading" class="description">
+        Загрузка...
+      </div>
+      <ul v-else class="queue-list">
+        <li v-for="movie in queueList" :key="movie.kpId" class="queue-item">
+          <span class="queue-item__title">{{ movie.titleMain }}</span>
+          <span class="queue-item__year">({{ movie.year }})</span>
+          <span class="queue-item__id">kpId: {{ movie.kpId }}</span>
+        </li>
+        <li v-if="queueList.length === 0" class="description">
+          Очередь пуста
+        </li>
+      </ul>
+
+      <div class="description">
+        Список фильмов в очереди на показ
+      </div>
+    </BaseConfigCard>
   </div>
   <div v-if="lastError" class="last-error">
     {{ lastError }}
@@ -234,6 +316,36 @@ function disableAutoplay() {
   grid-template-columns: repeat(auto-fit, 500px);
   justify-content: center;
   gap: 20px;
+}
+
+.queue-list {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.queue-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--ui-dark);
+}
+
+.queue-item__title {
+  font-weight: 600;
+}
+
+.queue-item__year,
+.queue-item__id {
+  opacity: 0.7;
+  font-size: 0.9em;
 }
 
 </style>
