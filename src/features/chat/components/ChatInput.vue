@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {nextTick, ref} from 'vue'
 import messageIcon from "@/assets/icons/message-icon.png";
 import onlineIcon from "@/assets/icons/online-icon.png";
+import EmoteSearch from './EmoteSearch.vue';
 
 const message = ref<string>('');
 const props = defineProps<{
@@ -9,6 +10,30 @@ const props = defineProps<{
 }>()
 const emit = defineEmits(['sendMessage'])
 
+const inputRef = ref<HTMLInputElement | null>(null);
+const emoteSearchRef = ref<InstanceType<typeof EmoteSearch> | null>(null);
+const caret = ref(0); // текущая позиция курсора в input, нужна EmoteSearch для поиска токена ":..."
+
+function updateCaret() {
+  caret.value = inputRef.value?.selectionStart ?? message.value.length;
+}
+
+
+function onEmoteApply(newText: string, newCaret: number) {
+  message.value = newText;
+  nextTick(() => {
+    inputRef.value?.focus();
+    inputRef.value?.setSelectionRange(newCaret, newCaret);
+    caret.value = newCaret;
+  });
+}
+
+function onKeydown(e: KeyboardEvent) {
+  // если список подсказок открыт и обработал клавишу сам — на этом всё
+  if (emoteSearchRef.value?.handleKeydown(e)) return;
+
+  if (e.key === 'Enter') sendMessage();
+}
 
 function sendMessage() {
   const trimmed = message.value.trim();
@@ -20,25 +45,43 @@ function sendMessage() {
 </script>
 
 <template>
-  <div class="chat-input">
-    <div class="online-container">
-      {{online}}
-      <img class="online-icon" :src="onlineIcon" alt="online"/>
-    </div>
-    <input
-        v-model="message"
-        type="text"
-        placeholder="Написать сообщение"
-        class="input-field"
-        @keydown.enter="sendMessage"
+  <div class="chat-input-wrapper">
+    <EmoteSearch
+        ref="emoteSearchRef"
+        :text="message"
+        :caret="caret"
+        @apply="onEmoteApply"
     />
-    <button class="chat-button" @click="sendMessage">
-      <img class="chat-button-icon" :src="messageIcon" alt="message"/>
-    </button>
+
+    <div class="chat-input">
+      <div class="online-container">
+        {{ online }}
+        <img class="online-icon" :src="onlineIcon" alt="online"/>
+      </div>
+      <input
+          ref="inputRef"
+          v-model="message"
+          type="text"
+          placeholder="Написать сообщение"
+          class="input-field"
+          @keydown="onKeydown"
+          @input="updateCaret"
+          @click="updateCaret"
+          @keyup="updateCaret"
+      />
+      <button class="chat-button" @click="sendMessage">
+        <img class="chat-button-icon" :src="messageIcon" alt="message"/>
+      </button>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.chat-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
 .chat-input {
   width: 100%;
   display: flex;

@@ -4,6 +4,7 @@ import {nextTick, onBeforeUnmount, onMounted, onUpdated, provide, ref, watch} fr
 import {Message} from "@/models/message";
 import {MessagePart, parseMessageParts} from "@/utils/message";
 import LazyChatImage from "@/features/chat/components/LazyChatImage.vue";
+import EmoteText from "@/features/chat/components/EmoteText.vue";
 
 const props = defineProps<{
   messages: Message[],
@@ -30,6 +31,8 @@ function scrollToBottomIfPinned() {
     scrollToBottom();
   }
 }
+
+provide('notifyChatResize', scrollToBottomIfPinned);
 
 function onScroll() {
   if (!chatLog.value) return;
@@ -118,11 +121,12 @@ function getMessageKey(message: Message, index: number): string | number {
           :key="getMessageKey(message, index)"
           class="chat-line"
       >
-        <span class="timestamp">{{new Date(message.createdAt).toLocaleTimeString([], {
+        <span class="timestamp">{{
+            new Date(message.createdAt).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
             })
-          }}</span>{{ ''}}
+          }}</span>{{ '' }}
 
         <div v-if="message.blobImage" class="message-badge">
           <img :src="message.blobImage" alt=""/>
@@ -131,7 +135,8 @@ function getMessageKey(message: Message, index: number): string | number {
         <span
             class="username"
             :style="{ color: message.nameColor }"
-        >{{ message.displayName }}:</span> <span class="text">{{ getMessageText(message) }}</span>
+        >{{ message.displayName }}: </span>
+        <EmoteText class="text" :text="getMessageText(message)"/>
 
         <div v-if="getMessageImages(message).length" class="chat-line-images">
           <LazyChatImage
