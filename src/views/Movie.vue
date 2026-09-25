@@ -7,7 +7,7 @@ import {useMovieInfo} from "@/features/player/composables/useMovieInfo.ts";
 import RelationsList from "@/features/player/components/info/RelationsList.vue";
 import ReviewsList from "@/features/player/components/info/review/ReviewsList.vue";
 import MovieInfoSkeleton from "@/features/player/components/info/MovieInfoSkeleton.vue";
-import StreamerRatingList from "@/features/streamer/components/StreamerRatingList.vue";
+import StreamerRatingList from "@/features/streamer/components/rating/StreamerRatingList.vue";
 import SidePanel from "@/components/window/SidePanel.vue";
 import NavBar from "@/components/navigation/NavBar.vue";
 
@@ -68,10 +68,5 @@ watch(movie, (newVal) => {
 </template>
 
 <style scoped>
-.home-icon {
-  z-index: 10;
-  position: fixed;
-  margin: 16px 0 0 16px;
-}
 </style>
 

@@ -1,21 +1,21 @@
-import {defineStore} from "pinia";
+import {defineStore} from 'pinia'
+import {TabId} from '@/models/tabs'
 
 export const useTabsStore = defineStore('main_tabs', {
     state: () => ({
-        tabId: 1 as number
+        tabId: TabId.Popular as number
     }),
 
     actions: {
         saveTabId(tabId: number) {
             this.tabId = tabId
-            sessionStorage.setItem('tab_cache', String(tabId))
+            localStorage.setItem('tab_cache', String(tabId))
         },
         hydrateTabId() {
-            const cachedId = sessionStorage.getItem('tab_cache')
+            const cachedId = localStorage.getItem('tab_cache')
             if (cachedId) {
                 this.tabId = Number(cachedId)
             }
         },
     },
-
 })

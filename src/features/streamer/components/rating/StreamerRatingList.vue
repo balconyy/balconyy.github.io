@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import StreamerRating from "@/features/streamer/components/StreamerRating.vue";
+import StreamerRating from "@/features/streamer/components/rating/StreamerRating.vue";
 import {StreamerRatingDto} from "@/data/dto/streamerRatingDto";
 
 const props = defineProps<{

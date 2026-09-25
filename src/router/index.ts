@@ -1,13 +1,21 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHistory, RouteLocationNormalized, RouteRecordRaw} from 'vue-router'
 
 import Home from '../views/Home.vue'
 import Movie from "@/views/Movie.vue";
 import Admin from "@/views/Admin.vue";
 import AdminLogin from "@/views/AdminLogin.vue";
-import {adminAuthApi} from "@/data/api/adminAuth.ts";
+import {adminAuthApi} from "@/data/api/adminAuth";
 import Cinema from "@/views/Cinema.vue";
+import Streamer from "@/views/Streamer.vue";
 
-const index = [
+declare module 'vue-router' {
+    interface RouteMeta {
+        title?: string
+        requiresAuth?: boolean
+    }
+}
+
+const index: RouteRecordRaw[] = [
     {
         path: '/',
         name: 'home',
@@ -35,6 +43,14 @@ const index = [
         component: Cinema,
     },
     {
+        path: "/streamer/:nickname",
+        name: "streamer",
+        component: Streamer,
+        props: (route) => ({
+            nickname: String(route.params.nickname)
+        })
+    },
+    {
         path: "/admin/login",
         name: "adminLogin",
         component: AdminLogin,
@@ -57,7 +73,7 @@ const router = createRouter({
     },
 )
 
-router.beforeEach(async (to) => {
+router.beforeEach(async (to: RouteLocationNormalized) => {
     if (to.meta.requiresAuth) {
         try {
             await adminAuthApi.check()
@@ -67,7 +83,7 @@ router.beforeEach(async (to) => {
     }
 })
 
-router.afterEach((to) => {
+router.afterEach((to: RouteLocationNormalized) => {
     window.gtag?.('event', 'page_view', {
         page_path: to.fullPath,
         page_location: window.location.href,

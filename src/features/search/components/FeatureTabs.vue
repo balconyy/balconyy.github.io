@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import FeatureTab from './Tab.vue'
+import type {Tab, TabId} from '@/models/tabs'
 
 defineProps<{
-  tabs: { id: number; label: string }[]
-  activeTabId: number
+  tabs: Tab[]
+  activeTabId: TabId
 }>()
 
 defineEmits<{
-  (e: 'clickTab', id: number): void
+  (e: 'clickTab', id: TabId): void
 }>()
 
 </script>

@@ -5,7 +5,7 @@ import {Link} from "@/models/link";
 import {Relation, ReviewResponse} from "@/data/dto/movieAddonDTO";
 import {MovieInfo} from "@/models/movie";
 import {useTiming} from "@/features/player/composables/useTiming";
-import {useStreamerInfo} from "@/features/streamer/composables/useStreamerInfo";
+import {useStreamerRating} from "@/features/streamer/composables/useStreamerRating";
 import {useMovieStore} from "@/store/movie";
 
 export function useMovieInfo() {
@@ -30,7 +30,7 @@ export function useMovieInfo() {
         ratings,
         getStreamersRating,
         emptyRating
-    } = useStreamerInfo()
+    } = useStreamerRating()
 
     const playerState = computed(() => ({
         data: players.value,

@@ -4,7 +4,7 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import {createPinia} from "pinia";
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-import router from "@/router/index.js";
+import router from "@/router/index.ts";
 import {useRemoteConfigStore} from "@/store/remoteConfig.ts";
 import {createHead} from "@vueuse/head";
 import {useUserStore} from "@/store/user.ts";

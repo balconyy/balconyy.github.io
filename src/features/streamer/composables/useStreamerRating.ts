@@ -2,7 +2,7 @@ import {ref} from "vue";
 import {StreamerRatingDto} from "@/data/dto/streamerRatingDto";
 import {streamersApi} from "@/data/api/streamer";
 
-export function useStreamerInfo() {
+export function useStreamerRating() {
     const isLoading = ref(false)
     const ratings = ref<StreamerRatingDto[]>([])
 

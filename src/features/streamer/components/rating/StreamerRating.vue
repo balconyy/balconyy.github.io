@@ -3,7 +3,7 @@ import {computed} from 'vue'
 import {StreamerRatingDto} from "@/data/dto/streamerRatingDto";
 import KpLogo from "@/assets/icons/kp-logo.svg";
 import SiteReferer from "@/features/player/components/info/SiteReferer.vue";
-import StreamerLink from "@/features/streamer/components/StreamerLink.vue";
+import StreamerLink from "@/features/streamer/components/rating/StreamerLink.vue";
 
 
 const props = defineProps<{
