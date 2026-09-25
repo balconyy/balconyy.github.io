@@ -28,6 +28,7 @@ const {
   items,
   selectedKey,
   selectedLabel,
+  compactLabel,
   mediaComponent,
   mediaId,
   mediaUrl,

@@ -15,8 +15,8 @@ export interface PlayerState {
 export interface PlayerSelectorItem {
     key: string
     label: string
+    children?: PlayerSelectorItem[]
 }
-
 
 
 

@@ -1,8 +1,8 @@
 import {computed, ref} from 'vue'
 
-import {StreamerVodDto} from '@/data/dto/vod/streamerVodDto'
 import {BoostyVodDto} from '@/data/dto/vod/boostyVodDto'
 import {vodsApi} from '@/data/api/vods'
+import {BoostyPostDto} from "@/data/dto/vod/boostyPostDto";
 
 const FALLBACK_QUALITY = '720p'
 
@@ -19,9 +19,9 @@ export function useVodPlayer() {
     const isPlayerLoading = ref(false)
     const isListLoaded = ref(false)
 
-    const vodsList = ref<StreamerVodDto[]>([])
+    const postList = ref<BoostyPostDto[]>([])
     const vodQualityList = ref<BoostyVodDto[]>([])
-    const selectedVod = ref<StreamerVodDto | null>(null)
+    const selectedPost = ref<BoostyPostDto | null>(null)
 
     /**
      * Текущее качество — единственный стейт, url из него выводится.
@@ -47,7 +47,7 @@ export function useVodPlayer() {
     }
 
     const resetSelection = (): void => {
-        selectedVod.value = null
+        selectedPost.value = null
         vodQualityList.value = []
         currentQuality.value = null
     }
@@ -57,24 +57,24 @@ export function useVodPlayer() {
             isListLoading.value = true
 
             const response = await vodsApi.getBoostyVods(kpId)
-            vodsList.value = response.data
+            postList.value = response.data
         } catch (e) {
-            vodsList.value = []
+            postList.value = []
         } finally {
             isListLoading.value = false
             isListLoaded.value = true
         }
     }
 
-    const getPlayerLinks = async (vod: StreamerVodDto): Promise<void> => {
+    const getPlayerLinks = async (vod: BoostyPostDto): Promise<void> => {
         try {
             isPlayerLoading.value = true
-            selectedVod.value = vod
+            selectedPost.value = vod
 
             vodQualityList.value = []
             currentQuality.value = null
 
-            const response = await vodsApi.getBoostyPlayerLinks(vod.boostyChannel, vod.postId, vod.title)
+            const response = await vodsApi.getBoostyPlayerLinks(vod.streamerName, vod.postId, vod.vid)
 
             vodQualityList.value = sortByQuality(response.data)
             currentQuality.value = pickQuality(vodQualityList.value)
@@ -98,9 +98,9 @@ export function useVodPlayer() {
     }
 
     return {
-        vodsList,
+        vodsList: postList,
         vodQualityList,
-        selectedVod,
+        selectedVod: selectedPost,
         currentVodUrl,
         currentQuality,
         isListLoading,

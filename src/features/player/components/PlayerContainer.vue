@@ -109,7 +109,7 @@ const isEmpty = computed<boolean>(() => !isMediaReady.value && !!props.emptyMess
 <style scoped>
 .player-container-wrapper {
   width: 70%;
-  margin: 0 auto;
+  margin: 0 auto 24px auto;
   color: #fff;
 }
 
